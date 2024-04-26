@@ -67,21 +67,30 @@ struct BookAppointmentView: View {
 struct DoctorListView: View {
     var category: String
     @ObservedObject var doctorsViewModel = DoctorsViewModel()
+    @State private var selectedDoc : Doctor = Doctor(fullName: "", gender: "", dateOfBirth: Date(), email: "", phone: "", emergencyContact: "", employeeID: "", department: "", qualification: "", position: "", startDate: Date(), licenseNumber: "", issuingOrganization: "", expiryDate: Date(), description: "", yearsOfExperience: "")
+    @State private var isDoctorSelected = false
     
     var body: some View {
         List(doctorsViewModel.doctors.filter { $0.department == category }, id: \.id) { doctor in
-            VStack(alignment: .leading) {
-                Text(doctor.fullName)
-                    .font(.headline)
-                    .foregroundColor(.primary)
-                
-                Text(doctor.department)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+            Button(action:{
+                self.selectedDoc = doctor
+                isDoctorSelected = true
+                print("\(selectedDoc.fullName)")
+            }){
+                VStack(alignment: .leading) {
+                    Text(doctor.fullName)
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                    
+                    Text(doctor.department)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                }
+                .padding()
+                .foregroundColor(.white)
+                .padding(.vertical, 5)
             }
-            .padding()
-            .foregroundColor(.white)
-            .padding(.vertical, 5)
+            
         }
         .onAppear {
             fetchDoctors()
@@ -92,4 +101,5 @@ struct DoctorListView: View {
         doctorsViewModel.fetchDoctors()
     }
 }
+
 
