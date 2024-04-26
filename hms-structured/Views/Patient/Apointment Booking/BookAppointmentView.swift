@@ -71,35 +71,47 @@ struct DoctorListView: View {
     @State private var isDoctorSelected = false
     
     var body: some View {
-        List(doctorsViewModel.doctors.filter { $0.department == category }, id: \.id) { doctor in
-            Button(action:{
-                self.selectedDoc = doctor
-                isDoctorSelected = true
-                print("\(selectedDoc.fullName)")
-            }){
-                VStack(alignment: .leading) {
-                    Text(doctor.fullName)
-                        .font(.headline)
-                        .foregroundColor(.primary)
-                    
-                    Text(doctor.department)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
+        NavigationView {
+            VStack {
+                NavigationLink(
+                    destination: DoctorDetailsView(doctor: selectedDoc).navigationBarBackButtonHidden(),
+                    isActive: $isDoctorSelected
+                ) {
+                    EmptyView()
                 }
-                .padding()
-                .foregroundColor(.white)
-                .padding(.vertical, 5)
+                
+                List(doctorsViewModel.doctors.filter { $0.department == category }, id: \.id) { doctor in
+                    Button(action: {
+                        self.selectedDoc = doctor
+                        isDoctorSelected = true
+                        print("\(selectedDoc.fullName)")
+                    }) {
+                        VStack(alignment: .leading) {
+                            Text(doctor.fullName)
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                            
+                            Text(doctor.department)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding()
+                        .foregroundColor(.white)
+                        .padding(.vertical, 5)
+                    }
+                    
+                }
             }
-            
-        }
-        .onAppear {
-            fetchDoctors()
+            .onAppear {
+                fetchDoctors()
+            }
         }
     }
     
-    func fetchDoctors() {
+    private func fetchDoctors() {
         doctorsViewModel.fetchDoctors()
     }
 }
 
+    
 
