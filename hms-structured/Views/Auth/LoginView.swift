@@ -15,6 +15,8 @@ private enum FocusableField: Hashable {
 }
 
 struct LoginView: View {
+    @AppStorage("user_name") var userName: String = ""
+    @AppStorage("user_UID") var userUID: String = ""
     @ObservedObject var viewModel =  AuthenticationViewModel()
     @Environment(\.dismiss) var dismiss
     
@@ -29,6 +31,10 @@ struct LoginView: View {
             if await viewModel.signInWithEmailPassword() == true {
                 dismiss()
                 isLoggedIn = true
+                userName = viewModel.patient.name
+                if let userid = viewModel.patient.id{
+                    userUID = userid
+                }
             }
         }
     }

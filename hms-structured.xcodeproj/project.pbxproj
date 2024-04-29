@@ -50,6 +50,10 @@
 		86ED4D4D2BDB899300282F0D /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 86ED4D4C2BDB899300282F0D /* FirebaseStorage */; };
 		86ED4D4F2BDB899300282F0D /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 86ED4D4E2BDB899300282F0D /* FirebaseStorageCombine-Community */; };
 		86ED4D512BDB8A2600282F0D /* DoctorDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86ED4D502BDB8A2600282F0D /* DoctorDetails.swift */; };
+		86ED4D542BDBBD4500282F0D /* DateCalenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86ED4D532BDBBD4500282F0D /* DateCalenderView.swift */; };
+		86ED4D562BDBC43F00282F0D /* TimeSlotView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86ED4D552BDBC43F00282F0D /* TimeSlotView.swift */; };
+		86ED4D582BDBC86800282F0D /* Patients.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86ED4D572BDBC86800282F0D /* Patients.swift */; };
+		86ED4D5A2BDBCE4700282F0D /* Appointments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86ED4D592BDBCE4700282F0D /* Appointments.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +74,10 @@
 		86ED4D0D2BDB713200282F0D /* BookAppointmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookAppointmentView.swift; sourceTree = "<group>"; };
 		86ED4D0F2BDB75F400282F0D /* DoctorHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorHomeView.swift; sourceTree = "<group>"; };
 		86ED4D502BDB8A2600282F0D /* DoctorDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorDetails.swift; sourceTree = "<group>"; };
+		86ED4D532BDBBD4500282F0D /* DateCalenderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCalenderView.swift; sourceTree = "<group>"; };
+		86ED4D552BDBC43F00282F0D /* TimeSlotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSlotView.swift; sourceTree = "<group>"; };
+		86ED4D572BDBC86800282F0D /* Patients.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Patients.swift; sourceTree = "<group>"; };
+		86ED4D592BDBCE4700282F0D /* Appointments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appointments.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +157,7 @@
 		86B555E02BDA439C0064E9BD /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				86ED4D522BDBBD3500282F0D /* Components */,
 				86B555D42BDA43850064E9BD /* ContentView.swift */,
 				86B555E72BDA44020064E9BD /* Auth */,
 				86B555E62BDA43F20064E9BD /* Patient */,
@@ -173,6 +182,8 @@
 			isa = PBXGroup;
 			children = (
 				86B556322BDAD7140064E9BD /* Doctors.swift */,
+				86ED4D572BDBC86800282F0D /* Patients.swift */,
+				86ED4D592BDBCE4700282F0D /* Appointments.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -265,8 +276,17 @@
 			children = (
 				86ED4D0D2BDB713200282F0D /* BookAppointmentView.swift */,
 				86ED4D502BDB8A2600282F0D /* DoctorDetails.swift */,
+				86ED4D552BDBC43F00282F0D /* TimeSlotView.swift */,
 			);
 			path = "Apointment Booking";
+			sourceTree = "<group>";
+		};
+		86ED4D522BDBBD3500282F0D /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				86ED4D532BDBBD4500282F0D /* DateCalenderView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -373,6 +393,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				86B556272BDA48110064E9BD /* AuthenticationViewModel.swift in Sources */,
+				86ED4D582BDBC86800282F0D /* Patients.swift in Sources */,
 				86B5563E2BDAD8350064E9BD /* PatientHomeView.swift in Sources */,
 				86B556292BDA48BE0064E9BD /* SignupView.swift in Sources */,
 				86B555D52BDA43850064E9BD /* ContentView.swift in Sources */,
@@ -382,9 +403,12 @@
 				86B556332BDAD7140064E9BD /* Doctors.swift in Sources */,
 				86B555D32BDA43850064E9BD /* hms_structuredApp.swift in Sources */,
 				86B556352BDAD7410064E9BD /* DoctorsViewModel.swift in Sources */,
+				86ED4D542BDBBD4500282F0D /* DateCalenderView.swift in Sources */,
 				86B556392BDAD7CC0064E9BD /* AppointmentCardView.swift in Sources */,
+				86ED4D562BDBC43F00282F0D /* TimeSlotView.swift in Sources */,
 				86ED4D102BDB75F400282F0D /* DoctorHomeView.swift in Sources */,
 				86ED4D0E2BDB713200282F0D /* BookAppointmentView.swift in Sources */,
+				86ED4D5A2BDBCE4700282F0D /* Appointments.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

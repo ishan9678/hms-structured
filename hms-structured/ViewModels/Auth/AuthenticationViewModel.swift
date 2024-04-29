@@ -15,7 +15,7 @@ import Combine
     @Published var authenticationState: AuthenticationState = .initial
     @Published var role: Role = .none
     @Published var isSignedUp = false
-    
+    @Published var patient = Patient(name: "", gender: "", age: 1, bloodGroup: "")
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -65,6 +65,8 @@ import Combine
                 // User is in 'patients' collection
                 role = .patient
                 authenticationState = .loggedIn
+                patient = try await patientsRef.getDocument(as: Patient.self)
+                
                 return true
             } else if doctorsDoc.exists {
                 // User is in 'doctors' collection

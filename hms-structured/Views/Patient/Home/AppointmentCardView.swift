@@ -1,4 +1,6 @@
 import SwiftUI
+import Firebase
+import FirebaseFirestore
 
 struct AppointmentCard: View {
     let appointment: Appointment
@@ -6,7 +8,6 @@ struct AppointmentCard: View {
     var body: some View {
         HStack(spacing: 16) {
             
-
             VStack(alignment: .leading, spacing: 8) {
                 
                 HStack{
@@ -38,13 +39,54 @@ struct AppointmentCard: View {
             .cornerRadius(10)
             .shadow(radius: 3)
         }
+        .onAppear {
+            Task {
+                do {
+                    try await fetchAppointments()
+                } catch {
+                    print(error)
+                }
+            }
+        }
     }
+        
     
     func getDate(date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd"
         return dateFormatter.string(from: date)
     }
+    
+    func fetchAppointments() async {
+        do {
+            let db = Firestore.firestore()
+            
+            guard let userId = Auth.auth().currentUser?.uid else {
+                print("User is not logged in")
+                return
+            }
+            
+            let document = try await db.collection("appointments").document(userId).getDocument()
+            guard let data = document.data() else {
+                print("Document does not exist or data is nil")
+                return
+            }
+
+            for (_, appointmentData) in data {
+                if let appointmentData = appointmentData as? [String: Any] {
+                    if let bookingDateTimestamp = appointmentData["bookingDate"] as? Timestamp {
+                        let bookingDate = Date(timeIntervalSince1970: TimeInterval(bookingDateTimestamp.seconds))
+                        // Now you can use the `bookingDate` in your `Appointments` struct
+                        print(bookingDate)
+                    }
+                }
+            }
+
+        } catch {
+            print("Error fetching document: \(error)")
+        }
+    }
+
 }
 
 
@@ -86,6 +128,9 @@ struct PatientAppointmentsView: View {
     }
 
 }
+
+
+
 
 // Example usage
 let appointments: [Appointment] = [

@@ -16,6 +16,10 @@ import Firebase
 
 struct BookAppointmentView: View {
     @State private var categories: [String] = []
+    @State private var selectedDate = Date()
+    @StateObject var weekStore = WeekStore()
+    @State private var selectedTime: String? = nil
+    @State private var currentMonth = ""
 
     
     var body: some View {
