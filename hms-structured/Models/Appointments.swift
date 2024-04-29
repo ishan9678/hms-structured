@@ -9,7 +9,7 @@ import Foundation
 import FirebaseFirestoreSwift
 import FirebaseFirestore
 
-struct Appointments: Identifiable, Codable {
+struct Appointments: Identifiable, Codable, Hashable {
     @DocumentID var id: String?
     var bookingDate: Date
     var timeSlot: String?
