@@ -28,7 +28,7 @@ struct PatientHomeView: View {
                     }
             
 
-                    PatientAppointmentsView()
+                    PatientAppointmentsView(appointments: appointments)
                         .padding(.bottom,10)
 
                     DoctorCardList()

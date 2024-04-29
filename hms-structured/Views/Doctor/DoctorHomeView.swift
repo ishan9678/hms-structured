@@ -1,5 +1,4 @@
 import SwiftUI
-import Firebase
 
 class Booking: ObservableObject {
     @Published var index: Int = 0
@@ -9,11 +8,16 @@ class Booking: ObservableObject {
 let booking: Booking = Booking()
 
 struct DoctorHomeView: View {
-    @State private var hello: String = "Mon"
+    @State private var hello : String = "Mon"
+    @State private var presentAppointments = false
+    @State private var dayColor: Color = Color(red: 161/255, green: 168/255, blue: 176/255)
+    @State private var dateColor: Color = Color(red: 16/255, green: 22/255, blue: 35/255)
+    @State private var bgColor: Color = Color(red: 242/255, green: 242/255, blue: 242/255)
+    @State private var symptomsColor: Color = Color(red: 157/255, green: 159/255, blue: 159/255)
+    @State private var headingColor: Color = Color(red: 28/255, green: 28/255, blue: 28/255)
     @State private var isDropdownExpanded = false
     @State private var selectedDate = Date()
-    @State private var appointments: [Appointments] = []
-    @State private var fetchedAppointments: [Appointments] = []
+    
     func dateGetter(index: Int) -> Date {
         return Calendar.current.date(byAdding: .day, value: index, to: getFirstDayOfWeek(for: selectedDate))!
     }
@@ -47,6 +51,7 @@ struct DoctorHomeView: View {
     var body: some View {
         ZStack {
             VStack {
+                // Dropdown list to select month and year
                 HStack {
                     Text(getMonthAndYear(date: selectedDate))
                         .font(.headline)
@@ -59,31 +64,32 @@ struct DoctorHomeView: View {
                     }
                     Spacer()
                 }
-                .padding([.horizontal, .top])
+                .padding([.horizontal,.top])
+                
                 .cornerRadius(10)
                 
+                // Your existing scroll view for the week
+               
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
                         ForEach(0..<7) { i in
                             let date = dateGetter(index: i)
                             let isSelected = Calendar.current.isDate(date, inSameDayAs: selectedDate)
                             
-                            Button(action: {
-                                withAnimation {
-                                    indexDate.index = i
-                                    selectedDate = date
-                                    hello = getDay(date: date)
-                                }
-                                print(date)
-                            }) {
+                            Button(action: {withAnimation {
+                                indexDate.index = i
+                                selectedDate = date
+                                hello = getDay(date: date)
+                            }
+                            print(date)}) {
                                 VStack {
                                     Text((getDay(date: date)))
                                         .font(Font.custom("SF Pro Display Regular", size: 16))
-                                        .foregroundColor(isSelected ? .white : .black)
+                                        .foregroundColor(isSelected ? .white : dayColor)
                                     
                                     Text((getDate(date: date)))
                                         .font(Font.custom("SF Pro Display ", size: 18))
-                                        .foregroundColor(isSelected ? .white : .black)
+                                        .foregroundColor(isSelected ? .white : dateColor)
                                 }
                                 .frame(alignment: .center)
                                 .padding(.leading)
@@ -100,11 +106,13 @@ struct DoctorHomeView: View {
                     .frame(height: 85)
                     .padding(.bottom)
                     .padding(.trailing, 16)
+                    
                 }
                 
-                AppointmentView(temp: hello, appointments: fetchedAppointments,selectedDate: selectedDate)
+                AppointmentView(temp: hello)
                 Spacer()
             }
+            
             
             if isDropdownExpanded {
                 Color.black.opacity(0.5)
@@ -113,6 +121,7 @@ struct DoctorHomeView: View {
                         self.isDropdownExpanded.toggle()
                     }
                 
+                // Modal containing DatePicker
                 VStack {
                     Spacer()
                     DatePicker("", selection: $selectedDate, displayedComponents: [.date])
@@ -124,147 +133,101 @@ struct DoctorHomeView: View {
                         .padding()
                 }
             }
-        }
-        .background(
+        }.background(
             LinearGradient(gradient: Gradient(colors: [Color(red: 0, green: 0.60, blue: 0.87), Color(red: 0.56, green: 0.87, blue: 0.97)]), startPoint: .top, endPoint: .bottom)
-        )
-        .onAppear {
+          )
+        .onAppear(){
             self.hello = getDay(date: Date())
-            fetchAppointments()
-            
-        }
-    }
-    
-    func fetchAppointments() {
-        let db = Firestore.firestore()
-        
-        guard let userId = Auth.auth().currentUser?.uid else {
-            print("User is not logged in")
-            return
-        }
-        
-        print("user id", userId)
-        
-        db.collection("appointments").getDocuments { querySnapshot, error in
-            if let error = error {
-                print("Error getting appointments: \(error)")
-                return
-            }
-            
-            guard let documents = querySnapshot?.documents else {
-                print("No appointments found")
-                return
-            }
-        
-            fetchedAppointments = []
-            
-            for document in documents {
-                let data = document.data()
-                
-                for (_, appointmentData) in data {
-                    if let appointmentData = appointmentData as? [String: Any] {
-                        
-                        if let doctorID = appointmentData["doctorID"] as? String, doctorID == userId{
-                            
-                            if let bookingDateTimestamp = appointmentData["bookingDate"] as? Timestamp {
-                                let bookingDate = Date(timeIntervalSince1970: TimeInterval(bookingDateTimestamp.seconds))
-                                // Now you can use the ⁠ bookingDate ⁠ in your ⁠ Appointments ⁠ struct
-                                let appointment = Appointments(bookingDate: bookingDate, timeSlot: appointmentData["timeSlot"] as? String, doctorID: appointmentData["doctorID"] as? String ?? "", doctorName: appointmentData["doctorName"] as? String ?? "", doctorDepartment: appointmentData["doctorDepartment"] as? String ?? "", patientName: appointmentData["patientName"] as? String ?? "", patientID: appointmentData["patientID"] as? String ?? "")
-                                fetchedAppointments.append(appointment)
-                                print(fetchedAppointments)
-                            }
-                        }
-                    }
-                }
-                
-            }
         }
     }
 }
 
-struct DoctorHomeView_Previews: PreviewProvider {
+struct DateCalendarView_Previews: PreviewProvider {
     static var previews: some View {
         DoctorHomeView()
     }
 }
 
-struct AppointmentView: View {
-    var temp: String
-    var appointments: [Appointments]
-    var selectedDate: Date
-    var body: some View {
-        VStack {
-            ForEach(Array(appointments.enumerated()), id: \.element) { index,appointment in
-                if retrieveDatePortion(from: selectedDate) == retrieveDatePortion(from: appointment.bookingDate){
-                    DisclosureGroup(
-                        content: {
-                            HStack() {
-                                                                VStack(alignment: .leading){
-                                                                
-                                                                    Text(appointment.patientName)
-                                                                      .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
-                                                                      .tracking(0.16)
-                                                                      .lineSpacing(21.60)
-                                                                      .foregroundColor(.black)
-
-                                                                    
-                                                                }
-                                                                .padding(.leading)
-                                                                
-                                                              Spacer()
-                                                                Image(systemName: "arrow.forwardarrow.forward")
-                                                            }
-                                                            .frame(width: 218, height: 84)
-                                                            .background(.white)
-                                                            .clipShape(RoundedRectangle(cornerRadius: 20))
-                                                            .padding([.horizontal,.vertical],5)
-                                                            .padding(.leading,60)
-                        },
-                        label: {
-                            HStack {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .foregroundColor(Color(red: 0.24, green: 0.24, blue: 0.26).opacity(0.36))
-                                        .frame(width: 86.78, height: 96)
-                                    Text("\(temp)")
-                                        .font(Font.custom("SF Pro Display", size: 18).weight(.medium))
-                                        .foregroundColor(.white)
-                                }
-                                .frame(width: 86.78, height: 96)
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .foregroundColor(Color(red: 0.24, green: 0.24, blue: 0.26).opacity(0.36))
-                                        .frame(width: 249.62, height: 96)
-                                    VStack(alignment: .leading) {
-                                        Text("\(appointment.timeSlot!)")
-                                            .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
-                                            .foregroundColor(.white)
-                                            .padding(.bottom)
-                                        Text("\(appointment.doctorName)")
-                                            .font(Font.custom("SF Pro Display", size: 12))
-                                            .foregroundColor(.white)
-                                    }
-                                    .offset(x: -30)
-                                }
-                                .frame(width: 249.62, height: 96)
-                            }
+struct AppointmentView : View {
+    var temp : String
+    var body : some View{
+        
+        VStack{
+            ForEach(0..<3){i in
+                if(i == 1){
+                    HStack{
+                        ZStack() {
+                          Rectangle()
+                            .foregroundColor(.clear)
+                            .frame(width: 86.78, height: 96)
+                            .background(.white)
+                            .cornerRadius(20)
+                            Text("\(temp)")
+                            .font(Font.custom("SF Pro Display", size: 18).weight(.medium))
+                            .foregroundColor(.black)
                         }
-                    )
-                    .padding(.horizontal)
+                        .frame(width: 86.78, height: 96)
+                        ZStack() {
+                          Rectangle()
+                            .foregroundColor(.clear)
+                            .frame(width: 249.62, height: 96)
+                            .background(.white)
+                            .cornerRadius(20)
+                            VStack(alignment: .leading){
+                                Text("11:00-12:00 PM")
+                                  .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
+                                  .foregroundColor(.black)
+                                  .padding(.bottom)
+                                Text("3 Patients")
+                                  .font(Font.custom("SF Pro Display", size: 12))
+                                  .foregroundColor(.black)
+                            }
+                            .offset(x:-30)
+                        }
+                        .frame(width: 249.62, height: 96)
+                    }
+                    
                 }
-
+                else{
+                    HStack{
+                        ZStack() {
+                          Rectangle()
+                            .foregroundColor(.clear)
+                            .frame(width: 86.78, height: 96)
+                            .background(Color(red: 0.24, green: 0.24, blue: 0.26).opacity(0.36))
+                            .cornerRadius(20)
+                          Text("\(temp)")
+                            .font(Font.custom("SF Pro Display", size: 18).weight(.medium))
+                            .foregroundColor(.white)
+                            
+                        }
+                        .frame(width: 86.78, height: 96)
+                        ZStack() {
+                          Rectangle()
+                            .foregroundColor(.clear)
+                            .frame(width: 249.62, height: 96)
+                            .background(Color(red: 0.24, green: 0.24, blue: 0.26).opacity(0.36))
+                            .cornerRadius(20)
+                            .offset(x: 0, y: 0)
+                            VStack(alignment: .leading){
+                                Text("11:00-12:00 PM")
+                                  .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
+                                  .foregroundColor(.white)
+                                  .padding(.bottom)
+                                Text("3 Patients")
+                                  .font(Font.custom("SF Pro Display", size: 12))
+                                  .foregroundColor(.white)
+                                 
+                            }
+                            .offset(x:-30)
+                        }
+                        .frame(width: 249.62, height: 96)
+                    }
+                    
+                }
             }
-        }.onAppear(){
-            print("appointments",appointments)
+            
         }
-        
     }
-    func retrieveDatePortion(from date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd" // Choose the desired date format
-        
-        return dateFormatter.string(from: date)
-    }
-
-
 }
+

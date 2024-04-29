@@ -16,10 +16,6 @@ import Firebase
 
 struct BookAppointmentView: View {
     @State private var categories: [String] = []
-    @State private var selectedDate = Date()
-    @StateObject var weekStore = WeekStore()
-    @State private var selectedTime: String? = nil
-    @State private var currentMonth = ""
 
     
     var body: some View {
@@ -71,51 +67,29 @@ struct BookAppointmentView: View {
 struct DoctorListView: View {
     var category: String
     @ObservedObject var doctorsViewModel = DoctorsViewModel()
-    @State private var selectedDoc : Doctor = Doctor(fullName: "", gender: "", dateOfBirth: Date(), email: "", phone: "", emergencyContact: "", employeeID: "", department: "", qualification: "", position: "", startDate: Date(), licenseNumber: "", issuingOrganization: "", expiryDate: Date(), description: "", yearsOfExperience: "")
-    @State private var isDoctorSelected = false
     
     var body: some View {
-        NavigationView {
-            VStack {
-                NavigationLink(
-                    destination: DoctorDetailsView(doctor: selectedDoc).navigationBarBackButtonHidden(),
-                    isActive: $isDoctorSelected
-                ) {
-                    EmptyView()
-                }
+        List(doctorsViewModel.doctors.filter { $0.department == category }, id: \.id) { doctor in
+            VStack(alignment: .leading) {
+                Text(doctor.fullName)
+                    .font(.headline)
+                    .foregroundColor(.primary)
                 
-                List(doctorsViewModel.doctors.filter { $0.department == category }, id: \.id) { doctor in
-                    Button(action: {
-                        self.selectedDoc = doctor
-                        isDoctorSelected = true
-                        print("\(selectedDoc.fullName)")
-                    }) {
-                        VStack(alignment: .leading) {
-                            Text(doctor.fullName)
-                                .font(.headline)
-                                .foregroundColor(.primary)
-                            
-                            Text(doctor.department)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-                        .padding()
-                        .foregroundColor(.white)
-                        .padding(.vertical, 5)
-                    }
-                    
-                }
+                Text(doctor.department)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
             }
-            .onAppear {
-                fetchDoctors()
-            }
+            .padding()
+            .foregroundColor(.white)
+            .padding(.vertical, 5)
+        }
+        .onAppear {
+            fetchDoctors()
         }
     }
     
-    private func fetchDoctors() {
+    func fetchDoctors() {
         doctorsViewModel.fetchDoctors()
     }
 }
-
-    
 
