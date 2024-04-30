@@ -194,65 +194,96 @@ struct AppointmentView: View {
     var selectedDate: Date
     var body: some View {
         VStack {
-            ForEach(Array(appointments.enumerated()), id: \.element) { index,appointment in
-                if retrieveDatePortion(from: selectedDate) == retrieveDatePortion(from: appointment.bookingDate){
-                    DisclosureGroup(
-                        content: {
-                            HStack() {
-                                                                VStack(alignment: .leading){
-                                                                
-                                                                    Text(appointment.patientName)
-                                                                      .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
-                                                                      .tracking(0.16)
-                                                                      .lineSpacing(21.60)
-                                                                      .foregroundColor(.black)
+            ForEach(0..<2) { i in
+                DisclosureGroup(
+                    content: { VStack{
+                        ForEach(Array(appointments.enumerated()), id: \.element) { index,appointment in
+                            if retrieveDatePortion(from: selectedDate) == retrieveDatePortion(from: appointment.bookingDate) {
+                                if(appointment.timeSlot == "11:00 - 12:00" && i == 1){
+                                    HStack() {
+                                        VStack(alignment: .leading){
+                                            Text(appointment.patientName)
+                                              .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
+                                              .tracking(0.16)
+                                              .lineSpacing(21.60)
+                                              .foregroundColor(.black)
 
-                                                                    
-                                                                }
-                                                                .padding(.leading)
-                                                                
-                                                              Spacer()
-                                                                Image(systemName: "arrow.forwardarrow.forward")
-                                                            }
-                                                            .frame(width: 218, height: 84)
-                                                            .background(.white)
-                                                            .clipShape(RoundedRectangle(cornerRadius: 20))
-                                                            .padding([.horizontal,.vertical],5)
-                                                            .padding(.leading,60)
-                        },
-                        label: {
-                            HStack {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .foregroundColor(Color(red: 0.24, green: 0.24, blue: 0.26).opacity(0.36))
-                                        .frame(width: 86.78, height: 96)
-                                    Text("\(temp)")
-                                        .font(Font.custom("SF Pro Display", size: 18).weight(.medium))
-                                        .foregroundColor(.white)
-                                }
-                                .frame(width: 86.78, height: 96)
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .foregroundColor(Color(red: 0.24, green: 0.24, blue: 0.26).opacity(0.36))
-                                        .frame(width: 249.62, height: 96)
-                                    VStack(alignment: .leading) {
-                                        Text("\(appointment.timeSlot!)")
-                                            .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
-                                            .foregroundColor(.white)
-                                            .padding(.bottom)
-                                        Text("\(appointment.doctorName)")
-                                            .font(Font.custom("SF Pro Display", size: 12))
-                                            .foregroundColor(.white)
+                                        }
+                                        .padding(.leading)
+                                        
+                                      Spacer()
+                                        Image(systemName: "arrow.forwardarrow.forward")
                                     }
-                                    .offset(x: -30)
+                                    .frame(width: 218, height: 84)
+                                    .background(.white)
+                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                                    .padding([.horizontal,.vertical],5)
+                                    
                                 }
-                                .frame(width: 249.62, height: 96)
-                            }
-                        }
-                    )
-                    .padding(.horizontal)
-                }
+                                else if(appointment.timeSlot == "9:00 - 11:00" && i == 0){
+                                    HStack() {
+                                        VStack(alignment: .leading){
+                                            Text(appointment.patientName)
+                                              .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
+                                              .tracking(0.16)
+                                              .lineSpacing(21.60)
+                                              .foregroundColor(.black)
 
+                                        }
+                                        .padding(.leading)
+                                        
+                                      Spacer()
+                                        Image(systemName: "arrow.forwardarrow.forward")
+                                    }
+                                    .frame(width: 218, height: 84)
+                                    .background(.white)
+                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                                    .padding([.horizontal,.vertical],5)
+                                }
+                                
+                                
+                            }
+
+                        }
+                        
+                    }.background(Color(red: 0.24, green: 0.24, blue: 0.26).opacity(0.36))
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .padding(.leading,100)
+                    },
+                    label: { HStack{
+                        ZStack() {
+                          Rectangle()
+                            .foregroundColor(.clear)
+                            .frame(width: 86.78, height: 96)
+                            .background(Color(red: 0.24, green: 0.24, blue: 0.26).opacity(0.36))
+                            .cornerRadius(20)
+                          Text("\(temp)")
+                            .font(Font.custom("SF Pro Display", size: 18).weight(.medium))
+                            .foregroundColor(.white)
+                            
+                        }
+                        .frame(width: 86.78, height: 96)
+                        ZStack() {
+                          Rectangle()
+                            .foregroundColor(.clear)
+                            .frame(width: 249.62, height: 96)
+                            .background(Color(red: 0.24, green: 0.24, blue: 0.26).opacity(0.36))
+                            .cornerRadius(20)
+                            .offset(x: 0, y: 0)
+                            VStack(alignment: .leading){
+                                Text(i == 0 ? "9:00 - 11:00" : "11:00 - 12:00")
+                                  .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
+                                  .foregroundColor(.white)
+                                  .padding(.bottom)
+                                
+                                 
+                            }
+                            .offset(x:-30)
+                        }
+                        .frame(width: 249.62, height: 96)
+                    }  }
+                ).padding(.horizontal)
+                
             }
         }.onAppear(){
             print("appointments",appointments)
