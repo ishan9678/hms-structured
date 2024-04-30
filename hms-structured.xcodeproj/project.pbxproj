@@ -57,6 +57,9 @@
 		86ED4D5D2BDF718C00282F0D /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 86ED4D5C2BDF718C00282F0D /* URLImage */; };
 		86ED4D5F2BDF718C00282F0D /* URLImageStore in Frameworks */ = {isa = PBXBuildFile; productRef = 86ED4D5E2BDF718C00282F0D /* URLImageStore */; };
 		86ED4D622BDF723F00282F0D /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 86ED4D612BDF723F00282F0D /* SDWebImageSwiftUI */; };
+		8E7731E02BE0F00000EE1DA2 /* PrescriptionForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7731DF2BE0F00000EE1DA2 /* PrescriptionForm.swift */; };
+		8E7731E22BE0F03500EE1DA2 /* MedicineList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7731E12BE0F03500EE1DA2 /* MedicineList.swift */; };
+		8E7731E42BE0F05D00EE1DA2 /* TestList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7731E32BE0F05D00EE1DA2 /* TestList.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,6 +84,9 @@
 		86ED4D552BDBC43F00282F0D /* TimeSlotView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSlotView.swift; sourceTree = "<group>"; };
 		86ED4D572BDBC86800282F0D /* Patients.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Patients.swift; sourceTree = "<group>"; };
 		86ED4D592BDBCE4700282F0D /* Appointments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appointments.swift; sourceTree = "<group>"; };
+		8E7731DF2BE0F00000EE1DA2 /* PrescriptionForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrescriptionForm.swift; sourceTree = "<group>"; };
+		8E7731E12BE0F03500EE1DA2 /* MedicineList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineList.swift; sourceTree = "<group>"; };
+		8E7731E32BE0F05D00EE1DA2 /* TestList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestList.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -215,6 +221,9 @@
 			isa = PBXGroup;
 			children = (
 				86ED4D0F2BDB75F400282F0D /* DoctorHomeView.swift */,
+				8E7731DF2BE0F00000EE1DA2 /* PrescriptionForm.swift */,
+				8E7731E12BE0F03500EE1DA2 /* MedicineList.swift */,
+				8E7731E32BE0F05D00EE1DA2 /* TestList.swift */,
 			);
 			path = Doctor;
 			sourceTree = "<group>";
@@ -410,8 +419,11 @@
 				86B555D52BDA43850064E9BD /* ContentView.swift in Sources */,
 				86B5563C2BDAD81D0064E9BD /* DoctorListView.swift in Sources */,
 				86B556312BDA8DDF0064E9BD /* LoginView.swift in Sources */,
+				8E7731E02BE0F00000EE1DA2 /* PrescriptionForm.swift in Sources */,
 				86ED4D512BDB8A2600282F0D /* DoctorDetails.swift in Sources */,
+				8E7731E42BE0F05D00EE1DA2 /* TestList.swift in Sources */,
 				86B556332BDAD7140064E9BD /* Doctors.swift in Sources */,
+				8E7731E22BE0F03500EE1DA2 /* MedicineList.swift in Sources */,
 				86B555D32BDA43850064E9BD /* hms_structuredApp.swift in Sources */,
 				86B556352BDAD7410064E9BD /* DoctorsViewModel.swift in Sources */,
 				86ED4D542BDBBD4500282F0D /* DateCalenderView.swift in Sources */,
