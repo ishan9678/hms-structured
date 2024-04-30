@@ -71,14 +71,14 @@ struct BookAppointmentView: View {
 struct DoctorListView: View {
     var category: String
     @ObservedObject var doctorsViewModel = DoctorsViewModel()
-    @State private var selectedDoc : Doctor = Doctor(fullName: "", gender: "", dateOfBirth: Date(), email: "", phone: "", emergencyContact: "", employeeID: "", department: "", qualification: "", position: "", startDate: Date(), licenseNumber: "", issuingOrganization: "", expiryDate: Date(), description: "", yearsOfExperience: "")
+    @State private var selectedDoc : Doctor = Doctor(fullName: "", gender: "", dateOfBirth: Date(), email: "", phone: "", emergencyContact: "", profileImageURL: "", employeeID: "" , department: "", qualification: "", position: "", startDate: Date(), licenseNumber: "", issuingOrganization: "", expiryDate: Date(), description: "", yearsOfExperience: "")
     @State private var isDoctorSelected = false
     
     var body: some View {
         NavigationView {
             VStack {
                 NavigationLink(
-                    destination: DoctorDetailsView(doctor: selectedDoc).navigationBarBackButtonHidden(),
+                    destination: DoctorDetailsView(doctor: selectedDoc),
                     isActive: $isDoctorSelected
                 ) {
                     EmptyView()

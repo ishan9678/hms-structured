@@ -121,6 +121,9 @@ struct PatientAppointmentsView: View {
                 }
             }
 
+            // Sort appointments by bookingDate in ascending order
+            fetchedAppointments.sort { $0.bookingDate < $1.bookingDate }
+
         } catch {
             print("Error fetching document: \(error)")
         }

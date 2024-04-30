@@ -8,6 +8,7 @@ struct Doctor: Identifiable, Codable {
     var email: String
     var phone: String
     var emergencyContact: String
+    var profileImageURL: String
     
     var employeeID: String
     var department: String
@@ -23,7 +24,7 @@ struct Doctor: Identifiable, Codable {
     var yearsOfExperience: String
 
     enum CodingKeys: String, CodingKey {
-        case id, fullName, gender, dateOfBirth, email, phone, emergencyContact
+        case id, fullName, gender, dateOfBirth, email, phone, emergencyContact, profileImageURL
         case employeeID, department, qualification, position, startDate
         case licenseNumber, issuingOrganization, expiryDate
         case description, yearsOfExperience

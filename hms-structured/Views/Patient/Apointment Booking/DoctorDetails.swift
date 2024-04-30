@@ -1,4 +1,5 @@
 import SwiftUI
+import SDWebImageSwiftUI
 import Firebase
 
 struct DoctorDetailsView: View {
@@ -9,20 +10,24 @@ struct DoctorDetailsView: View {
     @AppStorage("user_name") var userName: String = ""
     @AppStorage("user_UID") var userUID: String = ""
     @ObservedObject var indexDate = bookingCal
+    @State private var showAlert = false
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             
             HStack {
-                AsyncImage(url: URL(string: "https://t4.ftcdn.net/jpg/02/60/04/09/360_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg")) { image in
-                    image
+                
+                if let imageUrl = URL(string: doctor.profileImageURL) {
+                    WebImage(url: imageUrl)
                         .resizable()
+                        .aspectRatio(contentMode: .fill)
                         .frame(width: 130, height: 130)
-                        .cornerRadius(10)
-                        .scaledToFit()
-                } placeholder: {
-                    ProgressView()
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .overlay(RoundedRectangle(cornerRadius: 25).stroke(Color.gray, lineWidth: 1))
+                } else {
+                    // Handle invalid URL
+                    Text("Invalid URL")
+                        .foregroundColor(.red)
                 }
-
                 
                 VStack(alignment: .leading, spacing: 5) {
                     Text(doctor.fullName)
@@ -120,8 +125,10 @@ struct DoctorDetailsView: View {
             .background(Color.white)
             .cornerRadius(10)
             .padding()
+            .alert(isPresented: $showAlert) {
+                        Alert(title: Text("Success"), message: Text("Appointment added successfully"), dismissButton: .default(Text("OK")))
+                    }
         }
-        .navigationBarTitle("Doctor Details")
         .onAppear {
             currentMonth = getCurrentMonth()
         }
@@ -181,6 +188,7 @@ struct DoctorDetailsView: View {
                         print("Error saving drawing: \(error)")
                     } else {
                         print("Drawing saved successfully")
+                        showAlert = true
                     }
                 }
             } else {
@@ -191,6 +199,7 @@ struct DoctorDetailsView: View {
                         print("Error saving drawing: \(error)")
                     } else {
                         print("Drawing saved successfully")
+                        showAlert = true
                     }
                 }
             }
@@ -204,7 +213,7 @@ struct DoctorDetailsView: View {
 // Preview
 struct DoctorDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        let doctor = Doctor(id: "1", fullName: "Dr. John Doe", gender: "Male", dateOfBirth: Date(), email: "john.doe@example.com", phone: "1234567890", emergencyContact: "9876543210", employeeID: "EMP001", department: "Cardiology", qualification: "MBBS", position: "Cardiologist", startDate: Date(), licenseNumber: "LIC001", issuingOrganization: "Medical Board", expiryDate: Date(), description: "Lorem ipsum dolor sit amet", yearsOfExperience: "5")
+        let doctor = Doctor(id: "1", fullName: "Dr. John Doe", gender: "Male", dateOfBirth: Date(), email: "john.doe@example.com", phone: "1234567890", emergencyContact: "9876543210", profileImageURL: "", employeeID: "EMP001", department: "Cardiology", qualification: "MBBS", position: "Cardiologist", startDate: Date(), licenseNumber: "LIC001", issuingOrganization: "Medical Board", expiryDate: Date(), description: "Lorem ipsum dolor sit amet", yearsOfExperience: "5")
         return DoctorDetailsView(doctor: doctor)
             .previewLayout(.sizeThatFits)
     }
