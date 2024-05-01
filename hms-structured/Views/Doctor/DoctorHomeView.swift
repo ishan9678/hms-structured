@@ -198,51 +198,53 @@ struct AppointmentView: View {
                 DisclosureGroup(
                     content: { VStack{
                         ForEach(Array(appointments.enumerated()), id: \.element) { index,appointment in
-                            if retrieveDatePortion(from: selectedDate) == retrieveDatePortion(from: appointment.bookingDate) {
-                                if(appointment.timeSlot == "11:00 - 12:00" && i == 1){
-                                    HStack() {
-                                        VStack(alignment: .leading){
-                                            Text(appointment.patientName)
-                                              .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
-                                              .tracking(0.16)
-                                              .lineSpacing(21.60)
-                                              .foregroundColor(.black)
+                            NavigationLink(destination: PrescriptionForm(patientID: appointment.patientID,patientName: appointment.patientName), label:{
+                                if retrieveDatePortion(from: selectedDate) == retrieveDatePortion(from: appointment.bookingDate) {
+                                    if(appointment.timeSlot == "11:00 - 12:00" && i == 1){
+                                        HStack() {
+                                            VStack(alignment: .leading){
+                                                Text(appointment.patientName)
+                                                  .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
+                                                  .tracking(0.16)
+                                                  .lineSpacing(21.60)
+                                                  .foregroundColor(.black)
 
+                                            }
+                                            .padding(.leading)
+                                            
+                                          Spacer()
+                                            Image(systemName: "arrow.forwardarrow.forward")
                                         }
-                                        .padding(.leading)
+                                        .frame(width: 218, height: 84)
+                                        .background(.white)
+                                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                                        .padding([.horizontal,.vertical],5)
                                         
-                                      Spacer()
-                                        Image(systemName: "arrow.forwardarrow.forward")
                                     }
-                                    .frame(width: 218, height: 84)
-                                    .background(.white)
-                                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                                    .padding([.horizontal,.vertical],5)
+                                    else if(appointment.timeSlot == "9:00 - 11:00" && i == 0){
+                                        HStack() {
+                                            VStack(alignment: .leading){
+                                                Text(appointment.patientName)
+                                                  .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
+                                                  .tracking(0.16)
+                                                  .lineSpacing(21.60)
+                                                  .foregroundColor(.black)
+
+                                            }
+                                            .padding(.leading)
+                                            
+                                          Spacer()
+                                            Image(systemName: "arrow.forwardarrow.forward")
+                                        }
+                                        .frame(width: 218, height: 84)
+                                        .background(.white)
+                                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                                        .padding([.horizontal,.vertical],5)
+                                    }
+                                    
                                     
                                 }
-                                else if(appointment.timeSlot == "9:00 - 11:00" && i == 0){
-                                    HStack() {
-                                        VStack(alignment: .leading){
-                                            Text(appointment.patientName)
-                                              .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
-                                              .tracking(0.16)
-                                              .lineSpacing(21.60)
-                                              .foregroundColor(.black)
-
-                                        }
-                                        .padding(.leading)
-                                        
-                                      Spacer()
-                                        Image(systemName: "arrow.forwardarrow.forward")
-                                    }
-                                    .frame(width: 218, height: 84)
-                                    .background(.white)
-                                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                                    .padding([.horizontal,.vertical],5)
-                                }
-                                
-                                
-                            }
+                            })
 
                         }
                         

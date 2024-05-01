@@ -43,8 +43,10 @@ struct PrescriptionForm: View {
     @State private var isEditingDetails = false
     @State private var selectedMedicineNames: Set<String> = []
     @State private var selectedTestNames: Set<String> = []
-    
-    
+    var patientID = ""
+    var patientName = ""
+    @AppStorage("user_name") var userName: String = ""
+    @AppStorage("user_UID") var userUID: String = ""
     var filteredMedicines: [Medicine] {
         if searchTextMedicine.isEmpty {
             return medicineList.filter { !selectedMedicineNames.contains($0.name) }
@@ -283,6 +285,10 @@ struct PrescriptionForm: View {
             Button(action: {
                 // Submit to Firebase
                 let prescriptionData: [String: Any] = [
+                    "patientID": patientID,
+                    "patientName": patientName,
+//                    "doctorID": userUID,
+//                    "doctorName": userName,
                     "symptoms": symptoms,
                     "diagnosis": diagnosis,
                     "medicines": medicines.map { medicine in
@@ -301,6 +307,8 @@ struct PrescriptionForm: View {
                     }
                     // Add more fields as needed
                 ]
+
+
                 
                 // Add prescriptionData to Firebase
                 let db = Firestore.firestore()
