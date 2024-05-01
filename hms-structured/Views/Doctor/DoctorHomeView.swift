@@ -126,7 +126,7 @@ struct DoctorHomeView: View {
             }
         }
         .background(
-            LinearGradient(gradient: Gradient(colors: [Color(red: 0, green: 0.60, blue: 0.87), Color(red: 0.56, green: 0.87, blue: 0.97)]), startPoint: .top, endPoint: .bottom)
+            Color("bg-color1")
         )
         .onAppear {
             self.hello = getDay(date: Date())
