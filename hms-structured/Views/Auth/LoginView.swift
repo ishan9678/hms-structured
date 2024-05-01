@@ -31,10 +31,19 @@ struct LoginView: View {
             if await viewModel.signInWithEmailPassword() == true {
                 dismiss()
                 isLoggedIn = true
-                userName = viewModel.patient.name
-                if let userid = viewModel.patient.id{
-                    userUID = userid
+//                if viewModel.role == .doctor{
+//                    userName = viewModel.doctor.fullName
+//                    if let userid = viewModel.doctor.id{
+//                        userUID = userid
+//                    }
+//                }
+                if viewModel.role == .patient{
+                    userName = viewModel.patient.name
+                    if let userid = viewModel.patient.id{
+                        userUID = userid
+                    }
                 }
+                
             }
         }
     }
