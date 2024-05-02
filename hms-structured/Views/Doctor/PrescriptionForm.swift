@@ -63,6 +63,7 @@ struct PrescriptionForm: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
+            Text("\(patientName)")
             VStack(alignment: .leading, spacing: 10) {
                 Text("Symptoms")
                 TextField("Enter symptoms", text: $symptoms).textFieldStyle(RoundedBorderTextFieldStyle())
