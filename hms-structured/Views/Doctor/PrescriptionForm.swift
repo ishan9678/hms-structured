@@ -78,13 +78,14 @@ struct PrescriptionForm: View {
             VStack(alignment: .leading, spacing: 10) {
                 Text("Medication")
                     .font(.headline)
-                VStack(alignment: .leading, spacing: 10) {
-                    VStack(alignment: .leading, spacing: 10) {
+                VStack() {
+                    VStack() {
                         HStack {
                             TextField("Search for medicine", text: $searchTextMedicine, onEditingChanged: { editing in
                                 self.isEditingMedicine = editing
                             })
-                            
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            Spacer()
                             if isEditingMedicine {
                                 Button(action: {
                                     self.searchTextMedicine = ""
@@ -93,12 +94,11 @@ struct PrescriptionForm: View {
                                 }) {
                                     Image(systemName: "xmark.circle.fill")
                                         .foregroundColor(.gray)
-                                        .padding(.trailing, 8)
+                                        
                                 }
                             }
                         }
-                        .padding(.horizontal)
-                        .padding(.vertical, 8)
+                        
                         .background(Color.white)
                         .cornerRadius(8)
                         
@@ -106,20 +106,22 @@ struct PrescriptionForm: View {
                             ForEach(medicines) { medicine in
                                 VStack(alignment: .leading, spacing: 5) {
                                     HStack {
-                                        Text("\(medicine.name)").bold()
-                                        Spacer()
+                                        
                                         Button(action: {
                                             self.selectedMedicine = medicine
                                             self.isEditingDetails.toggle()
                                         }) {
+                                            Text("\(medicine.name)").bold()
+                                                .foregroundStyle(Color.black)
+                                            Spacer()
                                             Image(systemName: "chevron.down")
-                                                .foregroundColor(.blue)
+                                            .foregroundColor(.blue)
                                         }
                                         Button(action: {
                                             self.medicines.removeAll { $0.id == medicine.id }
                                         }) {
                                             Image(systemName: "trash")
-                                                .foregroundColor(.blue)
+                                                .foregroundColor(.red)
                                         }
                                     }
                                     if isEditingDetails && selectedMedicine?.id == medicine.id {
@@ -137,7 +139,7 @@ struct PrescriptionForm: View {
                                             
                                             Text("\(medicine.medicineDetails.dosage) tablet") .foregroundColor(.blue)
                                                 .padding()
-                                                .background(RoundedRectangle(cornerRadius: 5).stroke(Color.blue, lineWidth: 1))
+                                                
                                             
                                             Button(action: {
                                                 // Functionality to decrease dosage
@@ -164,7 +166,9 @@ struct PrescriptionForm: View {
                                                 }){
                                                     Text(time)
                                                         .padding(8)
-                                                        .background(RoundedRectangle(cornerRadius: 5).stroke(medicine.medicineDetails.selectedTimesOfDay.contains(time) ? Color.red : Color.gray, lineWidth: 5))
+                                                        .foregroundStyle(medicine.medicineDetails.selectedTimesOfDay.contains(time) ? Color.white : Color.black)
+                                                        .background(medicine.medicineDetails.selectedTimesOfDay.contains(time) ? Color("bg-color1") : Color.white)
+                                                        .clipShape(RoundedRectangle(cornerRadius: 5))
                                                 }
                                             }
                                         }
@@ -203,13 +207,12 @@ struct PrescriptionForm: View {
             
             VStack(alignment: .leading, spacing: 10) {
                 Text("Tests")
-                VStack(alignment: .leading, spacing: 10) {
-                    VStack(alignment: .leading, spacing: 10) {
+                VStack() {
+                    VStack() {
                         TextField("Search for test", text: $searchTextTest, onEditingChanged: { editing in
                             self.isEditingTest = editing
-                        })
+                        }).textFieldStyle(RoundedBorderTextFieldStyle())
                         
-                        .padding(.horizontal)
                         .overlay(
                             HStack {
                                 Spacer()
@@ -221,8 +224,6 @@ struct PrescriptionForm: View {
                                     }) {
                                         Image(systemName: "xmark.circle.fill")
                                             .foregroundColor(.gray)
-                                            .padding(.horizontal, 12)
-                                            .padding(.vertical, 5)
                                             .background(Color.white)
                                             .cornerRadius(20)
                                             .padding(.trailing, 8)
@@ -230,8 +231,6 @@ struct PrescriptionForm: View {
                                 }
                             }
                         )
-                        .padding(.vertical, 10)
-                        .padding(.horizontal, 10)
                         .background(Color.white)
                         .cornerRadius(8)
                         
