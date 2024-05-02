@@ -46,64 +46,69 @@ struct DoctorHomeView: View {
     
     var body: some View {
         ZStack {
-            VStack {
-                HStack {
-                    Text(getMonthAndYear(date: selectedDate))
-                        .font(.headline)
-                        .foregroundColor(.black)
-                    Button(action: {
-                        self.isDropdownExpanded.toggle()
-                    }) {
-                        Image(systemName: "chevron.down")
-                            .foregroundColor(.black)
-                    }
-                    Spacer()
+            ScrollView{
+                VStack{
+                    
                 }
-                .padding([.horizontal, .top])
-                .cornerRadius(10)
-                
-                ScrollView(.horizontal, showsIndicators: false) {
+                VStack {
                     HStack {
-                        ForEach(0..<7) { i in
-                            let date = dateGetter(index: i)
-                            let isSelected = Calendar.current.isDate(date, inSameDayAs: selectedDate)
-                            
-                            Button(action: {
-                                withAnimation {
-                                    indexDate.index = i
-                                    selectedDate = date
-                                    hello = getDay(date: date)
+                        Text(getMonthAndYear(date: selectedDate))
+                            .font(.headline)
+                            .foregroundColor(.black)
+                        Button(action: {
+                            self.isDropdownExpanded.toggle()
+                        }) {
+                            Image(systemName: "chevron.down")
+                                .foregroundColor(.black)
+                        }
+                        Spacer()
+                    }
+                    .padding([.horizontal, .top])
+                    .cornerRadius(10)
+                    
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(0..<7) { i in
+                                let date = dateGetter(index: i)
+                                let isSelected = Calendar.current.isDate(date, inSameDayAs: selectedDate)
+                                
+                                Button(action: {
+                                    withAnimation {
+                                        indexDate.index = i
+                                        selectedDate = date
+                                        hello = getDay(date: date)
+                                    }
+                                    print(date)
+                                }) {
+                                    VStack {
+                                        Text((getDay(date: date)))
+                                            .font(Font.custom("SF Pro Display Regular", size: 16))
+                                            .foregroundColor(isSelected ? .white : .black)
+                                        
+                                        Text((getDate(date: date)))
+                                            .font(Font.custom("SF Pro Display ", size: 18))
+                                            .foregroundColor(isSelected ? .white : .black)
+                                    }
+                                    .frame(alignment: .center)
+                                    .padding(.leading)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 15)
+                                            .frame(width: 64, height: 80)
+                                            .foregroundColor(isSelected ? Color("bg-color1").opacity(01) : .white)
+                                            .padding(.leading)
+                                    )
+                                    .padding()
                                 }
-                                print(date)
-                            }) {
-                                VStack {
-                                    Text((getDay(date: date)))
-                                        .font(Font.custom("SF Pro Display Regular", size: 16))
-                                        .foregroundColor(isSelected ? .white : .black)
-                                    
-                                    Text((getDate(date: date)))
-                                        .font(Font.custom("SF Pro Display ", size: 18))
-                                        .foregroundColor(isSelected ? .white : .black)
-                                }
-                                .frame(alignment: .center)
-                                .padding(.leading)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 15)
-                                        .frame(width: 64, height: 80)
-                                        .foregroundColor(isSelected ? Color(red: 0.24, green: 0.24, blue: 0.26).opacity(0.36) : .white)
-                                        .padding(.leading)
-                                )
-                                .padding()
                             }
                         }
+                        .frame(height: 85)
+                        .padding(.bottom)
+                        .padding(.trailing, 16)
                     }
-                    .frame(height: 85)
-                    .padding(.bottom)
-                    .padding(.trailing, 16)
+                    
+                    AppointmentView(temp: hello, appointments: fetchedAppointments,selectedDate: selectedDate)
+                    Spacer()
                 }
-                
-                AppointmentView(temp: hello, appointments: fetchedAppointments,selectedDate: selectedDate)
-                Spacer()
             }
             
             if isDropdownExpanded {
@@ -126,7 +131,7 @@ struct DoctorHomeView: View {
             }
         }
         .background(
-            Color("bg-color1")
+            Color(.white)
         )
         .onAppear {
             self.hello = getDay(date: Date())
@@ -213,7 +218,7 @@ struct AppointmentView: View {
                                             .padding(.leading)
                                             
                                           Spacer()
-                                            Image(systemName: "arrow.forwardarrow.forward")
+                                            
                                         }
                                         .frame(width: 218, height: 84)
                                         .background(.white)
@@ -248,7 +253,7 @@ struct AppointmentView: View {
 
                         }
                         
-                    }.background(Color(red: 0.24, green: 0.24, blue: 0.26).opacity(0.36))
+                    }.background(Color("bg-color1").opacity(1))
                             .clipShape(RoundedRectangle(cornerRadius: 20))
                             .padding(.leading,100)
                     },
@@ -257,10 +262,10 @@ struct AppointmentView: View {
                           Rectangle()
                             .foregroundColor(.clear)
                             .frame(width: 86.78, height: 96)
-                            .background(Color(red: 0.24, green: 0.24, blue: 0.26).opacity(0.36))
+                            .background(Color("bg-color1"))
                             .cornerRadius(20)
                           Text("\(temp)")
-                            .font(Font.custom("SF Pro Display", size: 18).weight(.medium))
+                            .font(Font.custom("SF Pro Display", size: 20).weight(.medium))
                             .foregroundColor(.white)
                             
                         }
@@ -269,12 +274,11 @@ struct AppointmentView: View {
                           Rectangle()
                             .foregroundColor(.clear)
                             .frame(width: 249.62, height: 96)
-                            .background(Color(red: 0.24, green: 0.24, blue: 0.26).opacity(0.36))
+                            .background(Color("bg-color1"))
                             .cornerRadius(20)
-                            .offset(x: 0, y: 0)
                             VStack(alignment: .leading){
                                 Text(i == 0 ? "9:00 - 11:00" : "11:00 - 12:00")
-                                  .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
+                                  .font(Font.custom("SF Pro Display", size: 20).weight(.semibold))
                                   .foregroundColor(.white)
                                   .padding(.bottom)
                                 

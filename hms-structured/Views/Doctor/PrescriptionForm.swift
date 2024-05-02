@@ -121,14 +121,14 @@ struct PrescriptionForm: View {
                                             self.selectedMedicine = medicine
                                             self.isEditingDetails.toggle()
                                         }) {
-                                            Image(systemName: "arrowtriangle.down.fill")
+                                            Image(systemName: "chevron.down")
                                                 .foregroundColor(.blue)
                                         }
                                         Button(action: {
                                             self.medicines.removeAll { $0.id == medicine.id }
                                         }) {
                                             Image(systemName: "trash")
-                                                .foregroundColor(.red)
+                                                .foregroundColor(.blue)
                                         }
                                     }
                                     if isEditingDetails && selectedMedicine?.id == medicine.id {
@@ -144,7 +144,9 @@ struct PrescriptionForm: View {
                                                     .background(RoundedRectangle(cornerRadius: 5).stroke(Color.blue, lineWidth: 1))
                                             }
                                             
-                                            Text("\(medicine.medicineDetails.dosage) tablet")
+                                            Text("\(medicine.medicineDetails.dosage) tablet") .foregroundColor(.blue)
+                                                .padding()
+                                                .background(RoundedRectangle(cornerRadius: 5).stroke(Color.blue, lineWidth: 1))
                                             
                                             Button(action: {
                                                 // Functionality to decrease dosage
@@ -183,7 +185,7 @@ struct PrescriptionForm: View {
                                         .pickerStyle(SegmentedPickerStyle())
                                     }
                                 }
-                                .padding(.vertical, 5)
+                                .padding()
                                 .background(Color.secondary.opacity(0.1))
                                 .cornerRadius(8)
                             }
