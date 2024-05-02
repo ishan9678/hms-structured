@@ -14,6 +14,8 @@ struct DoctorHomeView: View {
     @State private var selectedDate = Date()
     @State private var appointments: [Appointments] = []
     @State private var fetchedAppointments: [Appointments] = []
+    @AppStorage("user_name") var userName: String = ""
+    @AppStorage("user_UID") var userUID: String = ""
     func dateGetter(index: Int) -> Date {
         return Calendar.current.date(byAdding: .day, value: index, to: getFirstDayOfWeek(for: selectedDate))!
     }
@@ -175,6 +177,8 @@ struct DoctorHomeView: View {
                                 let bookingDate = Date(timeIntervalSince1970: TimeInterval(bookingDateTimestamp.seconds))
                                 // Now you can use the ⁠ bookingDate ⁠ in your ⁠ Appointments ⁠ struct
                                 let appointment = Appointments(bookingDate: bookingDate, timeSlot: appointmentData["timeSlot"] as? String, doctorID: appointmentData["doctorID"] as? String ?? "", doctorName: appointmentData["doctorName"] as? String ?? "", doctorDepartment: appointmentData["doctorDepartment"] as? String ?? "", patientName: appointmentData["patientName"] as? String ?? "", patientID: appointmentData["patientID"] as? String ?? "")
+                                userName = appointment.doctorName
+                                userUID = appointment.doctorID
                                 fetchedAppointments.append(appointment)
                                 print(fetchedAppointments)
                             }

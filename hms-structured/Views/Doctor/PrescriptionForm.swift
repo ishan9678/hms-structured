@@ -1,10 +1,3 @@
-//
-//  PrescriptionForm.swift
-//  hms-structured
-//
-//  Created by srijan mishra on 30/04/24.
-//
-
 import SwiftUI
 import FirebaseFirestore
 
@@ -14,10 +7,20 @@ struct MedicineDetails {
     var toBeTaken: String = "After Food"
 }
 
-
 struct Test: Identifiable {
     let id = UUID()
     let name: String
+}
+
+struct PrescriptionData {
+    let patientID: String
+    let patientName: String
+    let doctorID: String
+    let doctorName: String
+    let symptoms: String
+    let diagnosis: String
+    let medicines: [[String: Any]]
+    let tests: [[String: Any]]
 }
 
 struct PrescriptionForm: View {
@@ -30,12 +33,7 @@ struct PrescriptionForm: View {
     @State private var dosage = 1
     @State private var selectedTimesOfDay: [String] = []
     @State private var toBeTaken = "After Food"
-    @State private var referralDepartments: [String: Bool] = [
-        "Cardiology": false,
-        "Orthopedics": false,
-        "Neurology": false,
-        // Add more departments as needed
-    ]
+    @State private var suggestion = ""
     @State private var searchTextMedicine = ""
     @State private var searchTextTest = ""
     @State private var isEditingMedicine = false
@@ -67,8 +65,7 @@ struct PrescriptionForm: View {
         VStack(alignment: .leading, spacing: 20) {
             VStack(alignment: .leading, spacing: 10) {
                 Text("Symptoms")
-                TextField("Enter symptoms", text: $symptoms)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                TextField("Enter symptoms", text: $symptoms).textFieldStyle(RoundedBorderTextFieldStyle())
             }
             
             VStack(alignment: .leading, spacing: 10) {
@@ -79,35 +76,28 @@ struct PrescriptionForm: View {
             
             VStack(alignment: .leading, spacing: 10) {
                 Text("Medication")
+                    .font(.headline)
                 VStack(alignment: .leading, spacing: 10) {
                     VStack(alignment: .leading, spacing: 10) {
-                        TextField("Search for medicine", text: $searchTextMedicine, onEditingChanged: { editing in
-                            self.isEditingMedicine = editing
-                        })
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                        .padding(.horizontal)
-                        .overlay(
-                            HStack {
-                                Spacer()
-                                if isEditingMedicine {
-                                    Button(action: {
-                                        self.searchTextMedicine = ""
-                                        self.isEditingMedicine = false
-                                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                                    }) {
-                                        Image(systemName: "xmark.circle.fill")
-                                            .foregroundColor(.gray)
-                                            .padding(.horizontal, 12)
-                                            .padding(.vertical, 5)
-                                            .background(Color.white)
-                                            .cornerRadius(20)
-                                            .padding(.trailing, 8)
-                                    }
+                        HStack {
+                            TextField("Search for medicine", text: $searchTextMedicine, onEditingChanged: { editing in
+                                self.isEditingMedicine = editing
+                            })
+                            
+                            if isEditingMedicine {
+                                Button(action: {
+                                    self.searchTextMedicine = ""
+                                    self.isEditingMedicine = false
+                                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                }) {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundColor(.gray)
+                                        .padding(.trailing, 8)
                                 }
                             }
-                        )
+                        }
+                        .padding(.horizontal)
                         .padding(.vertical, 8)
-                        .padding(.horizontal, 10)
                         .background(Color.white)
                         .cornerRadius(8)
                         
@@ -185,7 +175,8 @@ struct PrescriptionForm: View {
                                         .pickerStyle(SegmentedPickerStyle())
                                     }
                                 }
-                                .padding()
+                                .padding(.vertical, 10)
+                                .padding(.horizontal, 10)
                                 .background(Color.secondary.opacity(0.1))
                                 .cornerRadius(8)
                             }
@@ -216,7 +207,7 @@ struct PrescriptionForm: View {
                         TextField("Search for test", text: $searchTextTest, onEditingChanged: { editing in
                             self.isEditingTest = editing
                         })
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        
                         .padding(.horizontal)
                         .overlay(
                             HStack {
@@ -238,7 +229,7 @@ struct PrescriptionForm: View {
                                 }
                             }
                         )
-                        .padding(.vertical, 8)
+                        .padding(.vertical, 10)
                         .padding(.horizontal, 10)
                         .background(Color.white)
                         .cornerRadius(8)
@@ -281,19 +272,20 @@ struct PrescriptionForm: View {
             }
             
             VStack(alignment: .leading, spacing: 10) {
-                Text("Referral")
+                Text("Suggetion")
+                TextField("ENTER SUGGESTIONS",text: $suggestion).textFieldStyle(RoundedBorderTextFieldStyle())
             }
             
             Button(action: {
                 // Submit to Firebase
-                let prescriptionData: [String: Any] = [
-                    "patientID": patientID,
-                    "patientName": patientName,
-//                    "doctorID": userUID,
-//                    "doctorName": userName,
-                    "symptoms": symptoms,
-                    "diagnosis": diagnosis,
-                    "medicines": medicines.map { medicine in
+                let prescriptionData = PrescriptionData(
+                    patientID: patientID,
+                    patientName: patientName,
+                    doctorID: userUID,
+                    doctorName: userName,
+                    symptoms: symptoms,
+                    diagnosis: diagnosis,
+                    medicines: medicines.map { medicine in
                         return [
                             "name": medicine.name,
                             "details": medicine.details,
@@ -302,19 +294,27 @@ struct PrescriptionForm: View {
                             "toBeTaken": medicine.medicineDetails.toBeTaken
                         ]
                     },
-                    "tests": tests.map { test in
+                    tests: tests.map { test in
                         return [
                             "name": test.name
                         ]
                     }
-                    // Add more fields as needed
+                )
+
+                let prescriptionDictionary: [String: Any] = [
+                    "patientID": prescriptionData.patientID,
+                    "patientName": prescriptionData.patientName,
+                    "doctorID": prescriptionData.doctorID,
+                    "doctorName": prescriptionData.doctorName,
+                    "symptoms": prescriptionData.symptoms,
+                    "diagnosis": prescriptionData.diagnosis,
+                    "medicines": prescriptionData.medicines,
+                    "tests": prescriptionData.tests
                 ]
-
-
                 
                 // Add prescriptionData to Firebase
                 let db = Firestore.firestore()
-                db.collection("prescriptions").addDocument(data: prescriptionData) { error in
+                db.collection("prescriptions").addDocument(data: prescriptionDictionary) { error in
                     if let error = error {
                         print("Error adding document: \(error)")
                     } else {
@@ -326,8 +326,7 @@ struct PrescriptionForm: View {
                         tests = []
                     }
                 }
-            })
-{
+            }) {
                 Text("Submit")
                     .foregroundColor(.white)
                     .padding()
@@ -341,6 +340,10 @@ struct PrescriptionForm: View {
         .background(Color(red: 239/255, green: 239/255, blue: 239/255))
         .cornerRadius(10)
         .padding()
+        .onAppear(){
+            print(userName)
+            print(userUID)
+        }
     }
 }
 
@@ -349,4 +352,3 @@ struct PrescriptionForm_Previews: PreviewProvider {
         PrescriptionForm()
     }
 }
-
