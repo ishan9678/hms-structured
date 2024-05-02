@@ -48,70 +48,94 @@ struct DoctorHomeView: View {
     
     var body: some View {
         ZStack {
-            ScrollView{
+            VStack{
                 VStack{
-                    
-                }
-                VStack {
-                    HStack {
-                        Text(getMonthAndYear(date: selectedDate))
-                            .font(.headline)
-                            .foregroundColor(.black)
-                        Button(action: {
-                            self.isDropdownExpanded.toggle()
-                        }) {
-                            Image(systemName: "chevron.down")
-                                .foregroundColor(.black)
+                    VStack(alignment: .leading){
+                        
+                        HStack{
+                            VStack(alignment: .leading){
+                                Text("Hello 👋")
+                                    .font(Font.custom("SF Pro Display", size: 20))
+                                    .lineSpacing(22)
+                                    .foregroundColor(.black)
+                                Text("Srijan mishra")
+                                    .font(Font.custom("SF Pro Display", size: 32).weight(.semibold))
+                                    .lineSpacing(22)
+                                    .foregroundColor(.black)
+                            }
+                            .padding()
+                            Spacer()
+                            Image(systemName:"person.fill")
+                                .resizable()
+                                .frame(width: 30,height: 30)
+                                .padding()
                         }
-                        Spacer()
+                        
                     }
-                    .padding([.horizontal, .top])
-                    .cornerRadius(10)
-                    
-                    ScrollView(.horizontal, showsIndicators: false) {
+                }
+                ScrollView{
+                   
+                    VStack {
                         HStack {
-                            ForEach(0..<7) { i in
-                                let date = dateGetter(index: i)
-                                let isSelected = Calendar.current.isDate(date, inSameDayAs: selectedDate)
-                                
-                                Button(action: {
-                                    withAnimation {
-                                        indexDate.index = i
-                                        selectedDate = date
-                                        hello = getDay(date: date)
+                            Text(getMonthAndYear(date: selectedDate))
+                                .font(.headline)
+                                .foregroundColor(.black)
+                            Button(action: {
+                                self.isDropdownExpanded.toggle()
+                            }) {
+                                Image(systemName: "chevron.down")
+                                    .foregroundColor(.black)
+                            }
+                            Spacer()
+                        }
+                        .padding([.horizontal, .top])
+                        .cornerRadius(10)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(0..<7) { i in
+                                    let date = dateGetter(index: i)
+                                    let isSelected = Calendar.current.isDate(date, inSameDayAs: selectedDate)
+                                    
+                                    Button(action: {
+                                        withAnimation {
+                                            indexDate.index = i
+                                            selectedDate = date
+                                            hello = getDay(date: date)
+                                        }
+                                        print(date)
+                                    }) {
+                                        VStack {
+                                            Text((getDay(date: date)))
+                                                .font(Font.custom("SF Pro Display Regular", size: 16))
+                                                .foregroundColor(isSelected ? .white : .black)
+                                            
+                                            Text((getDate(date: date)))
+                                                .font(Font.custom("SF Pro Display ", size: 18))
+                                                .foregroundColor(isSelected ? .white : .black)
+                                        }
+                                        .frame(alignment: .center)
+                                        .padding(.leading)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 15)
+                                                .frame(width: 64, height: 80)
+                                                .foregroundColor(isSelected ? Color("bg-color1").opacity(01) : .white)
+                                                .padding(.leading)
+                                        )
+                                        .padding()
                                     }
-                                    print(date)
-                                }) {
-                                    VStack {
-                                        Text((getDay(date: date)))
-                                            .font(Font.custom("SF Pro Display Regular", size: 16))
-                                            .foregroundColor(isSelected ? .white : .black)
-                                        
-                                        Text((getDate(date: date)))
-                                            .font(Font.custom("SF Pro Display ", size: 18))
-                                            .foregroundColor(isSelected ? .white : .black)
-                                    }
-                                    .frame(alignment: .center)
-                                    .padding(.leading)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 15)
-                                            .frame(width: 64, height: 80)
-                                            .foregroundColor(isSelected ? Color("bg-color1").opacity(01) : .white)
-                                            .padding(.leading)
-                                    )
-                                    .padding()
                                 }
                             }
+                            .frame(height: 85)
+                            .padding(.bottom)
+                            .padding(.trailing, 16)
                         }
-                        .frame(height: 85)
-                        .padding(.bottom)
-                        .padding(.trailing, 16)
+                        
+                        AppointmentView(temp: hello, appointments: fetchedAppointments,selectedDate: selectedDate)
+                        Spacer()
                     }
-                    
-                    AppointmentView(temp: hello, appointments: fetchedAppointments,selectedDate: selectedDate)
-                    Spacer()
                 }
-            }
+            }.padding(.top,50)
             
             if isDropdownExpanded {
                 Color.black.opacity(0.5)
