@@ -60,6 +60,7 @@
 		8E7731E02BE0F00000EE1DA2 /* PrescriptionForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7731DF2BE0F00000EE1DA2 /* PrescriptionForm.swift */; };
 		8E7731E22BE0F03500EE1DA2 /* MedicineList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7731E12BE0F03500EE1DA2 /* MedicineList.swift */; };
 		8E7731E42BE0F05D00EE1DA2 /* TestList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E7731E32BE0F05D00EE1DA2 /* TestList.swift */; };
+		8EFF67802BE3B79A0016A0AA /* PatientContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFF677F2BE3B79A0016A0AA /* PatientContentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -87,6 +88,7 @@
 		8E7731DF2BE0F00000EE1DA2 /* PrescriptionForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrescriptionForm.swift; sourceTree = "<group>"; };
 		8E7731E12BE0F03500EE1DA2 /* MedicineList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicineList.swift; sourceTree = "<group>"; };
 		8E7731E32BE0F05D00EE1DA2 /* TestList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestList.swift; sourceTree = "<group>"; };
+		8EFF677F2BE3B79A0016A0AA /* PatientContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,6 +173,7 @@
 			children = (
 				86ED4D522BDBBD3500282F0D /* Components */,
 				86B555D42BDA43850064E9BD /* ContentView.swift */,
+				8EFF677F2BE3B79A0016A0AA /* PatientContentView.swift */,
 				86B555E72BDA44020064E9BD /* Auth */,
 				86B555E62BDA43F20064E9BD /* Patient */,
 				86B555E52BDA43E00064E9BD /* Doctor */,
@@ -427,6 +430,7 @@
 				86B555D32BDA43850064E9BD /* hms_structuredApp.swift in Sources */,
 				86B556352BDAD7410064E9BD /* DoctorsViewModel.swift in Sources */,
 				86ED4D542BDBBD4500282F0D /* DateCalenderView.swift in Sources */,
+				8EFF67802BE3B79A0016A0AA /* PatientContentView.swift in Sources */,
 				86B556392BDAD7CC0064E9BD /* AppointmentCardView.swift in Sources */,
 				86ED4D562BDBC43F00282F0D /* TimeSlotView.swift in Sources */,
 				86ED4D102BDB75F400282F0D /* DoctorHomeView.swift in Sources */,

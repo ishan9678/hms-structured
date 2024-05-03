@@ -174,10 +174,11 @@ struct PrescriptionForm: View {
                                         }
                                         Text("To be Taken")
                                         Picker("To be Taken", selection: $toBeTaken) {
-                                            Text("After Food").tag("After Food")
-                                            Text("Before Food").tag("Before Food")
+                                            Text("After Food").tag("After Food").foregroundColor(.blue)
+                                            Text("Before Food").tag("Before Food").foregroundColor(.blue)
                                         }
                                         .pickerStyle(SegmentedPickerStyle())
+                                        .background(Color.white)
                                     }
                                 }
                                 .padding(.vertical, 10)

@@ -50,7 +50,8 @@ struct DoctorHomeView: View {
         ZStack {
             VStack{
                 VStack{
-                    VStack(alignment: .leading){
+                    ZStack(alignment: .leading){
+                       
                         
                         HStack{
                             VStack(alignment: .leading){
@@ -58,7 +59,7 @@ struct DoctorHomeView: View {
                                     .font(Font.custom("SF Pro Display", size: 20))
                                     .lineSpacing(22)
                                     .foregroundColor(.black)
-                                Text("Srijan mishra")
+                                Text("\(userName)")
                                     .font(Font.custom("SF Pro Display", size: 32).weight(.semibold))
                                     .lineSpacing(22)
                                     .foregroundColor(.black)
