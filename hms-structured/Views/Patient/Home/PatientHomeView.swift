@@ -34,21 +34,21 @@ struct PatientHomeView: View {
                     DoctorCardList()
 
                 Spacer()
-                
-                NavigationLink(destination: BookAppointmentView()) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 15)
-                            .foregroundColor(Color("bg-color1"))
-                            .frame(height: 60)
-                        
-                        Text("Book Appointment")
-                            .foregroundColor(.white)
-                            .font(.headline)
-                    }
-                    .padding()
-                }
-                Spacer()
-                
+//                
+//                NavigationLink(destination: BookAppointmentView()) {
+//                    ZStack {
+//                        RoundedRectangle(cornerRadius: 15)
+//                            .foregroundColor(Color("bg-color1"))
+//                            .frame(height: 60)
+//                        
+//                        Text("Book Appointment")
+//                            .foregroundColor(.white)
+//                            .font(.headline)
+//                    }
+//                    .padding()
+//                }
+//                Spacer()
+//                
                 }
                 .ignoresSafeArea(.all)
             }

@@ -25,7 +25,7 @@ struct PatientContentView: View {
                     Image(systemName: "plus.circle")
                     Text("Book")
                 }
-            PatientHomeView()
+            VitalsView(bloodPressureSystolic: "", bloodPressureDiastolic: "", spo2: "", bodyTemp: "", bloodGlucose: "", bmi: "")
                 .tabItem {
                     Image(systemName: "staroflife")
                     Text("Vital")

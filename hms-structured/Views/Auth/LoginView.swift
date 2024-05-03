@@ -135,7 +135,7 @@ struct LoginView: View {
                     .hidden()
                 
                 NavigationLink(
-                    destination: viewModel.role == .patient ? AnyView(PatientHomeView().navigationBarBackButtonHidden()) : viewModel.role == .doctor ? AnyView(DoctorHomeView().navigationBarBackButtonHidden()) : AnyView(SignupView()),
+                    destination: viewModel.role == .patient ? AnyView(PatientContentView().navigationBarBackButtonHidden()) : viewModel.role == .doctor ? AnyView(DoctorHomeView().navigationBarBackButtonHidden()) : AnyView(SignupView()),
                     isActive: $isLoggedIn,
                     label: {
                         EmptyView()
