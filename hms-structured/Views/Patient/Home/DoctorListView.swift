@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct DoctorCardList: View {
     @ObservedObject var doctorsViewModel = DoctorsViewModel()
@@ -24,20 +25,34 @@ struct DoctorCardList: View {
             ScrollView(.horizontal) {
                 HStack(spacing: 20) {
                     ForEach(doctorsViewModel.doctors, id: \.id) { doctor in
-                        VStack(alignment: .leading) {
-                            Text(doctor.fullName)
-                                .font(.headline)
-                                .frame(width: 130, height: 130)
-                                .background(Color.gray)
-                                .clipShape(RoundedRectangle(cornerRadius: 25))
-                                .foregroundColor(.white)
-                                .padding(.bottom, 5)
+                        VStack(alignment: .center) {
+                            if let imageUrl = URL(string: doctor.profileImageURL) {
+                                WebImage(url: imageUrl)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 130, height: 130)
+                                    .clipShape(RoundedRectangle(cornerRadius: 25))
+                                    .overlay(RoundedRectangle(cornerRadius: 25).stroke(Color.gray, lineWidth: 1))
+                            } else {
+                                // Handle invalid URL
+                                Text("Invalid URL")
+                                    .foregroundColor(.red)
+                            }
 
-                            Text(doctor.department)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
+                            VStack(alignment: .leading, spacing: 5) {
+                                Text(doctor.fullName)
+                                    .font(.headline)
+                                    .foregroundColor(.primary)
+                                
+                                Text(doctor.department)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                            .padding(.bottom)
                         }
+                        .padding(.top,10)
                     }
+
                 }
                 .padding(.horizontal)
             }

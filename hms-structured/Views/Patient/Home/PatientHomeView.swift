@@ -34,25 +34,21 @@ struct PatientHomeView: View {
                     DoctorCardList()
 
                 Spacer()
-                
-                    Button(action: {
-                        if let url = URL(string: "https://www.youtube.com/watch?v=dQw4w9WgXcQ") {
-                            UIApplication.shared.open(url)
-                        }
-                    }) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 15)
-                                .foregroundColor(Color("bg-color1"))
-                                .frame(height: 60)
-                            
-                            Text("Prevent the spread of Covid-19 Virus")
-                                .foregroundColor(.white)
-                                .font(.headline)
-                        }
-                        .padding()
-                    }
-                Spacer()
-                
+//                
+//                NavigationLink(destination: BookAppointmentView()) {
+//                    ZStack {
+//                        RoundedRectangle(cornerRadius: 15)
+//                            .foregroundColor(Color("bg-color1"))
+//                            .frame(height: 60)
+//                        
+//                        Text("Book Appointment")
+//                            .foregroundColor(.white)
+//                            .font(.headline)
+//                    }
+//                    .padding()
+//                }
+//                Spacer()
+//                
                 }
                 .ignoresSafeArea(.all)
             }

@@ -13,21 +13,25 @@ struct AppointmentCard: View {
                 
                 HStack{
                     
-                    RoundedRectangle(cornerRadius: 10)
+                    Text(getDate(date: appointment.bookingDate))
+                        .font(.system(size: 16))
+                        .foregroundColor(.white)
+                        .padding(.vertical, 4)
                         .frame(width: 50, height: 50)
-                        .foregroundColor(Color(red: 16/255, green: 22/255, blue: 35/255))
-                        .overlay(
-                            Text(getDate(date: appointment.bookingDate))
-                                .font(.system(size: 16))
-                                .foregroundColor(.white)
-                                .padding(.vertical, 4)
-                        )
+                        .background(Color("bg-color1"))
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                
+                        
+                            
+                        
+
                     Spacer()
                      Text(appointment.timeSlot ?? " ")
                             .font(.system(size: 15))
                             
                 }
                 .padding(.bottom, 10)
+
                 
                 
                 Text("Doctor: \(appointment.doctorName)")
@@ -120,6 +124,9 @@ struct PatientAppointmentsView: View {
                     }
                 }
             }
+
+            // Sort appointments by bookingDate in ascending order
+            fetchedAppointments.sort { $0.bookingDate < $1.bookingDate }
 
         } catch {
             print("Error fetching document: \(error)")

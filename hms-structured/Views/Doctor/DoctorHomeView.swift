@@ -14,6 +14,8 @@ struct DoctorHomeView: View {
     @State private var selectedDate = Date()
     @State private var appointments: [Appointments] = []
     @State private var fetchedAppointments: [Appointments] = []
+    @AppStorage("user_name") var userName: String = ""
+    @AppStorage("user_UID") var userUID: String = ""
     func dateGetter(index: Int) -> Date {
         return Calendar.current.date(byAdding: .day, value: index, to: getFirstDayOfWeek(for: selectedDate))!
     }
@@ -46,65 +48,95 @@ struct DoctorHomeView: View {
     
     var body: some View {
         ZStack {
-            VStack {
-                HStack {
-                    Text(getMonthAndYear(date: selectedDate))
-                        .font(.headline)
-                        .foregroundColor(.black)
-                    Button(action: {
-                        self.isDropdownExpanded.toggle()
-                    }) {
-                        Image(systemName: "chevron.down")
-                            .foregroundColor(.black)
-                    }
-                    Spacer()
-                }
-                .padding([.horizontal, .top])
-                .cornerRadius(10)
-                
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        ForEach(0..<7) { i in
-                            let date = dateGetter(index: i)
-                            let isSelected = Calendar.current.isDate(date, inSameDayAs: selectedDate)
-                            
-                            Button(action: {
-                                withAnimation {
-                                    indexDate.index = i
-                                    selectedDate = date
-                                    hello = getDay(date: date)
-                                }
-                                print(date)
-                            }) {
-                                VStack {
-                                    Text((getDay(date: date)))
-                                        .font(Font.custom("SF Pro Display Regular", size: 16))
-                                        .foregroundColor(isSelected ? .white : .black)
-                                    
-                                    Text((getDate(date: date)))
-                                        .font(Font.custom("SF Pro Display ", size: 18))
-                                        .foregroundColor(isSelected ? .white : .black)
-                                }
-                                .frame(alignment: .center)
-                                .padding(.leading)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 15)
-                                        .frame(width: 64, height: 80)
-                                        .foregroundColor(isSelected ? Color(red: 0.24, green: 0.24, blue: 0.26).opacity(0.36) : .white)
-                                        .padding(.leading)
-                                )
-                                .padding()
+            VStack{
+                VStack{
+                    ZStack(alignment: .leading){
+                       
+                        
+                        HStack{
+                            VStack(alignment: .leading){
+                                Text("Hello 👋")
+                                    .font(Font.custom("SF Pro Display", size: 20))
+                                    .lineSpacing(22)
+                                    .foregroundColor(.black)
+                                Text("\(userName)")
+                                    .font(Font.custom("SF Pro Display", size: 32).weight(.semibold))
+                                    .lineSpacing(22)
+                                    .foregroundColor(.black)
                             }
+                            .padding()
+                            Spacer()
+                            Image(systemName:"person.fill")
+                                .resizable()
+                                .frame(width: 30,height: 30)
+                                .padding()
                         }
+                        
                     }
-                    .frame(height: 85)
-                    .padding(.bottom)
-                    .padding(.trailing, 16)
                 }
-                
-                AppointmentView(temp: hello, appointments: fetchedAppointments,selectedDate: selectedDate)
-                Spacer()
-            }
+                ScrollView{
+                   
+                    VStack {
+                        HStack {
+                            Text(getMonthAndYear(date: selectedDate))
+                                .font(.headline)
+                                .foregroundColor(.black)
+                            Button(action: {
+                                self.isDropdownExpanded.toggle()
+                            }) {
+                                Image(systemName: "chevron.down")
+                                    .foregroundColor(.black)
+                            }
+                            Spacer()
+                        }
+                        .padding([.horizontal, .top])
+                        .cornerRadius(10)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(0..<7) { i in
+                                    let date = dateGetter(index: i)
+                                    let isSelected = Calendar.current.isDate(date, inSameDayAs: selectedDate)
+                                    
+                                    Button(action: {
+                                        withAnimation {
+                                            indexDate.index = i
+                                            selectedDate = date
+                                            hello = getDay(date: date)
+                                        }
+                                        print(date)
+                                    }) {
+                                        VStack {
+                                            Text((getDay(date: date)))
+                                                .font(Font.custom("SF Pro Display Regular", size: 16))
+                                                .foregroundColor(isSelected ? .white : .black)
+                                            
+                                            Text((getDate(date: date)))
+                                                .font(Font.custom("SF Pro Display ", size: 18))
+                                                .foregroundColor(isSelected ? .white : .black)
+                                        }
+                                        .frame(alignment: .center)
+                                        .padding(.leading)
+                                        .background(
+                                            RoundedRectangle(cornerRadius: 15)
+                                                .frame(width: 64, height: 80)
+                                                .foregroundColor(isSelected ? Color("bg-color1").opacity(01) : .white)
+                                                .padding(.leading)
+                                        )
+                                        .padding()
+                                    }
+                                }
+                            }
+                            .frame(height: 85)
+                            .padding(.bottom)
+                            .padding(.trailing, 16)
+                        }
+                        
+                        AppointmentView(temp: hello, appointments: fetchedAppointments,selectedDate: selectedDate)
+                        Spacer()
+                    }
+                }
+            }.padding(.top,50)
             
             if isDropdownExpanded {
                 Color.black.opacity(0.5)
@@ -126,7 +158,7 @@ struct DoctorHomeView: View {
             }
         }
         .background(
-            LinearGradient(gradient: Gradient(colors: [Color(red: 0, green: 0.60, blue: 0.87), Color(red: 0.56, green: 0.87, blue: 0.97)]), startPoint: .top, endPoint: .bottom)
+            Color(.white)
         )
         .onAppear {
             self.hello = getDay(date: Date())
@@ -170,6 +202,8 @@ struct DoctorHomeView: View {
                                 let bookingDate = Date(timeIntervalSince1970: TimeInterval(bookingDateTimestamp.seconds))
                                 // Now you can use the ⁠ bookingDate ⁠ in your ⁠ Appointments ⁠ struct
                                 let appointment = Appointments(bookingDate: bookingDate, timeSlot: appointmentData["timeSlot"] as? String, doctorID: appointmentData["doctorID"] as? String ?? "", doctorName: appointmentData["doctorName"] as? String ?? "", doctorDepartment: appointmentData["doctorDepartment"] as? String ?? "", patientName: appointmentData["patientName"] as? String ?? "", patientID: appointmentData["patientID"] as? String ?? "")
+                                userName = appointment.doctorName
+                                userUID = appointment.doctorID
                                 fetchedAppointments.append(appointment)
                                 print(fetchedAppointments)
                             }
@@ -194,65 +228,145 @@ struct AppointmentView: View {
     var selectedDate: Date
     var body: some View {
         VStack {
-            ForEach(Array(appointments.enumerated()), id: \.element) { index,appointment in
-                if retrieveDatePortion(from: selectedDate) == retrieveDatePortion(from: appointment.bookingDate){
-                    DisclosureGroup(
-                        content: {
-                            HStack() {
-                                                                VStack(alignment: .leading){
-                                                                
-                                                                    Text(appointment.patientName)
-                                                                      .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
-                                                                      .tracking(0.16)
-                                                                      .lineSpacing(21.60)
-                                                                      .foregroundColor(.black)
+            ForEach(0..<4) { i in
+                DisclosureGroup(
+                    content: { VStack{
+                        ForEach(Array(appointments.enumerated()), id: \.element) { index,appointment in
+                            NavigationLink(destination: PrescriptionForm(patientID: appointment.patientID,patientName: appointment.patientName), label:{
+                                if retrieveDatePortion(from: selectedDate) == retrieveDatePortion(from: appointment.bookingDate) {
+                                    if(appointment.timeSlot == "11:00 - 12:00" && i == 1){
+                                        HStack() {
+                                            VStack(alignment: .leading){
+                                                Text(appointment.patientName)
+                                                  .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
+                                                  .tracking(0.16)
+                                                  .lineSpacing(21.60)
+                                                  .foregroundColor(.black)
 
-                                                                    
-                                                                }
-                                                                .padding(.leading)
-                                                                
-                                                              Spacer()
-                                                                Image(systemName: "arrow.forwardarrow.forward")
-                                                            }
-                                                            .frame(width: 218, height: 84)
-                                                            .background(.white)
-                                                            .clipShape(RoundedRectangle(cornerRadius: 20))
-                                                            .padding([.horizontal,.vertical],5)
-                                                            .padding(.leading,60)
-                        },
-                        label: {
-                            HStack {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .foregroundColor(Color(red: 0.24, green: 0.24, blue: 0.26).opacity(0.36))
-                                        .frame(width: 86.78, height: 96)
-                                    Text("\(temp)")
-                                        .font(Font.custom("SF Pro Display", size: 18).weight(.medium))
-                                        .foregroundColor(.white)
-                                }
-                                .frame(width: 86.78, height: 96)
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .foregroundColor(Color(red: 0.24, green: 0.24, blue: 0.26).opacity(0.36))
-                                        .frame(width: 249.62, height: 96)
-                                    VStack(alignment: .leading) {
-                                        Text("\(appointment.timeSlot!)")
-                                            .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
-                                            .foregroundColor(.white)
-                                            .padding(.bottom)
-                                        Text("\(appointment.doctorName)")
-                                            .font(Font.custom("SF Pro Display", size: 12))
-                                            .foregroundColor(.white)
+                                            }
+                                            .padding(.leading)
+                                            
+                                          Spacer()
+                                            
+                                        }
+                                        .frame(width: 218, height: 84)
+                                        .background(.white)
+                                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                                        .padding([.horizontal,.vertical],5)
+                                        
                                     }
-                                    .offset(x: -30)
-                                }
-                                .frame(width: 249.62, height: 96)
-                            }
-                        }
-                    )
-                    .padding(.horizontal)
-                }
+                                    else if(appointment.timeSlot == "9:00 - 11:00" && i == 0){
+                                        HStack() {
+                                            VStack(alignment: .leading){
+                                                Text(appointment.patientName)
+                                                  .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
+                                                  .tracking(0.16)
+                                                  .lineSpacing(21.60)
+                                                  .foregroundColor(.black)
 
+                                            }
+                                            .padding(.leading)
+                                            
+                                          Spacer()
+                                            Image(systemName: "arrow.forwardarrow.forward")
+                                        }
+                                        .frame(width: 218, height: 84)
+                                        .background(.white)
+                                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                                        .padding([.horizontal,.vertical],5)
+                                    }
+                                    else if(appointment.timeSlot == "12:00 - 2:00" && i == 2){
+                                        HStack() {
+                                            VStack(alignment: .leading){
+                                                Text(appointment.patientName)
+                                                  .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
+                                                  .tracking(0.16)
+                                                  .lineSpacing(21.60)
+                                                  .foregroundColor(.black)
+
+                                            }
+                                            .padding(.leading)
+                                            
+                                          Spacer()
+                                            Image(systemName: "arrow.forwardarrow.forward")
+                                        }
+                                        .frame(width: 218, height: 84)
+                                        .background(.white)
+                                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                                        .padding([.horizontal,.vertical],5)
+                                    }
+                                    else if(appointment.timeSlot == "2:00 - 4:00" && i == 3){
+                                        HStack() {
+                                            VStack(alignment: .leading){
+                                                Text(appointment.patientName)
+                                                  .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
+                                                  .tracking(0.16)
+                                                  .lineSpacing(21.60)
+                                                  .foregroundColor(.black)
+
+                                            }
+                                            .padding(.leading)
+                                            
+                                          Spacer()
+                                            Image(systemName: "arrow.forwardarrow.forward")
+                                        }
+                                        .frame(width: 218, height: 84)
+                                        .background(.white)
+                                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                                        .padding([.horizontal,.vertical],5)
+                                    }
+                                    
+                                    
+                                }
+                            })
+
+                        }
+                        
+                    }.background(Color("bg-color1").opacity(1))
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .padding(.leading,100)
+                    },
+                    label: { HStack{
+                        ZStack() {
+                          Rectangle()
+                            .foregroundColor(.clear)
+                            .frame(width: 86.78, height: 96)
+                            .background(Color("bg-color1"))
+                            .cornerRadius(20)
+                          Text("\(temp)")
+                            .font(Font.custom("SF Pro Display", size: 20).weight(.medium))
+                            .foregroundColor(.white)
+                            
+                        }
+                        .frame(width: 86.78, height: 96)
+                        ZStack() {
+                          Rectangle()
+                            .foregroundColor(.clear)
+                            .frame(width: 249.62, height: 96)
+                            .background(Color("bg-color1"))
+                            .cornerRadius(20)
+                            VStack(alignment: .leading){
+                                if(i == 0 || i == 1){
+                                    Text(i == 0 ? "9:00 - 11:00" : "11:00 - 12:00")
+                                      .font(Font.custom("SF Pro Display", size: 20).weight(.semibold))
+                                      .foregroundColor(.white)
+                                      .padding(.bottom)
+                                }
+                                else{
+                                    Text(i == 2 ? "12:00 - 2:00" : "2:00 - 4:00")
+                                      .font(Font.custom("SF Pro Display", size: 20).weight(.semibold))
+                                      .foregroundColor(.white)
+                                      .padding(.bottom)
+                                }
+                                
+                                 
+                            }
+                            .offset(x:-30)
+                        }
+                        .frame(width: 249.62, height: 96)
+                    }  }
+                ).padding(.horizontal)
+                
             }
         }.onAppear(){
             print("appointments",appointments)
