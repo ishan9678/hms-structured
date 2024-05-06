@@ -16,6 +16,7 @@ struct AppointmentCard: View {
                     Text(getDate(date: appointment.bookingDate))
                         .font(.system(size: 16))
                         .foregroundColor(.white)
+                        .bold()
                         .padding(.vertical, 4)
                         .frame(width: 50, height: 50)
                         .background(Color("bg-color1"))

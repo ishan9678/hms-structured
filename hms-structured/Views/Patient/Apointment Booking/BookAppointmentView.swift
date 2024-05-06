@@ -297,7 +297,7 @@ struct MedicineTestListView: View {
                 }
                 .background(
                     NavigationLink(
-                        destination: Text("Details or booking view for \(selectedTest ?? "")"),
+                        destination: MedicalTestDetailsView(testName : selectedTest ?? "", category: category),
                         isActive: $isDetailViewActive,
                         label: { EmptyView() }
                     )

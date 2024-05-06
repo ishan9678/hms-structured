@@ -37,7 +37,9 @@
 		865236272BE4A17400CA1793 /* HealthCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865236262BE4A17400CA1793 /* HealthCardView.swift */; };
 		8652362A2BE4A1DB00CA1793 /* VitalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865236292BE4A1DB00CA1793 /* VitalsView.swift */; };
 		8652362E2BE8D30400CA1793 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 8652362D2BE8D30400CA1793 /* GoogleGenerativeAI */; };
-		865236302BE903C300CA1793 /* MedicalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652362F2BE903C300CA1793 /* MedicalTests.swift */; };
+		865236302BE903C300CA1793 /* MedicalTestsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652362F2BE903C300CA1793 /* MedicalTestsList.swift */; };
+		865236322BE953A300CA1793 /* MedicalTestDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865236312BE953A300CA1793 /* MedicalTestDetailsView.swift */; };
+		865236342BE967AA00CA1793 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865236332BE967AA00CA1793 /* Tests.swift */; };
 		86B555D32BDA43850064E9BD /* hms_structuredApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B555D22BDA43850064E9BD /* hms_structuredApp.swift */; };
 		86B555D52BDA43850064E9BD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B555D42BDA43850064E9BD /* ContentView.swift */; };
 		86B555D72BDA43860064E9BD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86B555D62BDA43860064E9BD /* Assets.xcassets */; };
@@ -72,7 +74,9 @@
 		865236262BE4A17400CA1793 /* HealthCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthCardView.swift; sourceTree = "<group>"; };
 		865236292BE4A1DB00CA1793 /* VitalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalsView.swift; sourceTree = "<group>"; };
 		8652362B2BE4A6AA00CA1793 /* hms-structured.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "hms-structured.entitlements"; sourceTree = "<group>"; };
-		8652362F2BE903C300CA1793 /* MedicalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicalTests.swift; sourceTree = "<group>"; };
+		8652362F2BE903C300CA1793 /* MedicalTestsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicalTestsList.swift; sourceTree = "<group>"; };
+		865236312BE953A300CA1793 /* MedicalTestDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicalTestDetailsView.swift; sourceTree = "<group>"; };
+		865236332BE967AA00CA1793 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		86B555CF2BDA43850064E9BD /* hms-structured.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "hms-structured.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		86B555D22BDA43850064E9BD /* hms_structuredApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hms_structuredApp.swift; sourceTree = "<group>"; };
 		86B555D42BDA43850064E9BD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -219,7 +223,8 @@
 				86B556322BDAD7140064E9BD /* Doctors.swift */,
 				86ED4D572BDBC86800282F0D /* Patients.swift */,
 				86ED4D592BDBCE4700282F0D /* Appointments.swift */,
-				8652362F2BE903C300CA1793 /* MedicalTests.swift */,
+				8652362F2BE903C300CA1793 /* MedicalTestsList.swift */,
+				865236332BE967AA00CA1793 /* Tests.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -318,6 +323,7 @@
 				86ED4D0D2BDB713200282F0D /* BookAppointmentView.swift */,
 				86ED4D502BDB8A2600282F0D /* DoctorDetails.swift */,
 				86ED4D552BDBC43F00282F0D /* TimeSlotView.swift */,
+				865236312BE953A300CA1793 /* MedicalTestDetailsView.swift */,
 			);
 			path = "Apointment Booking";
 			sourceTree = "<group>";
@@ -462,11 +468,13 @@
 				8E7731E42BE0F05D00EE1DA2 /* TestList.swift in Sources */,
 				86B556332BDAD7140064E9BD /* Doctors.swift in Sources */,
 				8E7731E22BE0F03500EE1DA2 /* MedicineList.swift in Sources */,
+				865236342BE967AA00CA1793 /* Tests.swift in Sources */,
 				86B555D32BDA43850064E9BD /* hms_structuredApp.swift in Sources */,
 				86B556352BDAD7410064E9BD /* DoctorsViewModel.swift in Sources */,
 				865236272BE4A17400CA1793 /* HealthCardView.swift in Sources */,
 				86ED4D542BDBBD4500282F0D /* DateCalenderView.swift in Sources */,
-				865236302BE903C300CA1793 /* MedicalTests.swift in Sources */,
+				865236302BE903C300CA1793 /* MedicalTestsList.swift in Sources */,
+				865236322BE953A300CA1793 /* MedicalTestDetailsView.swift in Sources */,
 				8EFF67802BE3B79A0016A0AA /* PatientContentView.swift in Sources */,
 				86B556392BDAD7CC0064E9BD /* AppointmentCardView.swift in Sources */,
 				8EF782E22BE88BCB00B70CE5 /* PatientPrescriptionView.swift in Sources */,
