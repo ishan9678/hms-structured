@@ -230,7 +230,7 @@ struct PrescriptionView: View {
     
     private func fetchPrescription() {
         let db = Firestore.firestore()
-        let prescriptionRef = db.collection("prescriptions").document("Thm7Th1uJroN2tT9Xna6")
+        let prescriptionRef = db.collection("prescriptions").document("GZgZEh06MKCn3h6rCS2d")
 
         prescriptionRef.getDocument { document, error in
             if let document = document, document.exists {

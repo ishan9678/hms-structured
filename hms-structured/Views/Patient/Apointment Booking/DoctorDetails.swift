@@ -21,7 +21,7 @@ struct DoctorDetailsView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 130, height: 130)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .clipShape(RoundedRectangle(cornerRadius: 25))
                         .overlay(RoundedRectangle(cornerRadius: 25).stroke(Color.gray, lineWidth: 1))
                 } else {
                     // Handle invalid URL

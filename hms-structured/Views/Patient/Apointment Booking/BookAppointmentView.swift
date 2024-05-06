@@ -13,6 +13,15 @@ struct BookAppointmentView_Previews: PreviewProvider {
 
 import SwiftUI
 import Firebase
+import GoogleGenerativeAI
+import SDWebImageSwiftUI
+
+let config = GenerationConfig(
+  temperature: 1,
+  topP: 0.95,
+  topK: 0,
+  maxOutputTokens: 8192
+)
 
 struct BookAppointmentView: View {
     @State private var categories: [String] = []
@@ -20,33 +29,119 @@ struct BookAppointmentView: View {
     @StateObject var weekStore = WeekStore()
     @State private var selectedTime: String? = nil
     @State private var currentMonth = ""
+    @State private var departmentName: String = ""
+    @State private var searchQuery: String = ""
+    @State private var showAllCategories = false
+    @State private var selectedBookingType = 0
+    @State private var medicalTestCategories: [String] = medicalTests.keys.map { $0 }
 
     
+
     var body: some View {
         NavigationView {
-            List {
-                Section(header: Text("Book an appointment")) {
-                    TextField("Symptoms, diseases", text: .constant(""))
-                        .padding()
-                        .background(Color(.systemGray6))
-                        .cornerRadius(10)
-                }
-                
-                Section(header: Text("Categories for doctors")) {
-                    ForEach(categories, id: \.self) { category in
-                        NavigationLink(destination: DoctorListView(category: category)) {
-                            Text(category)
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
+                    
+                    Section() {
+                        ZStack(alignment: .trailing) {
+                            TextField("Symptoms, diseases", text: $searchQuery)
+                                .padding()
+                                .background(Color(.systemGray6))
+                                .cornerRadius(10)
+                                .frame(width: 360)
+                                .padding(.leading, 240)
+                            
+                            if !searchQuery.isEmpty {
+                                Button(action: {
+                                    searchDepartment(for: searchQuery)
+                                }) {
+                                    Image(systemName: "magnifyingglass")
+                                        .foregroundColor(.blue)
+                                }
+                                .padding(.trailing, 10)
+                            }
+                        }
+                    }
+
+                    Spacer()
+                    
+                    Picker(selection: $selectedBookingType, label: Text("")) {
+                        Text("Book Appointment").tag(0)
+                        Text("Book Medical Test").tag(1)
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    .frame(width: 400)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 5)
+
+
+                    Section() {
+                        
+                        if(selectedBookingType == 0){
+                            
+                            ForEach(categories, id: \.self) { category in
+                                VStack {
+                                    NavigationLink(destination: DoctorListView(category: category)){
+                                        Image(category)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 50, height: 50)
+                                            .padding()
+                                            .clipShape(Circle())
+                                            .overlay(Circle().stroke(Color.gray.opacity(0.2), lineWidth: 2))
+                                    }
+                                    
+                                    NavigationLink(destination: DoctorListView(category: category)) {
+                                        Text(category)
+                                            .foregroundColor(.black)
+                                            .padding(.bottom, category.contains(" ") ? 0 : 22)
+                                    }
+                                }
+                            }
+                        } else{
+                            ForEach(medicalTestCategories, id: \.self) { category in
+                                VStack {
+                                    NavigationLink(destination: MedicineTestListView(category: category)){
+                                        Image(category)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 50, height: 50)
+                                            .padding()
+                                            .clipShape(Circle())
+                                            .overlay(Circle().stroke(Color.gray.opacity(0.2), lineWidth: 2))
+                                    }
+                                    NavigationLink(destination: MedicineTestListView(category: category)){
+                                        Text(category)
+                                            .foregroundColor(.black)
+                                            .padding(.bottom, category.contains(" ") ? 0 : 22)
+                                            .multilineTextAlignment(.center)
+                                    }
+                                }
+                            }
+                        }
+                        
+                        
+                        if showAllCategories {
+                            Button("Show All Categories") {
+                                departmentName = ""
+                                fetchCategories()
+                                showAllCategories = false
+                            }
+                            .foregroundColor(.blue)
+                            .padding()
                         }
                     }
                 }
+                .padding()
             }
-            .listStyle(GroupedListStyle())
-            .navigationBarTitle("Book Appointment")
+            .navigationBarTitle(selectedBookingType == 0 ? "Book Appointment" : "Book Medical Test")
             .onAppear {
                 self.fetchCategories()
             }
         }
     }
+
+
     
     private func fetchCategories() {
         let db = Firestore.firestore()
@@ -64,8 +159,46 @@ struct BookAppointmentView: View {
             }
             
             self.categories = Array(uniqueCategories).sorted()
+                        
+            if !departmentName.isEmpty {
+                self.categories = [departmentName]
+                print("categories", self.categories)
+            }
         }
     }
+
+    private func searchDepartment(for query: String) {
+        let model = GenerativeModel(
+            name: "gemini-1.5-pro-latest",
+            apiKey: "AIzaSyBV6mcL_K-UGuP-jI2X8yier815VjMbFx4",
+            generationConfig: config,
+            safetySettings: [
+                SafetySetting(harmCategory: .harassment, threshold: .blockMediumAndAbove),
+                SafetySetting(harmCategory: .hateSpeech, threshold: .blockMediumAndAbove),
+                SafetySetting(harmCategory: .sexuallyExplicit, threshold: .blockNone),
+                SafetySetting(harmCategory: .dangerousContent, threshold: .blockMediumAndAbove)
+            ]
+        )
+        print("Function called")
+        
+        print(query)
+        
+        Task {
+            do {
+                let prompt = "Given the departments of the hospital which are Cardiology, Emergency Medicine, General Surgery, Neurology, Obstetrics & Gynaecology, Oncology, Orthopaedics, Paediatrics, Radiology. The given input would be symptoms or diseases and you need to respond with the department name that would be responsible. Here is the input: "
+                let response = try await model.generateContent(prompt + query)
+                print(response)
+                let departmentName = response.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                self.departmentName = departmentName
+                print("Department Name: \(departmentName)")
+                fetchCategories()
+                showAllCategories = true
+            } catch {
+                print("Error: \(error.localizedDescription)")
+            }
+        }
+    }
+
 }
 
 struct DoctorListView: View {
@@ -75,45 +208,109 @@ struct DoctorListView: View {
     @State private var isDoctorSelected = false
     
     var body: some View {
-        NavigationView {
-            VStack {
-                NavigationLink(
-                    destination: DoctorDetailsView(doctor: selectedDoc),
-                    isActive: $isDoctorSelected
-                ) {
-                    EmptyView()
-                }
-                
-                List(doctorsViewModel.doctors.filter { $0.department == category }, id: \.id) { doctor in
-                    Button(action: {
-                        self.selectedDoc = doctor
-                        isDoctorSelected = true
-                        print("\(selectedDoc.fullName)")
-                    }) {
-                        VStack(alignment: .leading) {
-                            Text(doctor.fullName)
-                                .font(.headline)
-                                .foregroundColor(.primary)
-                            
-                            Text(doctor.department)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-                        .padding()
-                        .foregroundColor(.white)
-                        .padding(.vertical, 5)
+        VStack{
+            NavigationView {
+                VStack {
+                    NavigationLink(
+                        destination: DoctorDetailsView(doctor: selectedDoc),
+                        isActive: $isDoctorSelected
+                    ) {
+                        EmptyView()
                     }
                     
+                    List(doctorsViewModel.doctors.filter { $0.department == category }, id: \.id) { doctor in
+                        Button(action: {
+                            self.selectedDoc = doctor
+                            isDoctorSelected = true
+                            print("\(selectedDoc.fullName)")
+                        }) {
+                            HStack{
+                                if let imageUrl = URL(string: doctor.profileImageURL) {
+                                    WebImage(url: imageUrl)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 80, height: 80)
+                                        .clipShape(RoundedRectangle(cornerRadius: 25))
+                                        .overlay(RoundedRectangle(cornerRadius: 25).stroke(Color.gray, lineWidth: 1))
+                                } else {
+                                    // Handle invalid URL
+                                    Text("Invalid URL")
+                                        .foregroundColor(.red)
+                                }
+                                
+                                VStack(alignment: .leading) {
+                                    Text(doctor.fullName)
+                                        .font(.headline)
+                                        .foregroundColor(.primary)
+                                    
+                                    Text(doctor.department)
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                }
+                                .padding()
+                                .foregroundColor(.white)
+                                .padding(.vertical, 5)
+                            }
+                        }
+                    }
+                }
+                .onAppear {
+                    fetchDoctors()
                 }
             }
-            .onAppear {
-                fetchDoctors()
-            }
+            .navigationTitle(isDoctorSelected ? "" : category + " Doctors")
+            .navigationBarBackButtonHidden(isDoctorSelected ? true : false)
         }
     }
     
     private func fetchDoctors() {
         doctorsViewModel.fetchDoctors()
+    }
+}
+
+struct MedicineTestListView: View {
+    var category: String
+    @State private var selectedTest: String?
+    @State private var isDetailViewActive = false
+    
+    var body: some View {
+        VStack {
+            NavigationView {
+                List(medicalTests[category] ?? [], id: \.self) { medicalTest in
+                    Button(action: {
+                        self.selectedTest = medicalTest
+                        self.isDetailViewActive = true
+                    }) {
+                        HStack {
+                            Image(category)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 50, height: 50)
+                                .padding()
+                                .clipShape(Circle())
+                                .overlay(Circle().stroke(Color.gray.opacity(0.2), lineWidth: 2))
+                            
+                            Text(medicalTest)
+                                .foregroundColor(.black)
+                        }
+                    }
+                }
+                .background(
+                    NavigationLink(
+                        destination: Text("Details or booking view for \(selectedTest ?? "")"),
+                        isActive: $isDetailViewActive,
+                        label: { EmptyView() }
+                    )
+                )
+            }
+            .navigationTitle(isDetailViewActive ? "" : category)
+            .navigationBarBackButtonHidden(isDetailViewActive ? true : false)
+            .onChange(of: isDetailViewActive) { _ in
+                if !isDetailViewActive {
+                    self.selectedTest = nil
+                }
+            }
+        }
     }
 }
 

@@ -36,6 +36,8 @@
 		865236252BE49EAC00CA1793 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 865236242BE49EAC00CA1793 /* FirebaseStorageCombine-Community */; };
 		865236272BE4A17400CA1793 /* HealthCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865236262BE4A17400CA1793 /* HealthCardView.swift */; };
 		8652362A2BE4A1DB00CA1793 /* VitalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865236292BE4A1DB00CA1793 /* VitalsView.swift */; };
+		8652362E2BE8D30400CA1793 /* GoogleGenerativeAI in Frameworks */ = {isa = PBXBuildFile; productRef = 8652362D2BE8D30400CA1793 /* GoogleGenerativeAI */; };
+		865236302BE903C300CA1793 /* MedicalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652362F2BE903C300CA1793 /* MedicalTests.swift */; };
 		86B555D32BDA43850064E9BD /* hms_structuredApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B555D22BDA43850064E9BD /* hms_structuredApp.swift */; };
 		86B555D52BDA43850064E9BD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B555D42BDA43850064E9BD /* ContentView.swift */; };
 		86B555D72BDA43860064E9BD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86B555D62BDA43860064E9BD /* Assets.xcassets */; };
@@ -70,6 +72,7 @@
 		865236262BE4A17400CA1793 /* HealthCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthCardView.swift; sourceTree = "<group>"; };
 		865236292BE4A1DB00CA1793 /* VitalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalsView.swift; sourceTree = "<group>"; };
 		8652362B2BE4A6AA00CA1793 /* hms-structured.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "hms-structured.entitlements"; sourceTree = "<group>"; };
+		8652362F2BE903C300CA1793 /* MedicalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicalTests.swift; sourceTree = "<group>"; };
 		86B555CF2BDA43850064E9BD /* hms-structured.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "hms-structured.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		86B555D22BDA43850064E9BD /* hms_structuredApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hms_structuredApp.swift; sourceTree = "<group>"; };
 		86B555D42BDA43850064E9BD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -109,6 +112,7 @@
 				865236052BE49EAC00CA1793 /* FirebaseDatabaseSwift in Frameworks */,
 				865236152BE49EAC00CA1793 /* FirebaseInAppMessagingSwift-Beta in Frameworks */,
 				8652361B2BE49EAC00CA1793 /* FirebaseMessaging in Frameworks */,
+				8652362E2BE8D30400CA1793 /* GoogleGenerativeAI in Frameworks */,
 				865235FB2BE49EAC00CA1793 /* FirebaseAppDistribution-Beta in Frameworks */,
 				865235FF2BE49EAC00CA1793 /* FirebaseAuthCombine-Community in Frameworks */,
 				8652360B2BE49EAC00CA1793 /* FirebaseFirestoreCombine-Community in Frameworks */,
@@ -215,6 +219,7 @@
 				86B556322BDAD7140064E9BD /* Doctors.swift */,
 				86ED4D572BDBC86800282F0D /* Patients.swift */,
 				86ED4D592BDBCE4700282F0D /* Appointments.swift */,
+				8652362F2BE903C300CA1793 /* MedicalTests.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -381,6 +386,7 @@
 				865236202BE49EAC00CA1793 /* FirebaseRemoteConfigSwift */,
 				865236222BE49EAC00CA1793 /* FirebaseStorage */,
 				865236242BE49EAC00CA1793 /* FirebaseStorageCombine-Community */,
+				8652362D2BE8D30400CA1793 /* GoogleGenerativeAI */,
 			);
 			productName = "hms-structured";
 			productReference = 86B555CF2BDA43850064E9BD /* hms-structured.app */;
@@ -413,6 +419,7 @@
 			packageReferences = (
 				86ED4D602BDF723F00282F0D /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				865235EF2BE49EAC00CA1793 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				8652362C2BE8D30400CA1793 /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
 			);
 			productRefGroup = 86B555D02BDA43850064E9BD /* Products */;
 			projectDirPath = "";
@@ -459,6 +466,7 @@
 				86B556352BDAD7410064E9BD /* DoctorsViewModel.swift in Sources */,
 				865236272BE4A17400CA1793 /* HealthCardView.swift in Sources */,
 				86ED4D542BDBBD4500282F0D /* DateCalenderView.swift in Sources */,
+				865236302BE903C300CA1793 /* MedicalTests.swift in Sources */,
 				8EFF67802BE3B79A0016A0AA /* PatientContentView.swift in Sources */,
 				86B556392BDAD7CC0064E9BD /* AppointmentCardView.swift in Sources */,
 				8EF782E22BE88BCB00B70CE5 /* PatientPrescriptionView.swift in Sources */,
@@ -684,6 +692,14 @@
 				minimumVersion = 10.25.0;
 			};
 		};
+		8652362C2BE8D30400CA1793 /* XCRemoteSwiftPackageReference "generative-ai-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/generative-ai-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.2;
+			};
+		};
 		86ED4D602BDF723F00282F0D /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
@@ -829,6 +845,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 865235EF2BE49EAC00CA1793 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = "FirebaseStorageCombine-Community";
+		};
+		8652362D2BE8D30400CA1793 /* GoogleGenerativeAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8652362C2BE8D30400CA1793 /* XCRemoteSwiftPackageReference "generative-ai-swift" */;
+			productName = GoogleGenerativeAI;
 		};
 		86ED4D612BDF723F00282F0D /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
