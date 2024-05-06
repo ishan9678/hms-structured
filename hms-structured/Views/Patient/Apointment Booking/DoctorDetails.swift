@@ -91,17 +91,29 @@ struct DoctorDetailsView: View {
                     .font(.system(size: 20))
                     .fontWeight(.bold)
                 
-                HStack(spacing: 20) {
-                    // Time slots for morning set
-                    TimeSlotView(time: "9:00 - 11:00", isSelected: selectedTime == "9:00 - 11:00") { time in
-                        selectedTime = time
+                VStack {
+                    HStack(spacing: 20) {
+                        // Time slots for morning set
+                        TimeSlotView(time: "9:00 - 11:00", isSelected: selectedTime == "9:00 - 11:00") { time in
+                            selectedTime = time
+                        }
+                        TimeSlotView(time: "11:00 - 12:00", isSelected: selectedTime == "11:00 - 12:00") { time in
+                            selectedTime = time
+                        }
+                        
                     }
-                    TimeSlotView(time: "11:00 - 12:00", isSelected: selectedTime == "11:00 - 12:00") { time in
-                        selectedTime = time
+                    .padding()
+                    HStack(spacing: 20) {
+                        // Time slots for morning set
+                        TimeSlotView(time: "12:00 - 2:00", isSelected: selectedTime == "12:00 - 2:00") { time in
+                            selectedTime = time
+                        }
+                        TimeSlotView(time: "2:00 - 4:00", isSelected: selectedTime == "2:00 - 4:00") { time in
+                            selectedTime = time
+                        }
+                        
                     }
-                    
                 }
-                .padding()
                 
                
             

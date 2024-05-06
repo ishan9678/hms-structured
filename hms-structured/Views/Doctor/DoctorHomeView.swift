@@ -228,7 +228,7 @@ struct AppointmentView: View {
     var selectedDate: Date
     var body: some View {
         VStack {
-            ForEach(0..<2) { i in
+            ForEach(0..<4) { i in
                 DisclosureGroup(
                     content: { VStack{
                         ForEach(Array(appointments.enumerated()), id: \.element) { index,appointment in
@@ -256,6 +256,46 @@ struct AppointmentView: View {
                                         
                                     }
                                     else if(appointment.timeSlot == "9:00 - 11:00" && i == 0){
+                                        HStack() {
+                                            VStack(alignment: .leading){
+                                                Text(appointment.patientName)
+                                                  .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
+                                                  .tracking(0.16)
+                                                  .lineSpacing(21.60)
+                                                  .foregroundColor(.black)
+
+                                            }
+                                            .padding(.leading)
+                                            
+                                          Spacer()
+                                            Image(systemName: "arrow.forwardarrow.forward")
+                                        }
+                                        .frame(width: 218, height: 84)
+                                        .background(.white)
+                                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                                        .padding([.horizontal,.vertical],5)
+                                    }
+                                    else if(appointment.timeSlot == "12:00 - 2:00" && i == 2){
+                                        HStack() {
+                                            VStack(alignment: .leading){
+                                                Text(appointment.patientName)
+                                                  .font(Font.custom("SF Pro Display", size: 16).weight(.semibold))
+                                                  .tracking(0.16)
+                                                  .lineSpacing(21.60)
+                                                  .foregroundColor(.black)
+
+                                            }
+                                            .padding(.leading)
+                                            
+                                          Spacer()
+                                            Image(systemName: "arrow.forwardarrow.forward")
+                                        }
+                                        .frame(width: 218, height: 84)
+                                        .background(.white)
+                                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                                        .padding([.horizontal,.vertical],5)
+                                    }
+                                    else if(appointment.timeSlot == "2:00 - 4:00" && i == 3){
                                         HStack() {
                                             VStack(alignment: .leading){
                                                 Text(appointment.patientName)
@@ -306,10 +346,18 @@ struct AppointmentView: View {
                             .background(Color("bg-color1"))
                             .cornerRadius(20)
                             VStack(alignment: .leading){
-                                Text(i == 0 ? "9:00 - 11:00" : "11:00 - 12:00")
-                                  .font(Font.custom("SF Pro Display", size: 20).weight(.semibold))
-                                  .foregroundColor(.white)
-                                  .padding(.bottom)
+                                if(i == 0 || i == 1){
+                                    Text(i == 0 ? "9:00 - 11:00" : "11:00 - 12:00")
+                                      .font(Font.custom("SF Pro Display", size: 20).weight(.semibold))
+                                      .foregroundColor(.white)
+                                      .padding(.bottom)
+                                }
+                                else{
+                                    Text(i == 2 ? "12:00 - 2:00" : "2:00 - 4:00")
+                                      .font(Font.custom("SF Pro Display", size: 20).weight(.semibold))
+                                      .foregroundColor(.white)
+                                      .padding(.bottom)
+                                }
                                 
                                  
                             }
