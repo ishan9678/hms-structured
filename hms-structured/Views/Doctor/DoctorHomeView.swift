@@ -57,11 +57,11 @@ struct DoctorHomeView: View {
                             HStack{
                                 VStack(alignment: .leading){
                                     Text("Hello 👋")
-                                        .font(Font.custom("SF Pro Display", size: 20))
+                                        .font(Font.custom("SF Pro Display", size: 30))
                                         .lineSpacing(22)
                                         .foregroundColor(.black)
                                     Text("\(userName)")
-                                        .font(Font.custom("SF Pro Display", size: 32).weight(.semibold))
+                                        .font(Font.custom("SF Pro Display", size: 30).weight(.semibold))
                                         .lineSpacing(22)
                                         .foregroundColor(.black)
                                 }
@@ -70,7 +70,9 @@ struct DoctorHomeView: View {
                                 NavigationLink(destination: DProfile()) {
                                     Image(systemName: "person.fill")
                                         .resizable()
-                                        .frame(width: 30, height: 30)
+                                        .frame(width: 40, height: 40)
+                                        .padding()
+                                        .overlay(Circle().stroke(Color.bgColor1, lineWidth: 3))
                                         .padding()
                                 }
                                 
