@@ -74,7 +74,14 @@ import Combine
                 authenticationState = .loggedIn
 //                doctor = try await patientsRef.getDocument(as: Doctor.self)
                 return true
-            } else {
+                
+            }
+            else if !doctorsDoc.exists && !patientsDoc.exists{
+                role = .admin
+                authenticationState = .loggedIn
+                return true
+            }
+            else {
                 // User not found in either collection
                 errorMessage = "User not found in patients or doctors collection"
                 authenticationState = .error
@@ -113,3 +120,4 @@ enum Role {
     case doctor
     case admin
 }
+
