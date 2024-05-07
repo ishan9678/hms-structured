@@ -51,7 +51,7 @@ struct LoginView: View {
     var body: some View {
         NavigationStack{
             VStack {
-                Image("Login")
+                Image("SignUp")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(minHeight: 300, maxHeight: 400)
@@ -118,21 +118,36 @@ struct LoginView: View {
                     Button(action: {
                         isNavigateToSignUp = true
                     }) {
-                        Text("Sign up")
-                            .fontWeight(.semibold)
-                            .foregroundColor(.blue)
+                        Button(action: {
+                            isNavigateToSignUp.toggle()
+                        }) {
+                            NavigationLink(destination: SignupView()){
+                                Text("Sign up")
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.blue)
+                                
+                            }
+                            
+                        }
+                        
                     }
                 }
                 .padding([.top, .bottom], 50)
                 
                 // to navigate
-                NavigationLink(
-                    destination: SignupView(),
-                    isActive: $isNavigateToSignUp,
-                    label: {
-                        EmptyView()
-                    })
-                    .hidden()
+//                NavigationLink(
+//                    destination: SignupView().navigationBarBackButtonHidden(),
+//                    isActive: $isNavigateToSignUp,
+//                    label: {
+//                        EmptyView()
+//                    })
+//                    .hidden()
+                
+                NavigationLink(destination: SignupView(), isActive: $isNavigateToSignUp) {
+                    EmptyView()
+                }
+                .hidden()
+                
                 
                 NavigationLink(
                     destination: viewModel.role == .patient ? AnyView(PatientContentView().navigationBarBackButtonHidden()) : viewModel.role == .doctor ? AnyView(DoctorHomeView().navigationBarBackButtonHidden()) : AnyView(SignupView()),
@@ -145,6 +160,7 @@ struct LoginView: View {
             }
             .listStyle(.plain)
             .padding()
+            .navigationBarBackButtonHidden(true)
             .analyticsScreen(name: "\(Self.self)")
         }
     }

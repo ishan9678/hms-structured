@@ -45,7 +45,7 @@ struct SignupView: View {
                 Image("SignUp")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(minHeight: 300, maxHeight: 400)
+                    .frame(minHeight: 200, maxHeight: 200)
                 Text("Sign up")
                     .font(.largeTitle)
                     .fontWeight(.bold)
@@ -53,14 +53,17 @@ struct SignupView: View {
                 HStack {
                     Text("Already have an account?")
                     Button(action: {
-                        isNavigateToLogin = true
+                        isNavigateToLogin.toggle()
                     }) {
-                        Text("Log in")
-                            .fontWeight(.semibold)
-                            .foregroundColor(.blue)
+                        NavigationLink(destination: LoginView()){
+                            Text("Log in")
+                                .fontWeight(.semibold)
+                                .foregroundColor(.blue)
+                        }
+                        
                     }
                 }
-                .padding([.top, .bottom], 50)
+                .padding()
                 TextField("Name", text: $viewModel.name)
                     .disableAutocorrection(true)
                     .focused($focus, equals: .name)
@@ -104,21 +107,7 @@ struct SignupView: View {
                     .background(Divider(), alignment: .bottom)
                     .padding(.bottom, 8)
                 
-                TextField("Age", value: $viewModel.age, formatter: NumberFormatter())
-                    .keyboardType(.numberPad)
-                    .padding(.vertical, 6)
-                    .background(Divider(), alignment: .bottom)
-                    .padding(.bottom, 8)
                 
-                TextField("Blood Group", text: $viewModel.bloodGroup)
-                    .padding(.vertical, 6)
-                    .background(Divider(), alignment: .bottom)
-                    .padding(.bottom, 8)
-                
-                TextField("Gender", text: $viewModel.gender)
-                    .padding(.vertical, 6)
-                    .background(Divider(), alignment: .bottom)
-                    .padding(.bottom, 8)
                 
                 if !viewModel.errorMessage.isEmpty {
                     VStack {
@@ -147,13 +136,18 @@ struct SignupView: View {
                 
                 //navigation
                 
-                NavigationLink(
-                    destination: LoginView(),
-                    isActive: $isNavigateToLogin,
-                    label: {
-                        EmptyView()
-                    })
-                    .hidden()
+//                NavigationLink(
+//                    destination: LoginView(),
+//                    isActive: $isNavigateToLogin,
+//                    label: {
+//                        EmptyView()
+//                    })
+//                    .hidden()
+                
+                NavigationLink(destination: LoginView(), isActive: $isNavigateToLogin) {
+                    EmptyView()
+                }
+                .hidden()
                 
                 NavigationLink(
                     destination: PatientHomeView(),
@@ -167,7 +161,7 @@ struct SignupView: View {
             .listStyle(.plain)
             .padding()
         }
-        .navigationBarBackButtonHidden()
+        .navigationBarBackButtonHidden(true)
         
     }
         
