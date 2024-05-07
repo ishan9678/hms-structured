@@ -1,78 +1,53 @@
-//
-//  DProfile.swift
-//  Reports
-//
-//  Created by Ashi Gupta on 07/05/24.
-//
-
-
 import SwiftUI
+import FirebaseAuth
+import FirebaseFirestore
+import FirebaseStorage
 
 struct DProfile: View {
     @State private var appointmentsSchedule: Int? = 10 // Dummy number of appointments
     @State private var hours: Int? = 5 // Dummy number of hours
-
+    @State private var doctor: Doctor = Doctor(fullName: "", gender: "", dateOfBirth: Date(), email: "", phone: "", emergencyContact: "", profileImageURL: "", employeeID: "", department: "", qualification: "", position: "", startDate: Date(), licenseNumber: "", issuingOrganization: "", expiryDate: Date(), description: "", yearsOfExperience: "")// Doctor object to hold fetched data
+    @State private var isFetchingData: Bool = true // Flag to track data fetching status
+    @State private var newPassword: String = ""
+    @State private var confirmPassword: String = ""
+    @State private var isChangingPassword: Bool = false
+    @State private var passwordChangeError: String?
+    
     var body: some View {
-        ScrollView{
+        ScrollView {
             VStack {
                 RoundedRectangle(cornerRadius: 20)
                     .foregroundColor(.bgColor1)
-                    .frame(width: 400, height: 500)
+                    .frame(width: 400, height: 400)
                     .overlay(
                         VStack {
-                            Image("doctor") // Replace "doctor_image" with the name of your doctor image asset
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 100, height: 100)
-                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.white, lineWidth: 4))
-                                .padding(.top, 80)
-                                .padding(.bottom, 0)
-                            VStack{
-                                Text("Dr. Alia Mukherjee")
+                            
+                             let doctor = doctor
+                                if !doctor.profileImageURL.isEmpty,
+                                   let url = URL(string: doctor.profileImageURL),
+                                   let imageData = try? Data(contentsOf: url),
+                                   let uiImage = UIImage(data: imageData) {
+
+                                    Image(uiImage: uiImage)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 200, height: 200)
+                                        .clipShape(Circle())
+                                        .overlay(Circle().stroke(Color.white, lineWidth: 4))
+                                        .padding(.top, 80)
+                                        .padding(.bottom, 0)
+                                } else {
+                                    Text("No Profile Image")
+                                }
+                                Text(doctor.fullName ?? "Doctor Name")
                                     .foregroundColor(.white)
                                     .padding(.top,10)
-                                Text("Upcoming Tasks")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 25))
-                                    .padding(.top,40)
+                                    .font(.headline)
                                 
-                                
-                            }
                             
-                            HStack(spacing: 2) {
-                                VStack {
-                                    Image(systemName: "calendar")
-                                        .resizable()
-                                        .frame(width: 30, height: 30)
-                                        .foregroundColor(.white)
-                                   
-                                    if let appointmentsSchedule = appointmentsSchedule {
-                                        Text("\(appointmentsSchedule) appointments")
-                                            .foregroundColor(.white)
-                                    }
-                                    Text("Scheduled")
-                                        .foregroundColor(.white)
-                                }
-                                .padding(.trailing,110)
-                                
-                                VStack {
-                                    Color.white
-                                        .frame(width: 30, height: 30) // Background color
-                                        .mask(
-                                            Image("clock")
-                                                .resizable()
-                                        )
-                                   
-                                    if let hours = hours {
-                                        Text("\(hours) hrs")
-                                            .foregroundColor(.white)
-                                    }
-                                    Text("Work")
-                                        .foregroundColor(.white)
-                                }
-                            }
-                            .padding(.top,20)
+//                                ProgressView()
+//                                    .progressViewStyle(CircularProgressViewStyle())
+                            
                         }
                     )
                     .padding(.top,-60)
@@ -82,13 +57,16 @@ struct DProfile: View {
                     .padding(.top,350)
                     .overlay(
                         VStack {
-                            HStack {
-                                Image("settings")
-                                    .resizable()
-                                    .frame(width: 30, height: 30)
-                                Text("Account Settings")
-                                Spacer()
-                                Image(systemName: "chevron.right")
+                            Divider()
+                            NavigationLink(destination: UpdateView(doctor: doctor)) {
+                                HStack {
+                                    Image("settings")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                    Text("Account Settings")
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                }
                             }
                             .padding()
                             
@@ -103,38 +81,116 @@ struct DProfile: View {
                                 Image(systemName: "chevron.right")
                             }
                             .padding()
-                            Divider()
-                            HStack {
-                                Image("docs")
-                                    .resizable()
-                                    .frame(width: 30, height: 30)
-                                Text("Terms and Conditions")
-                                Spacer()
-                                Image(systemName: "chevron.right")
+                            .onTapGesture {
+                                isChangingPassword.toggle()
                             }
-                            .padding()
-                            Divider()
-                            HStack {
-                                Image("patients")
-                                    .resizable()
-                                    .frame(width: 30, height: 30)
-                                Text("Patients Info")
-                                Spacer()
-                                Image(systemName: "chevron.right")
+                            
+                            if isChangingPassword {
+                                VStack {
+                                    SecureField("New Password", text: $newPassword)
+                                        .padding()
+                                        .background(Color.white)
+                                        .cornerRadius(8)
+                                        .padding(.bottom, 8)
+                                    
+                                    SecureField("Confirm Password", text: $confirmPassword)
+                                        .padding()
+                                        .background(Color.white)
+                                        .cornerRadius(8)
+                                        .padding(.bottom, 8)
+                                    
+                                    if let error = passwordChangeError {
+                                        Text(error)
+                                            .foregroundColor(.red)
+                                            .padding(.bottom, 8)
+                                    }
+                                    
+                                    Button(action: changePassword) {
+                                        Text("Change Password")
+                                            .padding()
+                                            .foregroundColor(.white)
+                                            .background(Color.blue)
+                                            .cornerRadius(8)
+                                    }
+                                    .padding(.bottom, 8)
+                                }
+                                .padding()
+                                .background(Color.gray.opacity(0.1))
+                                .cornerRadius(8)
                             }
-                            .padding()
+                            
                             Divider()
-                            HStack {
-                                Image("info")
-                                    .resizable()
-                                    .frame(width: 30, height: 30)
-                                Text("Log Out")
-                                Spacer()
-                                Image(systemName: "chevron.right")
+                            Button(action: {
+                                do {
+                                    try Auth.auth().signOut()
+                                    UserDefaults.standard.set(false, forKey: "isLoggedIn")
+                                    UIApplication.shared.windows.first?.rootViewController = UIHostingController(rootView: LoginView())
+                                } catch {
+                                    print("Error signing out: \(error.localizedDescription)")
+                                }
+                            }) {
+                                HStack {
+                                    Image("info")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                    Text("Log Out")
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                }
+                                .padding()
                             }
-                            .padding()
                         }
                     )
+            }
+        }
+        .padding()
+        .onAppear {
+            fetchDoctorProfile()
+        }
+    }
+    
+    func fetchDoctorProfile() {
+        let db = Firestore.firestore()
+        
+        guard let userId = Auth.auth().currentUser?.uid else {
+            return
+        }
+        
+        db.collection("doctors").document(userId).getDocument { document, error in
+            if let error = error {
+                print("Error fetching doctor profile: \(error.localizedDescription)")
+                return
+            }
+            
+            if let document = document, document.exists {
+                do {
+                    let doctor = try document.data(as: Doctor.self)
+                    self.doctor = doctor
+                } catch {
+                    print("Error decoding doctor profile: \(error.localizedDescription)")
+                }
+            } else {
+                print("Doctor profile document does not exist")
+            }
+            
+            isFetchingData = false
+        }
+    }
+    
+    func changePassword() {
+        guard newPassword == confirmPassword else {
+            passwordChangeError = "Passwords do not match"
+            return
+        }
+        
+        Auth.auth().currentUser?.updatePassword(to: newPassword) { error in
+            if let error = error {
+                passwordChangeError = error.localizedDescription
+            } else {
+                isChangingPassword = false
+                newPassword = ""
+                confirmPassword = ""
+                passwordChangeError = nil
             }
         }
     }

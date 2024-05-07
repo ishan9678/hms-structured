@@ -67,20 +67,22 @@ struct PrescriptionForm: View {
         
         NavigationStack{
             VStack(alignment: .leading, spacing: 20) {
+                Divider()
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Patient : \(patientName)")
                 }
+                Divider()
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Symptoms")
                     TextField("Enter symptoms", text: $symptoms).textFieldStyle(RoundedBorderTextFieldStyle())
                 }
-                
+                Divider()
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Diagnosis")
                     TextField("Enter diagnosis", text: $diagnosis)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
-                
+                Divider()
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Medication")
                         .font(.headline)
@@ -159,6 +161,7 @@ struct PrescriptionForm: View {
                                                         .background(RoundedRectangle(cornerRadius: 5).stroke(Color.blue, lineWidth: 1))
                                                 }
                                             }
+                                            Divider()
                                             Text("Time of the Day")
                                             HStack {
                                                 ForEach(["Morning", "Noon", "Night"], id: \.self) { time in
@@ -178,6 +181,7 @@ struct PrescriptionForm: View {
                                                     }
                                                 }
                                             }
+                                            Divider()
                                             Text("To be Taken")
                                             Picker("To be Taken", selection: $toBeTaken) {
                                                 Text("After Food").tag("After Food").foregroundColor(.blue)
@@ -211,7 +215,7 @@ struct PrescriptionForm: View {
                         }
                     }
                 }
-                
+                Divider()
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Tests")
                     VStack() {
@@ -277,12 +281,12 @@ struct PrescriptionForm: View {
                         }
                     }
                 }
-                
+                Divider()
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Suggetion")
                     TextField("Enter suggestions",text: $suggestion).textFieldStyle(RoundedBorderTextFieldStyle())
                 }
-                
+                Divider()
                 Button(action: {
                     // Submit to Firebase
                     let prescriptionData = PrescriptionData(

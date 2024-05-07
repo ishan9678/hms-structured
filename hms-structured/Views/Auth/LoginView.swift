@@ -127,7 +127,7 @@ struct LoginView: View {
                 
                 // to navigate
                 NavigationLink(
-                    destination: SignupView(),
+                    destination: SignupView().navigationBarBackButtonHidden(),
                     isActive: $isNavigateToSignUp,
                     label: {
                         EmptyView()
