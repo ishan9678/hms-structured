@@ -244,6 +244,7 @@ struct DoctorDetailsView: View {
                     for (_, appointmentData) in data {
                         if let appointmentData = appointmentData as? [String: Any] {
                             
+                            
                             if let doctorID = appointmentData["doctorID"] as? String, doctorID == doctor.id {
                                 
                                 if let bookingDateTimestamp = appointmentData["bookingDate"] as? Timestamp {
