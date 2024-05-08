@@ -42,7 +42,7 @@ struct SearchablePrescriptionListView: View {
         }
     }
 
-    private func fetchPrescriptions()  {
+    func fetchPrescriptions()  {
            let db = Firestore.firestore()
            let prescriptionsRef = db.collection("prescriptions")
 

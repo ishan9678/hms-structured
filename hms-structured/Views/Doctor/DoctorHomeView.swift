@@ -239,7 +239,7 @@ struct AppointmentView: View {
                 DisclosureGroup(
                     content: { VStack{
                         ForEach(Array(appointments.enumerated()), id: \.element) { index,appointment in
-                            NavigationLink(destination: PrescriptionForm(patientID: appointment.patientID,patientName: appointment.patientName), label:{
+                            NavigationLink(destination: RecordsView1(patientID: appointment.patientID,patientName: appointment.patientName), label:{
                                 if retrieveDatePortion(from: selectedDate) == retrieveDatePortion(from: appointment.bookingDate) {
                                     if(appointment.timeSlot == "11:00 - 12:00" && i == 1){
                                         HStack() {
