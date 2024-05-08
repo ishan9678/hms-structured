@@ -84,6 +84,7 @@
 		8EF782E42BE88BCB00B70CE5 /* TestReportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF782E12BE88BCB00B70CE5 /* TestReportsView.swift */; };
 		8EF783182BE9FD6400B70CE5 /* DProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF783172BE9FD6400B70CE5 /* DProfile.swift */; };
 		8EF7831B2BEA432600B70CE5 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF7831A2BEA432600B70CE5 /* Profile.swift */; };
+		8EF7831D2BEB482A00B70CE5 /* DoctorPatientRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF7831C2BEB482A00B70CE5 /* DoctorPatientRecordView.swift */; };
 		8EFF67802BE3B79A0016A0AA /* PatientContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFF677F2BE3B79A0016A0AA /* PatientContentView.swift */; };
 /* End PBXBuildFile section */
 
@@ -138,6 +139,7 @@
 		8EF782E12BE88BCB00B70CE5 /* TestReportsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestReportsView.swift; sourceTree = "<group>"; };
 		8EF783172BE9FD6400B70CE5 /* DProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DProfile.swift; sourceTree = "<group>"; };
 		8EF7831A2BEA432600B70CE5 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
+		8EF7831C2BEB482A00B70CE5 /* DoctorPatientRecordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorPatientRecordView.swift; sourceTree = "<group>"; };
 		8EFF677F2BE3B79A0016A0AA /* PatientContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -298,6 +300,7 @@
 				86ED4D0F2BDB75F400282F0D /* DoctorHomeView.swift */,
 				8EF783172BE9FD6400B70CE5 /* DProfile.swift */,
 				8E7731DF2BE0F00000EE1DA2 /* PrescriptionForm.swift */,
+				8EF7831C2BEB482A00B70CE5 /* DoctorPatientRecordView.swift */,
 				8E7731E12BE0F03500EE1DA2 /* MedicineList.swift */,
 				8E7731E32BE0F05D00EE1DA2 /* TestList.swift */,
 			);
@@ -521,6 +524,7 @@
 				86B556292BDA48BE0064E9BD /* SignupView.swift in Sources */,
 				86B555D52BDA43850064E9BD /* ContentView.swift in Sources */,
 				8652364E2BE9EEB300CA1793 /* StaffManagementViewModel.swift in Sources */,
+				8EF7831D2BEB482A00B70CE5 /* DoctorPatientRecordView.swift in Sources */,
 				86B5563C2BDAD81D0064E9BD /* DoctorListView.swift in Sources */,
 				865236432BE9EE9700CA1793 /* EmergencyView.swift in Sources */,
 				8652364C2BE9EEB300CA1793 /* AddDoctorsViewModel.swift in Sources */,

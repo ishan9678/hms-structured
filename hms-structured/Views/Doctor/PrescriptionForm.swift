@@ -66,23 +66,24 @@ struct PrescriptionForm: View {
     var body: some View {
         
         NavigationStack{
+            ScrollView{
             VStack(alignment: .leading, spacing: 20) {
-                Divider()
+                
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Patient : \(patientName)")
                 }
-                Divider()
+                
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Symptoms")
                     TextField("Enter symptoms", text: $symptoms).textFieldStyle(RoundedBorderTextFieldStyle())
                 }
-                Divider()
+                
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Diagnosis")
                     TextField("Enter diagnosis", text: $diagnosis)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                 }
-                Divider()
+                
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Medication")
                         .font(.headline)
@@ -94,6 +95,7 @@ struct PrescriptionForm: View {
                                 })
                                 .textFieldStyle(RoundedBorderTextFieldStyle())
                                 Spacer()
+                                Spacer()
                                 if isEditingMedicine {
                                     Button(action: {
                                         self.searchTextMedicine = ""
@@ -102,7 +104,7 @@ struct PrescriptionForm: View {
                                     }) {
                                         Image(systemName: "xmark.circle.fill")
                                             .foregroundColor(.gray)
-                                            
+                                        
                                     }
                                 }
                             }
@@ -123,7 +125,7 @@ struct PrescriptionForm: View {
                                                     .foregroundStyle(Color.black)
                                                 Spacer()
                                                 Image(systemName: "chevron.down")
-                                                .foregroundColor(.blue)
+                                                    .foregroundColor(.blue)
                                             }
                                             Button(action: {
                                                 self.medicines.removeAll { $0.id == medicine.id }
@@ -147,7 +149,7 @@ struct PrescriptionForm: View {
                                                 
                                                 Text("\(medicine.medicineDetails.dosage) tablet") .foregroundColor(.blue)
                                                     .padding()
-                                                    
+                                                
                                                 
                                                 Button(action: {
                                                     // Functionality to decrease dosage
@@ -211,11 +213,13 @@ struct PrescriptionForm: View {
                                     }
                                 }
                                 .listStyle(PlainListStyle())
+                                .frame(width: 320,height: 250)
                             }
                         }
                     }
                 }
-                Divider()
+                
+                
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Tests")
                     VStack() {
@@ -224,26 +228,26 @@ struct PrescriptionForm: View {
                                 self.isEditingTest = editing
                             }).textFieldStyle(RoundedBorderTextFieldStyle())
                             
-                            .overlay(
-                                HStack {
-                                    Spacer()
-                                    if isEditingTest {
-                                        Button(action: {
-                                            self.searchTextTest = ""
-                                            self.isEditingTest = false
-                                            UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                                        }) {
-                                            Image(systemName: "xmark.circle.fill")
-                                                .foregroundColor(.gray)
-                                                .background(Color.white)
-                                                .cornerRadius(20)
-                                                .padding(.trailing, 8)
+                                .overlay(
+                                    HStack {
+                                        Spacer()
+                                        if isEditingTest {
+                                            Button(action: {
+                                                self.searchTextTest = ""
+                                                self.isEditingTest = false
+                                                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                                            }) {
+                                                Image(systemName: "xmark.circle.fill")
+                                                    .foregroundColor(.gray)
+                                                    .background(Color.white)
+                                                    .cornerRadius(20)
+                                                    .padding(.trailing, 8)
+                                            }
                                         }
                                     }
-                                }
-                            )
-                            .background(Color.white)
-                            .cornerRadius(8)
+                                )
+                                .background(Color.white)
+                                .cornerRadius(8)
                             
                             if !tests.isEmpty {
                                 ForEach(tests) { test in
@@ -277,16 +281,17 @@ struct PrescriptionForm: View {
                                     }
                                 }
                                 .listStyle(PlainListStyle())
+                                .frame(width: 320,height: 250)
                             }
                         }
                     }
                 }
-                Divider()
+                
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Suggetion")
                     TextField("Enter suggestions",text: $suggestion).textFieldStyle(RoundedBorderTextFieldStyle())
                 }
-                Divider()
+                
                 Button(action: {
                     // Submit to Firebase
                     let prescriptionData = PrescriptionData(
@@ -313,7 +318,7 @@ struct PrescriptionForm: View {
                         suggestion: suggestion,
                         appointmentDate: Date() // Current date as appointment date
                     )
-
+                    
                     let prescriptionDictionary: [String: Any] = [
                         "patientID": prescriptionData.patientID,
                         "patientName": prescriptionData.patientName,
@@ -362,6 +367,7 @@ struct PrescriptionForm: View {
             }
             .navigationTitle("Prescription")
         }
+    }
     }
 }
 

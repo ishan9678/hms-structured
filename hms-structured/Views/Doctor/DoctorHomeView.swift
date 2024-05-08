@@ -72,7 +72,7 @@ struct DoctorHomeView: View {
                                         .resizable()
                                         .frame(width: 40, height: 40)
                                         .padding()
-                                        .overlay(Circle().stroke(Color.bgColor1, lineWidth: 3))
+                                        .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.bgColor1, lineWidth: 3))
                                         .padding()
                                 }
                                 
@@ -335,14 +335,19 @@ struct AppointmentView: View {
                     },
                     label: { HStack{
                         ZStack() {
-                          Rectangle()
-                            .foregroundColor(.clear)
-                            .frame(width: 86.78, height: 96)
-                            .background(Color("bg-color1"))
-                            .cornerRadius(20)
-                          Text("\(temp)")
-                            .font(Font.custom("SF Pro Display", size: 20).weight(.medium))
-                            .foregroundColor(.white)
+                          
+                            if(i == 0){
+                                Rectangle()
+                                  .foregroundColor(.clear)
+                                  .frame(width: 86.78, height: 96)
+                                  .background(Color("bg-color1"))
+                                  .cornerRadius(20)
+                                Text("\(temp)")
+                                  .font(Font.custom("SF Pro Display", size: 20).weight(.medium))
+                                  .foregroundColor(.white)
+                            }
+                            
+                            
                             
                         }
                         .frame(width: 86.78, height: 96)
@@ -354,16 +359,19 @@ struct AppointmentView: View {
                             .cornerRadius(20)
                             VStack(alignment: .leading){
                                 if(i == 0 || i == 1){
-                                    Text(i == 0 ? "9:00 - 11:00" : "11:00 - 12:00")
-                                      .font(Font.custom("SF Pro Display", size: 20).weight(.semibold))
-                                      .foregroundColor(.white)
-                                      .padding(.bottom)
+                                    VStack(alignment: .leading){
+                                        Text(i == 0 ? "9:00 - 11:00" : "11:00 - 12:00")
+                                          .font(Font.custom("SF Pro Display", size: 25).weight(.semibold))
+                                          .foregroundColor(.white)
+                                          
+                                    }.padding()
                                 }
                                 else{
-                                    Text(i == 2 ? "12:00 - 2:00" : "2:00 - 4:00")
-                                      .font(Font.custom("SF Pro Display", size: 20).weight(.semibold))
-                                      .foregroundColor(.white)
-                                      .padding(.bottom)
+                                    VStack(alignment: .leading){
+                                        Text(i == 2 ? "12:00 - 2:00" : "2:00 - 4:00")
+                                          .font(Font.custom("SF Pro Display", size: 25).weight(.semibold))
+                                          .foregroundColor(.white)
+                                    }.padding()
                                 }
                                 
                                  
