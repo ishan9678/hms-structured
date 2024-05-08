@@ -32,11 +32,11 @@ struct TimeSlotView: View {
     var slotColor: Color {
         switch availabilityCount {
         case 0:
-            return isSelected ? .blue : .green
+            return isSelected ? .blue : Color("fully-available")
         case 1:
-            return isSelected ? .blue : .yellow
+            return isSelected ? .blue : Color("limited-availability")
         case 2:
-            return isSelected ? .blue : .red
+            return isSelected ? .blue : Color("almost-full")
         default:
             return isSelected ? .blue : .gray
         }
@@ -46,4 +46,3 @@ struct TimeSlotView: View {
         isSelected ? .white : .black
     }
 }
-

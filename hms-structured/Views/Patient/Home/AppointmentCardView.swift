@@ -4,6 +4,7 @@ import FirebaseFirestore
 
 struct AppointmentCard: View {
     let appointment: Appointments
+    let onDelete: () -> Void
     
 
     var body: some View {
@@ -21,11 +22,6 @@ struct AppointmentCard: View {
                         .frame(width: 50, height: 50)
                         .background(Color("bg-color1"))
                         .clipShape(RoundedRectangle(cornerRadius: 10))
-                
-                        
-                            
-                        
-
                     Spacer()
                      Text(appointment.timeSlot ?? " ")
                             .font(.system(size: 15))
@@ -45,7 +41,13 @@ struct AppointmentCard: View {
             .cornerRadius(10)
             .shadow(radius: 3)
         }
-        
+        .contextMenu {
+                Button {
+                    onDelete()
+                } label: {
+                    Label("Cancel Appointment", systemImage: "trash")
+                }
+            }
     }
         
     
@@ -78,7 +80,9 @@ struct PatientAppointmentsView: View {
                 HStack(spacing: 0) {
                     ForEach(Array(fetchedAppointments.enumerated()), id: \.element) { index, appointment in
                         VStack {
-                            AppointmentCard(appointment: appointment)
+                            AppointmentCard(appointment: appointment){
+                                deleteAppointment(appointment: appointment)
+                            }
                                 .frame(width: 230)
                                 .padding(.horizontal, 10)
                         }
@@ -102,6 +106,7 @@ struct PatientAppointmentsView: View {
     }
     func fetchAppointments() async {
         do {
+            fetchedAppointments = []
             let db = Firestore.firestore()
             
             guard let userId = Auth.auth().currentUser?.uid else {
@@ -115,12 +120,13 @@ struct PatientAppointmentsView: View {
                 return
             }
             
-            for (_, appointmentData) in data {
+            for (key , appointmentData) in data {
                 if let appointmentData = appointmentData as? [String: Any] {
                     if let bookingDateTimestamp = appointmentData["bookingDate"] as? Timestamp {
                         let bookingDate = Date(timeIntervalSince1970: TimeInterval(bookingDateTimestamp.seconds))
                         // Now you can use the `bookingDate` in your `Appointments` struct
-                        let appointment = Appointments(bookingDate: bookingDate, timeSlot: appointmentData["timeSlot"] as? String, doctorID: appointmentData["doctorID"] as? String ?? "", doctorName: appointmentData["doctorName"] as? String ?? "", doctorDepartment: appointmentData["doctorDepartment"] as? String ?? "", patientName: appointmentData["patientName"] as? String ?? "", patientID: appointmentData["patientID"] as? String ?? "")
+                        let appointment = Appointments(id: key,bookingDate: bookingDate, timeSlot: appointmentData["timeSlot"] as? String, doctorID: appointmentData["doctorID"] as? String ?? "", doctorName: appointmentData["doctorName"] as? String ?? "", doctorDepartment: appointmentData["doctorDepartment"] as? String ?? "", patientName: appointmentData["patientName"] as? String ?? "", patientID: appointmentData["patientID"] as? String ?? "")
+                            
                         fetchedAppointments.append(appointment)
                     }
                 }
@@ -131,6 +137,46 @@ struct PatientAppointmentsView: View {
 
         } catch {
             print("Error fetching document: \(error)")
+        }
+    }
+    func deleteAppointment(appointment: Appointments) {
+        let db = Firestore.firestore()
+        let userId = Auth.auth().currentUser?.uid
+
+        // Get the document reference for the user's appointments
+        let documentRef = db.collection("appointments").document(userId!)
+
+        documentRef.getDocument { snapshot, error in
+            if let error = error {
+                print("Error fetching document: \(error)")
+                return
+            }
+
+            guard let snapshot = snapshot else {
+                print("Document does not exist")
+                return
+            }
+
+            // Check if the document contains any data
+            guard var appointmentsMap = snapshot.data() as? [String: Any] else {
+                print("Document data is empty")
+                return
+            }
+
+            // Remove the appointment ID from the map
+            appointmentsMap.removeValue(forKey: appointment.id ?? "")
+
+            // Update the document with the modified map
+            documentRef.setData(appointmentsMap) { error in
+                if let error = error {
+                    print("Error updating document: \(error)")
+                } else {
+                    print("Appointment successfully deleted")
+                    Task{
+                        await fetchAppointments()
+                    }
+                }
+            }
         }
     }
 }
