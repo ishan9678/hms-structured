@@ -16,7 +16,7 @@ import Combine
     @Published var role: Role = .none
     @Published var isSignedUp = false
     @Published var patient = Patient(name: "", gender: "", age: 1, bloodGroup: "")
-//    @Published var doctor = Doctor(fullName: "", gender: "", dateOfBirth: Date(), email: "", phone: "", emergencyContact: "",profileImageURL: "", employeeID: "",  department: "", qualification: "", position: "", startDate: Date(), licenseNumber: "", issuingOrganization: "", expiryDate: Date(), description: "", yearsOfExperience: "")
+    @Published var doctor = Doctor(fullName: "", gender: "", dateOfBirth: Date(), email: "", phone: "", emergencyContact: "",profileImageURL: "", employeeID: "",  department: "", qualification: "", position: "", startDate: Date(), licenseNumber: "", issuingOrganization: "", expiryDate: Date(), description: "", yearsOfExperience: "")
     private var cancellables = Set<AnyCancellable>()
 
     func signUpWithEmailPassword() async -> Bool {
@@ -72,7 +72,7 @@ import Combine
                 // User is in 'doctors' collection
                 role = .doctor
                 authenticationState = .loggedIn
-//                doctor = try await patientsRef.getDocument(as: Doctor.self)
+                doctor = try await doctorsRef.getDocument(as: Doctor.self)
                 return true
                 
             }

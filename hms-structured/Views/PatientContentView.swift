@@ -30,7 +30,7 @@ struct PatientContentView: View {
                     Image(systemName: "staroflife")
                     Text("Vital")
                 }
-            PatientHomeView()
+            Profile()
                 .tabItem {
                     Image(systemName: "person")
                     Text("Profile")

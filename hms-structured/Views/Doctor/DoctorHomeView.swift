@@ -48,95 +48,102 @@ struct DoctorHomeView: View {
     
     var body: some View {
         ZStack {
-            VStack{
+            NavigationView{
                 VStack{
-                    ZStack(alignment: .leading){
-                       
-                        
-                        HStack{
-                            VStack(alignment: .leading){
-                                Text("Hello 👋")
-                                    .font(Font.custom("SF Pro Display", size: 20))
-                                    .lineSpacing(22)
-                                    .foregroundColor(.black)
-                                Text("\(userName)")
-                                    .font(Font.custom("SF Pro Display", size: 32).weight(.semibold))
-                                    .lineSpacing(22)
-                                    .foregroundColor(.black)
-                            }
-                            .padding()
-                            Spacer()
-                            Image(systemName:"person.fill")
-                                .resizable()
-                                .frame(width: 30,height: 30)
+                    VStack{
+                        ZStack(alignment: .leading){
+                            
+                            
+                            HStack{
+                                VStack(alignment: .leading){
+                                    Text("Hello 👋")
+                                        .font(Font.custom("SF Pro Display", size: 30))
+                                        .lineSpacing(22)
+                                        .foregroundColor(.black)
+                                    Text("\(userName)")
+                                        .font(Font.custom("SF Pro Display", size: 30).weight(.semibold))
+                                        .lineSpacing(22)
+                                        .foregroundColor(.black)
+                                }
                                 .padding()
-                        }
-                        
-                    }
-                }
-                ScrollView{
-                   
-                    VStack {
-                        HStack {
-                            Text(getMonthAndYear(date: selectedDate))
-                                .font(.headline)
-                                .foregroundColor(.black)
-                            Button(action: {
-                                self.isDropdownExpanded.toggle()
-                            }) {
-                                Image(systemName: "chevron.down")
-                                    .foregroundColor(.black)
-                            }
-                            Spacer()
-                        }
-                        .padding([.horizontal, .top])
-                        .cornerRadius(10)
-                        
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack {
-                                ForEach(0..<7) { i in
-                                    let date = dateGetter(index: i)
-                                    let isSelected = Calendar.current.isDate(date, inSameDayAs: selectedDate)
-                                    
-                                    Button(action: {
-                                        withAnimation {
-                                            indexDate.index = i
-                                            selectedDate = date
-                                            hello = getDay(date: date)
-                                        }
-                                        print(date)
-                                    }) {
-                                        VStack {
-                                            Text((getDay(date: date)))
-                                                .font(Font.custom("SF Pro Display Regular", size: 16))
-                                                .foregroundColor(isSelected ? .white : .black)
-                                            
-                                            Text((getDate(date: date)))
-                                                .font(Font.custom("SF Pro Display ", size: 18))
-                                                .foregroundColor(isSelected ? .white : .black)
-                                        }
-                                        .frame(alignment: .center)
-                                        .padding(.leading)
-                                        .background(
-                                            RoundedRectangle(cornerRadius: 15)
-                                                .frame(width: 64, height: 80)
-                                                .foregroundColor(isSelected ? Color("bg-color1").opacity(01) : .white)
-                                                .padding(.leading)
-                                        )
+                                Spacer()
+                                NavigationLink(destination: DProfile()) {
+                                    Image(systemName: "person.fill")
+                                        .resizable()
+                                        .frame(width: 40, height: 40)
                                         .padding()
+                                        .overlay(Circle().stroke(Color.bgColor1, lineWidth: 3))
+                                        .padding()
+                                }
+                                
+                            }
+                            
+                        }
+                    }
+                    ScrollView{
+                        
+                        VStack {
+                            HStack {
+                                Text(getMonthAndYear(date: selectedDate))
+                                    .font(.headline)
+                                    .foregroundColor(.black)
+                                Button(action: {
+                                    self.isDropdownExpanded.toggle()
+                                }) {
+                                    Image(systemName: "chevron.down")
+                                        .foregroundColor(.black)
+                                }
+                                Spacer()
+                            }
+                            .padding([.horizontal, .top])
+                            .cornerRadius(10)
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack {
+                                    ForEach(0..<7) { i in
+                                        let date = dateGetter(index: i)
+                                        let isSelected = Calendar.current.isDate(date, inSameDayAs: selectedDate)
+                                        
+                                        Button(action: {
+                                            withAnimation {
+                                                indexDate.index = i
+                                                selectedDate = date
+                                                hello = getDay(date: date)
+                                            }
+                                            print(date)
+                                        }) {
+                                            VStack {
+                                                Text((getDay(date: date)))
+                                                    .font(Font.custom("SF Pro Display Regular", size: 16))
+                                                    .foregroundColor(isSelected ? .white : .black)
+                                                
+                                                Text((getDate(date: date)))
+                                                    .font(Font.custom("SF Pro Display ", size: 18))
+                                                    .foregroundColor(isSelected ? .white : .black)
+                                            }
+                                            .frame(alignment: .center)
+                                            .padding(.leading)
+                                            .background(
+                                                RoundedRectangle(cornerRadius: 15)
+                                                    .frame(width: 64, height: 80)
+                                                    .foregroundColor(isSelected ? Color("bg-color1").opacity(01) : .white)
+                                                    .padding(.leading)
+                                            )
+                                            .padding()
+                                        }
                                     }
                                 }
+                                .frame(height: 85)
+                                .padding(.bottom)
+                                .padding(.trailing, 16)
                             }
-                            .frame(height: 85)
-                            .padding(.bottom)
-                            .padding(.trailing, 16)
+                            
+                            AppointmentView(temp: hello, appointments: fetchedAppointments,selectedDate: selectedDate)
+                            Spacer()
                         }
-                        
-                        AppointmentView(temp: hello, appointments: fetchedAppointments,selectedDate: selectedDate)
-                        Spacer()
                     }
-                }
-            }.padding(.top,50)
+                }.padding(.top,50)
+            }
             
             if isDropdownExpanded {
                 Color.black.opacity(0.5)
