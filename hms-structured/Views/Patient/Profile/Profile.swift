@@ -1,128 +1,140 @@
-//
-//  Profile.swift
-//  Reports
-//
-//  Created by Ashi Gupta on 06/05/24.
-//
-
 import SwiftUI
+import FirebaseAuth
+import FirebaseFirestore
+import FirebaseStorage
 
 struct Profile: View {
-    @State private var heartRate: Int? = 215
-    @State private var height: Int? = 180
-    @State private var weight: Int? = 82
+    @State private var heartRate: Int? // Dummy heart rate
+    @State private var height: Int? // Dummy height
+    @State private var weight: Int? // Dummy weight
+    @State private var patient: Patient = Patient(name: "", gender: "", age: 0, bloodGroup: "") // Patient object to hold fetched data
+    @State private var isFetchingData: Bool = true // Flag to track data fetching status
     
     var body: some View {
-        ScrollView{
+        ScrollView {
             VStack {
                 RoundedRectangle(cornerRadius: 20)
                     .foregroundColor(.blue)
                     .frame(width: 400, height: 400)
-                //                .padding()
                     .overlay(
-                        VStack {
-                            Image("doctor") // Replace "doctor_image" with the name of your doctor image asset
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 100, height: 100)
-                                .clipShape(Circle())
-                                .overlay(Circle().stroke(Color.white, lineWidth: 4))
-                                .padding(.top, 20)
-                                .padding(.bottom, 10)
-                            
-                            //                            .padding(.top, 20)
-                            
-                            // Doctor's Name could be added here if you want it back
-                            Text("Lakshami Awasthi")
-                                .foregroundColor(.white)
-                            HStack(spacing: 20) {
-                                VStack {
-                                    Image(systemName: "heart.fill")
-                                        .resizable()
-                                        .frame(width: 30, height: 30)
-                                        .foregroundColor(.white)
-                                    Text("Heart rate")
-                                        .foregroundColor(.white)
-                                    if let heartRate = heartRate {
-                                        Text("\(heartRate) bpm")
-                                            .foregroundColor(.white)
-                                    }
-                                }
-                                //                            padding(.trailing,2)
-                                VStack {
-                                    Color.white
-                                        .frame(width: 30, height: 30) // Background color
-                                        .mask(
-                                            Image("height")
-                                                .resizable()
-                                        )
-                                    Text("Height")
-                                        .foregroundColor(.white)
-                                    if let height = height {
-                                        Text("\(height) cm")
-                                            .foregroundColor(.white)
-                                    }
-                                }
-                                
-                                
-                                VStack {
-                                    Color.white
-                                        .frame(width: 30, height: 30) // Background color
-                                        .mask(
-                                            Image("weight")
-                                                .resizable()
-                                        )
-                                    Text("Weight")
-                                        .foregroundColor(.white)
-                                    if let weight = weight {
-                                        Text("\(weight) kg")
-                                            .foregroundColor(.white)
-                                    }
-                                }
+                        HStack {
+                            if let heartRate = heartRate {
+                                Image(systemName: "heart.fill")
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .foregroundColor(.white)
+                                Text("Heart rate")
+                                    .foregroundColor(.white)
+                                Text("\(heartRate) bpm")
+                                    .foregroundColor(.white)
+                            } else {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle())
                             }
-                            .padding(.top,80)
+                            
+                            if let height = height {
+                                Image("height")
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .foregroundColor(.white)
+                                Text("Height")
+                                    .foregroundColor(.white)
+                                Text("\(height) cm")
+                                    .foregroundColor(.white)
+                            } else {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle())
+                            }
+                            
+                            if let weight = weight {
+                                Image("weight")
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .foregroundColor(.white)
+                                Text("Weight")
+                                    .foregroundColor(.white)
+                                Text("\(weight) kg")
+                                    .foregroundColor(.white)
+                            } else {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle())
+                            }
                         }
                     )
                     .padding(.top,-60)
+                
                 RoundedRectangle(cornerRadius: 20)
                     .foregroundColor(.white)
                     .padding(.top,350)
                     .overlay(
                         VStack {
-                            HStack {
-                                Image("settings")
-                                    .resizable()
-                                    .frame(width: 30, height: 30)
-                                Text("Account Settings")
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                            }
+                                HStack {
+                                    Image("padlock")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                    Text("Change Password")
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                }
+                            
                             .padding()
                             
-                            Divider() // Add a divider between the HStacks
-                            
-                            HStack {
-                                Image("padlock")
-                                    .resizable()
-                                    .frame(width: 30, height: 30)
-                                Text("Change Password")
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                            }
-                            .padding()
                             Divider()
-                            HStack {
-                                Image("info")
-                                    .resizable()
-                                    .frame(width: 30, height: 30)
-                                Text("Log Out")
-                                Spacer()
-                                Image(systemName: "chevron.right")
+                            
+                            Button(action: {
+                                do {
+                                    try Auth.auth().signOut()
+                                    UserDefaults.standard.set(false, forKey: "isLoggedIn")
+                                    UIApplication.shared.windows.first?.rootViewController = UIHostingController(rootView: LoginView())
+                                } catch {
+                                    print("Error signing out: \(error.localizedDescription)")
+                                }
+                            }) {
+                                HStack {
+                                    Image("info")
+                                        .resizable()
+                                        .frame(width: 30, height: 30)
+                                    Text("Log Out")
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                }
+                                .padding()
                             }
-                            .padding()
                         }
                     )
             }
+        }
+        .padding()
+        .onAppear {
+            fetchPatientProfile()
+        }
+    }
+    
+    func fetchPatientProfile() {
+        let db = Firestore.firestore()
+        
+        guard let userId = Auth.auth().currentUser?.uid else {
+            return
+        }
+        
+        db.collection("patients").document(userId).getDocument { document, error in
+            if let error = error {
+                print("Error fetching patient profile: \(error.localizedDescription)")
+                return
+            }
+            
+            if let document = document, document.exists {
+                do {
+                    let patient = try document.data(as: Patient.self)
+                    self.patient = patient
+                } catch {
+                    print("Error decoding patient profile: \(error.localizedDescription)")
+                }
+            } else {
+                print("Patient profile document does not exist")
+            }
+            
+            isFetchingData = false
         }
     }
 }
