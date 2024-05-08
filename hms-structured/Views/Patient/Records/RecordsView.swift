@@ -28,12 +28,7 @@ struct RecordsView: View {
             .pickerStyle(SegmentedPickerStyle())
             
             if selectedSegmentIndex == 0 { // Show the prescription list and search bar
-                SearchablePrescriptionListView(searchText: $searchText, doctors:[
-                    AppointedDoctor(name: "Dr. John Doe", specialization: "Cardiologist", appointmentDate: "05/05/2024"),
-                                                                                       AppointedDoctor(name: "Dr. Emily Smith", specialization: "Pediatrician", appointmentDate: "06/05/2024"),
-                                                                                       AppointedDoctor(name: "Dr. Michael Johnson", specialization: "Dermatologist", appointmentDate: "07/05/2024"),
-                                                                                       // Add more doctors as needed
-                                                                            ])
+                SearchablePrescriptionListView(searchText: $searchText)
             } else if selectedSegmentIndex == 1 { // Show ReportsView
                 ReportsView()
             }

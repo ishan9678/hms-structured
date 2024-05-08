@@ -126,11 +126,8 @@ struct DoctorDetailsView: View {
                     }
                 }
                 .padding(.bottom, 20)
+          
 
-                
-                
-                
-                
                 Button(action: {
                     if let selectedTime = selectedTime {
                         addAppointmentToFirestore(selectedDate: selectedDate, selectedTime: selectedTime, doctor: doctor, userName: userName, userUID: userUID)
@@ -280,7 +277,6 @@ struct TimeSlotAvailability {
      ]
  }
  
-
     
     // Preview
     struct DoctorDetailsView_Previews: PreviewProvider {
