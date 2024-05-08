@@ -13,6 +13,7 @@ struct BookAppointmentView_Previews: PreviewProvider {
 
 import SwiftUI
 import Firebase
+import FirebaseFirestore
 import GoogleGenerativeAI
 import SDWebImageSwiftUI
 

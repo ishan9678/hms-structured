@@ -16,24 +16,25 @@ struct RecordsView: View {
     @State private var searchText = "" // State variable to hold the search text
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("Your Records")
-                .font(.title)
-            
-            Picker(selection: $selectedSegmentIndex, label: Text("Select Segment")) {
-                ForEach(0..<segments.count) { index in
-                    Text(self.segments[index]).tag(index)
+        NavigationView{
+            VStack(alignment: .leading) {
+                Picker(selection: $selectedSegmentIndex, label: Text("Select Segment")) {
+                    ForEach(0..<segments.count) { index in
+                        Text(self.segments[index]).tag(index)
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                
+                if selectedSegmentIndex == 0 { // Show the prescription list and search bar
+                    SearchablePrescriptionListView(searchText: $searchText)
+                } else if selectedSegmentIndex == 1 { // Show ReportsView
+                    ReportsView(searchText: $searchText)
                 }
             }
-            .pickerStyle(SegmentedPickerStyle())
-            
-            if selectedSegmentIndex == 0 { // Show the prescription list and search bar
-                SearchablePrescriptionListView(searchText: $searchText)
-            } else if selectedSegmentIndex == 1 { // Show ReportsView
-                ReportsView()
-            }
+            .navigationBarTitle("Your Records")
+            .padding()
         }
-        .padding()
+        .searchable(text: $searchText)
     }
 }
 

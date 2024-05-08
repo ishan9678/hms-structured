@@ -31,7 +31,7 @@ struct SearchablePrescriptionListView: View {
                         }
                     }
                 }
-                .searchable(text: $searchText)
+//                .searchable(text: $searchText)
                 .sheet(item: $selectedPrescription) { prescription in
                     PrescriptionView(prescription: prescription)
                 }
