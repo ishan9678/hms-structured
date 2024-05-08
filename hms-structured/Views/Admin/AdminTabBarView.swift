@@ -25,7 +25,7 @@ struct AdminTabBarView: View {
                     Label("Appointments", systemImage: "calendar")
                 }
 
-            AdminReportsView()
+            AppointmentsView()
                 .tabItem {
                     Label("Reports", systemImage: "doc.text")
                 }

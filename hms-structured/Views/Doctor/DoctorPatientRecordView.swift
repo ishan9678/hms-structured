@@ -37,7 +37,7 @@ struct RecordsView1: View {
             if selectedSegmentIndex == 0 { // Show the prescription list and search bar
                 SearchablePrescriptionListView1(patientID: patientID, patientName: patientName, searchText: $searchText)
             } else if selectedSegmentIndex == 1 { // Show ReportsView
-                ReportsView()
+                ReportsView( searchText: $searchText)
             }
         }
         .padding()
@@ -72,6 +72,13 @@ struct SearchablePrescriptionListView1: View {
             }
             
             // Add an overlay button to pop up a sheet for adding a prescription
+            NavigationLink(
+                destination: PrescriptionForm(patientID: patientID,patientName: patientName).navigationBarBackButtonHidden(),
+                isActive: $isAddPrescriptionSheetPresented,
+                label: {
+                    EmptyView()
+                })
+                .hidden()
             Button(action: {
                 isAddPrescriptionSheetPresented = true
             }) {
@@ -81,11 +88,7 @@ struct SearchablePrescriptionListView1: View {
                     .background(Color.blue)
                     .cornerRadius(8)
             }
-            .sheet(isPresented: $isAddPrescriptionSheetPresented) {
-                // Your add prescription sheet content here
-                PrescriptionForm(patientID: patientID,patientName: patientName)
-            }
-            .padding()
+            
         }
         .onAppear {
             fetchPrescriptions()

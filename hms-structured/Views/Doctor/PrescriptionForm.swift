@@ -26,6 +26,7 @@ struct PrescriptionData {
 }
 
 struct PrescriptionForm: View {
+    @Environment(\.presentationMode) var presentationMode
     @State private var symptoms = ""
     @State private var diagnosis = ""
     @State private var medicines: [Medicine] = []
@@ -347,6 +348,7 @@ struct PrescriptionForm: View {
                             suggestion = ""
                         }
                     }
+                    presentationMode.wrappedValue.dismiss()
                 }) {
                     Text("Submit")
                         .foregroundColor(.white)
