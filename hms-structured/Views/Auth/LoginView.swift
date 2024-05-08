@@ -31,13 +31,12 @@ struct LoginView: View {
             if await viewModel.signInWithEmailPassword() == true {
                 dismiss()
                 isLoggedIn = true
-                if viewModel.role == .doctor{
-                    userName = viewModel.doctor.fullName
-                    if let userid = viewModel.doctor.id{
-                        userUID = userid
-                        
-                    }
-                }
+//                if viewModel.role == .doctor{
+//                    userName = viewModel.doctor.fullName
+//                    if let userid = viewModel.doctor.id{
+//                        userUID = userid
+//                    }
+//                }
                 if viewModel.role == .patient{
                     userName = viewModel.patient.name
                     if let userid = viewModel.patient.id{
@@ -52,7 +51,7 @@ struct LoginView: View {
     var body: some View {
         NavigationStack{
             VStack {
-                Image("Login")
+                Image("SignUp")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(minHeight: 300, maxHeight: 400)
@@ -119,24 +118,39 @@ struct LoginView: View {
                     Button(action: {
                         isNavigateToSignUp = true
                     }) {
-                        Text("Sign up")
-                            .fontWeight(.semibold)
-                            .foregroundColor(.blue)
+                        Button(action: {
+                            isNavigateToSignUp.toggle()
+                        }) {
+                            NavigationLink(destination: SignupView()){
+                                Text("Sign up")
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.blue)
+                                
+                            }
+                            
+                        }
+                        
                     }
                 }
                 .padding([.top, .bottom], 50)
                 
                 // to navigate
-                NavigationLink(
-                    destination: SignupView().navigationBarBackButtonHidden(),
-                    isActive: $isNavigateToSignUp,
-                    label: {
-                        EmptyView()
-                    })
-                    .hidden()
+//                NavigationLink(
+//                    destination: SignupView().navigationBarBackButtonHidden(),
+//                    isActive: $isNavigateToSignUp,
+//                    label: {
+//                        EmptyView()
+//                    })
+//                    .hidden()
+                
+                NavigationLink(destination: SignupView(), isActive: $isNavigateToSignUp) {
+                    EmptyView()
+                }
+                .hidden()
+                
                 
                 NavigationLink(
-                    destination: viewModel.role == .patient ? AnyView(PatientContentView().navigationBarBackButtonHidden()) : viewModel.role == .doctor  ? AnyView(DoctorHomeView().navigationBarBackButtonHidden()) : viewModel.role == .admin ? AnyView(AdminTabBarView().navigationBarBackButtonHidden()) : AnyView(SignupView()),
+                    destination: viewModel.role == .patient ? AnyView(PatientContentView().navigationBarBackButtonHidden()) : viewModel.role == .doctor ? AnyView(DoctorHomeView().navigationBarBackButtonHidden()) : AnyView(SignupView()),
                     isActive: $isLoggedIn,
                     label: {
                         EmptyView()
@@ -146,6 +160,7 @@ struct LoginView: View {
             }
             .listStyle(.plain)
             .padding()
+            .navigationBarBackButtonHidden(true)
             .analyticsScreen(name: "\(Self.self)")
         }
     }
