@@ -14,5 +14,5 @@ struct AdminReportsView: View {
 }
 
 #Preview {
-    ReportsView()
+    AdminReportsView()
 }
