@@ -1,6 +1,7 @@
 import SwiftUI
 import SDWebImageSwiftUI
 import Firebase
+import Combine
 
 struct DoctorDetailsView: View {
     var doctor: Doctor
@@ -161,6 +162,17 @@ struct DoctorDetailsView: View {
                 availabilityCounts["2:00 - 4:00"] = timeSlotAvailability.slotCounts["2:00 - 4:00"]
             }
         }
+        .onReceive(Just(selectedDate)) { _ in
+                checkTimeSlotAvailability(doctor: doctor, selectedDate: selectedDate) {
+                    timeSlotAvailability in
+                    print(timeSlotAvailability.slotCounts)
+                    print("Selected date change", selectedDate)
+                    availabilityCounts["9:00 - 11:00"] = timeSlotAvailability.slotCounts["9:00 - 11:00"]
+                    availabilityCounts["11:00 - 12:00"] = timeSlotAvailability.slotCounts["11:00 - 12:00"]
+                    availabilityCounts["12:00 - 2:00"] = timeSlotAvailability.slotCounts["12:00 - 2:00"]
+                    availabilityCounts["2:00 - 4:00"] = timeSlotAvailability.slotCounts["2:00 - 4:00"]
+                }
+        }
     }
         
         func addAppointmentToFirestore(selectedDate: Date, selectedTime: String, doctor: Doctor, userName: String, userUID: String) {
@@ -221,6 +233,8 @@ struct DoctorDetailsView: View {
                 print("User is not logged in")
                 return
             }
+            
+            print("date", selectedDate)
             
             var timeSlotAvailability = TimeSlotAvailability()
             

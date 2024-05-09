@@ -8,6 +8,7 @@
 import SwiftUI
 import Firebase
 import FirebaseFirestore
+import Combine
 
 struct MedicalTestDetailsView: View {
     
@@ -137,6 +138,17 @@ struct MedicalTestDetailsView: View {
                 print("avai", TestTimeSlotAvailability.slotCounts["9:00 - 11:00"])
             }
         }
+        .onReceive(Just(selectedDate)) { _ in
+                checkTestSlotAvailability(selectedDate: selectedDate, testName: testName) {
+                    TestSlotAvailability in
+                    print(TestSlotAvailability.slotCounts)
+                    print("Selected date change", selectedDate)
+                    availabilityCounts["9:00 - 11:00"] = TestSlotAvailability.slotCounts["9:00 - 11:00"]
+                    availabilityCounts["11:00 - 12:00"] = TestSlotAvailability.slotCounts["11:00 - 12:00"]
+                    availabilityCounts["12:00 - 2:00"] = TestSlotAvailability.slotCounts["12:00 - 2:00"]
+                    availabilityCounts["2:00 - 4:00"] = TestSlotAvailability.slotCounts["2:00 - 4:00"]
+                }
+        }
     }
     
     func medicalTestToFirestore(selectedDate: Date, selectedTime: String, category: String, testName: String ,userName: String, userUID: String) {
@@ -187,6 +199,8 @@ struct MedicalTestDetailsView: View {
             print("User is not logged in")
             return
         }
+        
+        print("selected date", selectedDate)
         
         var testTimeSlotAvailability = TestTimeSlotAvailability()
         

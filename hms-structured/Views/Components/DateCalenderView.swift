@@ -60,6 +60,7 @@ struct DateCalendarView: View {
                             }
                             temp.date = date
                             indexDate.date = date
+                            selectedDate = date
                             print(temp.date)
                             
                         } label: {

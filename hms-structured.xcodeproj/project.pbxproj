@@ -84,8 +84,6 @@
 		8EF782E32BE88BCB00B70CE5 /* RecordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF782E02BE88BCB00B70CE5 /* RecordsView.swift */; };
 		8EF782E42BE88BCB00B70CE5 /* TestReportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF782E12BE88BCB00B70CE5 /* TestReportsView.swift */; };
 		8EF783182BE9FD6400B70CE5 /* DProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF783172BE9FD6400B70CE5 /* DProfile.swift */; };
-		8EF7831B2BEA432600B70CE5 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF7831A2BEA432600B70CE5 /* Profile.swift */; };
-		8EF7831D2BEB482A00B70CE5 /* DoctorPatientRecordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF7831C2BEB482A00B70CE5 /* DoctorPatientRecordView.swift */; };
 		8EFF67802BE3B79A0016A0AA /* PatientContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFF677F2BE3B79A0016A0AA /* PatientContentView.swift */; };
 /* End PBXBuildFile section */
 
@@ -700,6 +698,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"hms-structured/Preview Content\"";
+				DEVELOPMENT_TEAM = JS9P3X2U8F;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "To retrieve vitals";
@@ -730,6 +729,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"hms-structured/Preview Content\"";
+				DEVELOPMENT_TEAM = JS9P3X2U8F;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "To retrieve vitals";

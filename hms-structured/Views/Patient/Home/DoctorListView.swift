@@ -14,13 +14,13 @@ struct DoctorCardList: View {
     var body: some View {
         VStack{
             HStack {
-                Text("Find your doctor")
+                Text("Top Doctors")
                     .padding(.leading, 25)
                     .font(.headline)
                 Spacer()
-                Button("See all") {}
-                    .padding(.trailing, 25)
-                    .font(.headline)
+//                Button("See all") {}
+//                    .padding(.trailing, 25)
+//                    .font(.headline)
             }
             ScrollView(.horizontal) {
                 HStack(spacing: 20) {
