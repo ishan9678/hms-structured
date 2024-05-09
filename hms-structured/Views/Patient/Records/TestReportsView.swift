@@ -11,6 +11,7 @@ struct MedicalTest: Identifiable, Codable, Hashable {
     let patientName: String
     let testName: String
     let timeSlot: String
+    let pdfURL: String
 }
 
 struct ReportsView: View {
@@ -90,8 +91,21 @@ struct ReportsView: View {
                     }
                     .padding()
                    
-                    Image(systemName: "square.and.arrow.down")
-                        .font(.system(size: 25))
+                    Button(action: {
+                        Task {
+                            if let url = await downloadFileAsync(urlstring: test.pdfURL) {
+                                print("File downloaded: \(url)")
+                                // Handle the downloaded file here
+                            }
+                        }
+                    }) {
+                        Image(systemName: "square.and.arrow.down")
+                            .font(.system(size: 25))
+                    }
+
+
+                    
+                    
                 }.frame(width:360,height: 150)
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(10)
@@ -151,7 +165,8 @@ struct ReportsView: View {
                         patientID: mapData["patientID"] as? String ?? "",
                         patientName: mapData["patientName"] as? String ?? "",
                         testName: mapData["testName"] as? String ?? "",
-                        timeSlot: mapData["timeSlot"] as? String ?? ""
+                        timeSlot: mapData["timeSlot"] as? String ?? "",
+                        pdfURL: mapData["pdfURL"] as? String ?? ""
                     )
                     medicalTests.append(medicalTest)
                 }
@@ -160,6 +175,53 @@ struct ReportsView: View {
             fetchedMedicalTests = medicalTests
         }
     }
+    
+    private func downloadTaskAsync(request: URLRequest) async  -> (URL?, URLResponse?, Error?) {
+            
+        return await withCheckedContinuation{ continuation in
+            URLSession.shared.downloadTask(with: request) { tempFileUrl, response, error in
+                continuation.resume(returning: (tempFileUrl, response, error))
+            }.resume()
+        }
+        
+    }
+    
+    private func downloadFileAsync(urlstring: String) async -> URL? {
+            
+            let url = URL(string: urlstring)!
+
+            let documentsUrl =  try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+
+            let destinationUrl = documentsUrl.appendingPathComponent(url.lastPathComponent)
+            print(destinationUrl)
+
+            if FileManager().fileExists(atPath: destinationUrl.path) {
+                print("File already exists [\(destinationUrl.path)]")
+    //            try! FileManager().removeItem(at: destinationUrl)
+                return destinationUrl
+            }
+            
+            let request = URLRequest(url: url)
+            let (tempFileUrl, response, error)  = await downloadTaskAsync(request: request)
+            if error != nil {
+                return nil
+            }
+                
+            if let response = response as? HTTPURLResponse {
+                if response.statusCode == 200 {
+                    if let tempFileUrl = tempFileUrl {
+                        print("download finished")
+                        try! FileManager.default.moveItem(at: tempFileUrl, to: destinationUrl)
+                        return destinationUrl
+                    } else {
+                        return nil
+                    }
+                
+                }
+            }
+            
+            return nil
+        }
 }
 
 
