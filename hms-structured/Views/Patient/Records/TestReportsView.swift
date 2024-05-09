@@ -17,6 +17,7 @@ struct MedicalTest: Identifiable, Codable, Hashable {
 }
 
 struct ReportsView: View {
+    let patientID: String
     @State var fetchedMedicalTests: [MedicalTest] = []
     @Binding var searchText: String 
     var filiteredMedicalTests:[MedicalTest]{
@@ -136,12 +137,9 @@ struct ReportsView: View {
     private func fetchMedicalTest() {
         let db = Firestore.firestore()
         
-        guard let userId = Auth.auth().currentUser?.uid else {
-            print("User is not logged in")
-            return
-        }
 
-        db.collection("medical-tests").document(userId).getDocument { documentSnapshot, error in
+
+        db.collection("medical-tests").document(patientID).getDocument { documentSnapshot, error in
             if let error = error {
                 print("Error fetching document: \(error.localizedDescription)")
                 return
@@ -201,8 +199,8 @@ struct ReportsView: View {
 }
 
 
-#Preview {
-
-    ReportsView(searchText:.constant(""))
-
-}
+//#Preview {
+//
+//    ReportsView(searchText:.constant(""))
+//
+//}

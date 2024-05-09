@@ -20,12 +20,12 @@ struct AdminTabBarView: View {
                     Label("Staff", systemImage: "person.3")
                 }
 
-            AppointmentsView()
+            AppointmentsAdminView()
                 .tabItem {
                     Label("Appointments", systemImage: "calendar")
                 }
 
-            AppointmentsView()
+            AdminReportsView()
                 .tabItem {
                     Label("Reports", systemImage: "doc.text")
                 }

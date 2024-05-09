@@ -1,4 +1,5 @@
 import SwiftUI
+import SDWebImageSwiftUI
 import FirebaseAuth
 import FirebaseFirestore
 import FirebaseStorage
@@ -14,139 +15,150 @@ struct DProfile: View {
     @State private var passwordChangeError: String?
     
     var body: some View {
-        ScrollView {
-            VStack {
-                RoundedRectangle(cornerRadius: 20)
-                    .foregroundColor(.bgColor1)
-                    .frame(width: 400, height: 400)
-                    .overlay(
-                        VStack {
-                            
-                             let doctor = doctor
-                                if !doctor.profileImageURL.isEmpty,
-                                   let url = URL(string: doctor.profileImageURL),
-                                   let imageData = try? Data(contentsOf: url),
-                                   let uiImage = UIImage(data: imageData) {
 
-                                    Image(uiImage: uiImage)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(width: 200, height: 200)
-                                        .clipShape(Circle())
-                                        .overlay(Circle().stroke(Color.white, lineWidth: 4))
-                                        .padding(.top, 80)
-                                        .padding(.bottom, 0)
-                                } else {
-                                    Text("No Profile Image")
+//        VStack {
+            VStack(spacing:30) {
+                    
+                    Text("My Account")
+                    .font(.system(size: 30))
+                ZStack{
+                    Rectangle()
+                        .fill(.bgColor1)
+                        .cornerRadius(10)
+                        .frame(width: 350,height: 200)
+                    HStack{
+                        let doctor = doctor
+                        if let imageUrl = URL(string: doctor.profileImageURL) {
+                            WebImage(url: imageUrl)
+                                .resizable()
+                                .frame(width: 100, height: 100)
+                                .clipShape(RoundedRectangle(cornerRadius: 100))
+                                .padding()
+                                        }
+                        VStack{
+                            Text(doctor.fullName ?? "Doctor Name")
+                                .foregroundColor(.white)
+                                .font(.system(size: 21))
+                                .fontWeight(.bold)
+//                                .padding(.top,10)
+                            Text(doctor.department)
+                                .foregroundColor(.white)
+                            
+                        }
+
+                                        
+                                    
+        //                                ProgressView()
+        //                                    .progressViewStyle(CircularProgressViewStyle())
+                                    
                                 }
-                                Text(doctor.fullName ?? "Doctor Name")
-                                    .foregroundColor(.white)
-                                    .padding(.top,10)
-                                    .font(.headline)
+                }
+//                        .padding(.top,-60)
+                    
+                    RoundedRectangle(cornerRadius: 20)
+                    .frame(width: 320,height: 450)
+                        .foregroundColor(.white)
+                        .overlay(
+                            VStack {
+                                Divider()
+                                NavigationLink(destination: UpdateView(doctor: doctor)) {
+                                    HStack {
+                                        Image("settings")
+                                            .resizable()
+                                            .frame(width: 30, height: 30)
+                                            .foregroundColor(.bgColor1)
+                                        Text("Account Settings")
+                                            .foregroundColor(.bgColor1)
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .foregroundColor(.bgColor1)
+                                    }
+                                }
+                                .padding()
                                 
-                            
-//                                ProgressView()
-//                                    .progressViewStyle(CircularProgressViewStyle())
-                            
-                        }
-                    )
-                    .padding(.top,-60)
-                
-                RoundedRectangle(cornerRadius: 20)
-                    .foregroundColor(.white)
-                    .padding(.top,350)
-                    .overlay(
-                        VStack {
-                            Divider()
-                            NavigationLink(destination: UpdateView(doctor: doctor)) {
+                                Divider()
+                                
                                 HStack {
-                                    Image("settings")
+                                    Image("padlock")
                                         .resizable()
                                         .frame(width: 30, height: 30)
-                                    Text("Account Settings")
+                                        .foregroundColor(.bgColor1)
+                                    Text("Change Password")
+                                        .foregroundColor(.bgColor1)
                                     Spacer()
                                     Image(systemName: "chevron.right")
+                                        .foregroundColor(.bgColor1)
                                 }
-                            }
-                            .padding()
-                            
-                            Divider()
-                            
-                            HStack {
-                                Image("padlock")
-                                    .resizable()
-                                    .frame(width: 30, height: 30)
-                                Text("Change Password")
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                            }
-                            .padding()
-                            .onTapGesture {
-                                isChangingPassword.toggle()
-                            }
-                            
-                            if isChangingPassword {
-                                VStack {
-                                    SecureField("New Password", text: $newPassword)
-                                        .padding()
-                                        .background(Color.white)
-                                        .cornerRadius(8)
-                                        .padding(.bottom, 8)
-                                    
-                                    SecureField("Confirm Password", text: $confirmPassword)
-                                        .padding()
-                                        .background(Color.white)
-                                        .cornerRadius(8)
-                                        .padding(.bottom, 8)
-                                    
-                                    if let error = passwordChangeError {
-                                        Text(error)
-                                            .foregroundColor(.red)
-                                            .padding(.bottom, 8)
-                                    }
-                                    
-                                    Button(action: changePassword) {
-                                        Text("Change Password")
+                                .padding()
+                                .onTapGesture {
+                                    isChangingPassword.toggle()
+                                }
+                                
+                                if isChangingPassword {
+                                    VStack {
+                                        SecureField("New Password", text: $newPassword)
                                             .padding()
-                                            .foregroundColor(.white)
-                                            .background(Color.blue)
+                                            .background(Color.white)
                                             .cornerRadius(8)
+                                            .padding(.bottom, 8)
+                                        
+                                        SecureField("Confirm Password", text: $confirmPassword)
+                                            .padding()
+                                            .background(Color.white)
+                                            .cornerRadius(8)
+                                            .padding(.bottom, 8)
+                                        
+                                        if let error = passwordChangeError {
+                                            Text(error)
+                                                .foregroundColor(.red)
+                                                .padding(.bottom, 8)
+                                        }
+                                        
+                                        Button(action: changePassword) {
+                                            Text("Change Password")
+                                                .padding()
+                                                .foregroundColor(.blue)
+                                                .background(Color.blue)
+                                                .cornerRadius(8)
+                                        }
+                                        .padding(.bottom, 8)
                                     }
-                                    .padding(.bottom, 8)
+                                    .padding()
+                                    .background(Color.gray.opacity(0.1))
+                                    .cornerRadius(8)
                                 }
-                                .padding()
-                                .background(Color.gray.opacity(0.1))
-                                .cornerRadius(8)
-                            }
-                            
-                            Divider()
-                            Button(action: {
-                                do {
-                                    try Auth.auth().signOut()
-                                    UserDefaults.standard.set(false, forKey: "isLoggedIn")
-                                    UIApplication.shared.windows.first?.rootViewController = UIHostingController(rootView: LoginView())
-                                } catch {
-                                    print("Error signing out: \(error.localizedDescription)")
+                                
+                                Divider()
+                                Button(action: {
+                                    do {
+                                        try Auth.auth().signOut()
+                                        UserDefaults.standard.set(false, forKey: "isLoggedIn")
+                                        UIApplication.shared.windows.first?.rootViewController = UIHostingController(rootView: LoginView())
+                                    } catch {
+                                        print("Error signing out: \(error.localizedDescription)")
+                                    }
+                                }) {
+                                    HStack {
+                                        Image("info")
+                                            .resizable()
+                                            .frame(width: 30, height: 30)
+                                            .foregroundColor(.bgColor1)
+                                        Text("Log Out")
+                                            .foregroundColor(.bgColor1)
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .foregroundColor(.bgColor1)
+                                    }
+                                    .padding()
                                 }
-                            }) {
-                                HStack {
-                                    Image("info")
-                                        .resizable()
-                                        .frame(width: 30, height: 30)
-                                    Text("Log Out")
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                }
-                                .padding()
-                            }
-                        }
-                    )
-            }
+                            }.padding(.top,-150)
+                        )
+                }
+            .padding()
+            .onAppear {
+                fetchDoctorProfile()
         }
-        .padding()
-        .onAppear {
-            fetchDoctorProfile()
-        }
+//        }
     }
     
     func fetchDoctorProfile() {
