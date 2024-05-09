@@ -64,6 +64,7 @@ struct SearchablePrescriptionListView: View {
                    let doctorSpecialty = data["doctorSpecialty"] as? String ?? ""
                    let symptoms = data["symptoms"] as? String ?? ""
                    let suggestions = data["suggestions"] as? String ?? ""
+                   let diagnosis = data["diagnosis"] as? String ?? ""
                    let medicationData = data["medicines"] as? [[String: Any]] ?? []
                    let medication = medicationData.map { medData -> Medication in
                        let name = medData["name"] as? String ?? ""
@@ -87,7 +88,7 @@ struct SearchablePrescriptionListView: View {
                    } else {
                        appointmentDate = nil
                    }
-                   let prescription = Prescription(doctorName: doctorName, doctorSpecialty: doctorSpecialty, symptoms: symptoms, medication: medication, tests: tests, suggestions: suggestions, appointmentDate: appointmentDate ?? Date())
+                   let prescription = Prescription(doctorName: doctorName, doctorSpecialty: doctorSpecialty, symptoms: symptoms, diagnosis: diagnosis, medication: medication, tests: tests, suggestions: suggestions, appointmentDate: appointmentDate ?? Date())
                    prescriptions.append(prescription)
                }
 
@@ -106,16 +107,13 @@ struct PrescriptionRow: View {
     var body: some View {
         HStack {
             // Doctor's image
-            Image(systemName: "person.fill")
-                .resizable()
-                .clipShape(Circle())
-                .frame(width: 50, height: 50)
+            
             
             // Doctor's name and specialization
             VStack(alignment: .leading) {
                 Text(prescription.doctorName)
                     .font(.headline)
-                Text("Appointment: \(prescription.appointmentDate)")
+                Text("Appointment: \(formattedDate(prescription.appointmentDate))")
                     .font(.subheadline)
                     .foregroundColor(.gray)
             }
@@ -127,6 +125,15 @@ struct PrescriptionRow: View {
         .onTapGesture {
             onTap()
         }
+    }
+    private func formattedDate(_ date: Date) -> String {
+        
+        let dateFormatter = DateFormatter()
+        
+        dateFormatter.dateFormat = "MMM d, yyyy"
+        
+        return dateFormatter.string(from: date)
+        
     }
 }
 
@@ -144,6 +151,7 @@ struct Prescription: Codable, Hashable, Identifiable {
     var doctorName: String
     var doctorSpecialty: String
     var symptoms: String
+    let diagnosis: String
     var medication: [Medication]
     var tests: [TestPress]
     var suggestions: String
@@ -189,6 +197,9 @@ struct PrescriptionView: View {
             // Symptoms
             Section(header: Text("Symptoms")) {
                 Text(prescription.symptoms)
+            }
+            Section(header: Text("Diagnosis")) {
+                Text(prescription.diagnosis)
             }
 
             // Medication Details
