@@ -1,5 +1,5 @@
 {
-  "originHash" : "2972f5a87ee6d70f657583c7a4fd75038372aa226aea84d0be24ed9b8f7daaeb",
+  "originHash" : "661d9d4d9ce582bf40ea1adab104f73f3505b9c2d71ff56553d20478776fbd81",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -123,8 +123,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SDWebImage/SDWebImage.git",
       "state" : {
-        "revision" : "f6afa0132961d593f07970d84e2d8b588c29ea04",
-        "version" : "5.19.1"
+        "revision" : "5642d1ffe3dbe628592443bd14154e31929727b4",
+        "version" : "5.19.2"
       }
     },
     {
@@ -134,6 +134,15 @@
       "state" : {
         "revision" : "b7af5e6bd9c2987e41730400d1baad13d74a141a",
         "version" : "3.0.4"
+      }
+    },
+    {
+      "identity" : "sharesheetview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/rebeloper/ShareSheetView.git",
+      "state" : {
+        "revision" : "6362de0e1792e296c5f3477a43ee1f0b354c0d57",
+        "version" : "0.1.1"
       }
     },
     {

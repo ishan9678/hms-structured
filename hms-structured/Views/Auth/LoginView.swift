@@ -51,7 +51,7 @@ struct LoginView: View {
     var body: some View {
         NavigationStack{
             VStack {
-                Image("Signup")
+                Image("SignUp")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(minHeight: 300, maxHeight: 400)

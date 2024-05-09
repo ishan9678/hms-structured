@@ -1,6 +1,8 @@
 import SwiftUI
+import FirebaseStorage
 import FirebaseAuth
 import FirebaseFirestore
+import ShareSheetView
 
 
 struct MedicalTest: Identifiable, Codable, Hashable {
@@ -92,12 +94,7 @@ struct ReportsView: View {
                     .padding()
                    
                     Button(action: {
-                        Task {
-                            if let url = await downloadFileAsync(urlstring: test.pdfURL) {
-                                print("File downloaded: \(url)")
-                                // Handle the downloaded file here
-                            }
-                        }
+                        downloadPDF(url: test.pdfURL)
                     }) {
                         Image(systemName: "square.and.arrow.down")
                             .font(.system(size: 25))
@@ -175,53 +172,24 @@ struct ReportsView: View {
             fetchedMedicalTests = medicalTests
         }
     }
-    
-    private func downloadTaskAsync(request: URLRequest) async  -> (URL?, URLResponse?, Error?) {
-            
-        return await withCheckedContinuation{ continuation in
-            URLSession.shared.downloadTask(with: request) { tempFileUrl, response, error in
-                continuation.resume(returning: (tempFileUrl, response, error))
-            }.resume()
+    func downloadPDF(url : String){
+        if let URl = URL(string: url){
+            let storageRef = Storage.storage().reference(forURL: url)
+            let destination = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent(URl.lastPathComponent).appendingPathExtension("pdf")
+            let dowloadTask = storageRef.write(toFile: destination){
+                url, error in
+                if let error = error{
+                    print("Failed to Download")
+                }
+                else{
+                    print("Downloaded")
+                    let activityViewController = UIActivityViewController(activityItems: [destination], applicationActivities: nil)
+                    UIApplication.shared.windows.first?.rootViewController?.present(activityViewController, animated: true, completion: nil)
+                }
+            }
         }
         
     }
-    
-    private func downloadFileAsync(urlstring: String) async -> URL? {
-            
-            let url = URL(string: urlstring)!
-
-            let documentsUrl =  try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-
-            let destinationUrl = documentsUrl.appendingPathComponent(url.lastPathComponent)
-            print(destinationUrl)
-
-            if FileManager().fileExists(atPath: destinationUrl.path) {
-                print("File already exists [\(destinationUrl.path)]")
-    //            try! FileManager().removeItem(at: destinationUrl)
-                return destinationUrl
-            }
-            
-            let request = URLRequest(url: url)
-            let (tempFileUrl, response, error)  = await downloadTaskAsync(request: request)
-            if error != nil {
-                return nil
-            }
-                
-            if let response = response as? HTTPURLResponse {
-                if response.statusCode == 200 {
-                    if let tempFileUrl = tempFileUrl {
-                        print("download finished")
-                        try! FileManager.default.moveItem(at: tempFileUrl, to: destinationUrl)
-                        return destinationUrl
-                    } else {
-                        return nil
-                    }
-                
-                }
-            }
-            
-            return nil
-        }
 }
 
 

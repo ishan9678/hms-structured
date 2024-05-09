@@ -57,6 +57,7 @@
 		865236522BE9EEDA00CA1793 /* Nurse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865236512BE9EEDA00CA1793 /* Nurse.swift */; };
 		865908682BEC8A41005EF7BD /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865908672BEC8A41005EF7BD /* Profile.swift */; };
 		8690D3F52BEB4B6000286184 /* CancelAppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8690D3F42BEB4B6000286184 /* CancelAppointmentView.swift */; };
+		86AC0DFF2BECA57D00153103 /* ShareSheetView in Frameworks */ = {isa = PBXBuildFile; productRef = 86AC0DFE2BECA57D00153103 /* ShareSheetView */; };
 		86B555D32BDA43850064E9BD /* hms_structuredApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B555D22BDA43850064E9BD /* hms_structuredApp.swift */; };
 		86B555D52BDA43850064E9BD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B555D42BDA43850064E9BD /* ContentView.swift */; };
 		86B555D72BDA43860064E9BD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86B555D62BDA43860064E9BD /* Assets.xcassets */; };
@@ -141,7 +142,6 @@
 		8EF782E02BE88BCB00B70CE5 /* RecordsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordsView.swift; sourceTree = "<group>"; };
 		8EF782E12BE88BCB00B70CE5 /* TestReportsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestReportsView.swift; sourceTree = "<group>"; };
 		8EF783172BE9FD6400B70CE5 /* DProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DProfile.swift; sourceTree = "<group>"; };
-		8EF7831A2BEA432600B70CE5 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		8EF7831E2BEC8E4400B70CE5 /* DoctorPatientRecordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorPatientRecordsView.swift; sourceTree = "<group>"; };
 		8EFF677F2BE3B79A0016A0AA /* PatientContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -174,6 +174,7 @@
 				8652361F2BE49EAC00CA1793 /* FirebaseRemoteConfig in Frameworks */,
 				865236232BE49EAC00CA1793 /* FirebaseStorage in Frameworks */,
 				865236032BE49EAC00CA1793 /* FirebaseDatabase in Frameworks */,
+				86AC0DFF2BECA57D00153103 /* ShareSheetView in Frameworks */,
 				865236252BE49EAC00CA1793 /* FirebaseStorageCombine-Community in Frameworks */,
 				86ED4D622BDF723F00282F0D /* SDWebImageSwiftUI in Frameworks */,
 				865235FD2BE49EAC00CA1793 /* FirebaseAuth in Frameworks */,
@@ -459,6 +460,7 @@
 				865236222BE49EAC00CA1793 /* FirebaseStorage */,
 				865236242BE49EAC00CA1793 /* FirebaseStorageCombine-Community */,
 				8652362D2BE8D30400CA1793 /* GoogleGenerativeAI */,
+				86AC0DFE2BECA57D00153103 /* ShareSheetView */,
 			);
 			productName = "hms-structured";
 			productReference = 86B555CF2BDA43850064E9BD /* hms-structured.app */;
@@ -492,6 +494,7 @@
 				86ED4D602BDF723F00282F0D /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				865235EF2BE49EAC00CA1793 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				8652362C2BE8D30400CA1793 /* XCRemoteSwiftPackageReference "generative-ai-swift" */,
+				86AC0DFD2BECA57D00153103 /* XCRemoteSwiftPackageReference "ShareSheetView" */,
 			);
 			productRefGroup = 86B555D02BDA43850064E9BD /* Products */;
 			projectDirPath = "";
@@ -795,6 +798,14 @@
 				minimumVersion = 0.5.2;
 			};
 		};
+		86AC0DFD2BECA57D00153103 /* XCRemoteSwiftPackageReference "ShareSheetView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rebeloper/ShareSheetView.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.1;
+			};
+		};
 		86ED4D602BDF723F00282F0D /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
@@ -945,6 +956,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8652362C2BE8D30400CA1793 /* XCRemoteSwiftPackageReference "generative-ai-swift" */;
 			productName = GoogleGenerativeAI;
+		};
+		86AC0DFE2BECA57D00153103 /* ShareSheetView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86AC0DFD2BECA57D00153103 /* XCRemoteSwiftPackageReference "ShareSheetView" */;
+			productName = ShareSheetView;
 		};
 		86ED4D612BDF723F00282F0D /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
