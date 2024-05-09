@@ -2,7 +2,7 @@ import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 import Combine
-
+import SwiftUI
 @MainActor class AuthenticationViewModel: ObservableObject {
     @Published var name = ""
     @Published var email = ""
