@@ -56,8 +56,8 @@
 		865236502BE9EED400CA1793 /* Doctor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652364F2BE9EED400CA1793 /* Doctor.swift */; };
 		865236522BE9EEDA00CA1793 /* Nurse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865236512BE9EEDA00CA1793 /* Nurse.swift */; };
 		865908682BEC8A41005EF7BD /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865908672BEC8A41005EF7BD /* Profile.swift */; };
-		8690D3F52BEB4B6000286184 /* CancelAppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8690D3F42BEB4B6000286184 /* CancelAppointmentView.swift */; };
 		86AC0DFF2BECA57D00153103 /* ShareSheetView in Frameworks */ = {isa = PBXBuildFile; productRef = 86AC0DFE2BECA57D00153103 /* ShareSheetView */; };
+		86AC0E012BECC81200153103 /* MedicalTestCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AC0E002BECC81200153103 /* MedicalTestCardView.swift */; };
 		86B555D32BDA43850064E9BD /* hms_structuredApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B555D22BDA43850064E9BD /* hms_structuredApp.swift */; };
 		86B555D52BDA43850064E9BD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B555D42BDA43850064E9BD /* ContentView.swift */; };
 		86B555D72BDA43860064E9BD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86B555D62BDA43860064E9BD /* Assets.xcassets */; };
@@ -113,7 +113,7 @@
 		8652364F2BE9EED400CA1793 /* Doctor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Doctor.swift; sourceTree = "<group>"; };
 		865236512BE9EEDA00CA1793 /* Nurse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nurse.swift; sourceTree = "<group>"; };
 		865908672BEC8A41005EF7BD /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
-		8690D3F42BEB4B6000286184 /* CancelAppointmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelAppointmentView.swift; sourceTree = "<group>"; };
+		86AC0E002BECC81200153103 /* MedicalTestCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MedicalTestCardView.swift; sourceTree = "<group>"; };
 		86B555CF2BDA43850064E9BD /* hms-structured.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "hms-structured.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		86B555D22BDA43850064E9BD /* hms_structuredApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hms_structuredApp.swift; sourceTree = "<group>"; };
 		86B555D42BDA43850064E9BD /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -371,7 +371,7 @@
 				86B556382BDAD7CC0064E9BD /* AppointmentCardView.swift */,
 				86B5563B2BDAD81D0064E9BD /* DoctorListView.swift */,
 				86B5563D2BDAD8350064E9BD /* PatientHomeView.swift */,
-				8690D3F42BEB4B6000286184 /* CancelAppointmentView.swift */,
+				86AC0E002BECC81200153103 /* MedicalTestCardView.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -526,7 +526,6 @@
 				86B556272BDA48110064E9BD /* AuthenticationViewModel.swift in Sources */,
 				86ED4D582BDBC86800282F0D /* Patients.swift in Sources */,
 				86B5563E2BDAD8350064E9BD /* PatientHomeView.swift in Sources */,
-				8690D3F52BEB4B6000286184 /* CancelAppointmentView.swift in Sources */,
 				8652364D2BE9EEB300CA1793 /* AddNursesViewModel.swift in Sources */,
 				86B556292BDA48BE0064E9BD /* SignupView.swift in Sources */,
 				86B555D52BDA43850064E9BD /* ContentView.swift in Sources */,
@@ -564,6 +563,7 @@
 				8EF782E22BE88BCB00B70CE5 /* PatientPrescriptionView.swift in Sources */,
 				8652362A2BE4A1DB00CA1793 /* VitalsView.swift in Sources */,
 				86ED4D562BDBC43F00282F0D /* TimeSlotView.swift in Sources */,
+				86AC0E012BECC81200153103 /* MedicalTestCardView.swift in Sources */,
 				86ED4D102BDB75F400282F0D /* DoctorHomeView.swift in Sources */,
 				865236402BE9EE9700CA1793 /* AdminDoctorListView.swift in Sources */,
 				865236442BE9EE9700CA1793 /* ReportsView.swift in Sources */,
