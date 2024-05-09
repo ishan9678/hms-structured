@@ -80,7 +80,7 @@ struct ReportsView: View {
                     VStack(alignment: .leading) {
                         Text("\(test.testName)")
                             .fontWeight(.bold)
-                            .font(.system(size: 25))
+                            .font(.system(size: 16))
                         
                         Text("\(test.category)")
                             .foregroundColor(.black.opacity(0.6))
@@ -89,21 +89,29 @@ struct ReportsView: View {
                         Text("Booking Date: \(formattedDate(test.bookingDate))")
                         
                         Text("Time Slot: \(test.timeSlot)")
-                        
+                        HStack(spacing:30){
+                            RoundedRectangle(cornerRadius: 30)
+                                .fill(test.pdfURL.isEmpty ? Color.blue : Color.green)
+                                .frame(width: 150,height: 30)
+                                .overlay(Text(test.pdfURL.isEmpty ? "In-progress":"Completed")
+                                    .foregroundColor(.white))
+                            if test.pdfURL.isEmpty{
+                                
+                            }else{
+                                Button(action: {
+                                    downloadPDF(url: test.pdfURL)
+                                }) {
+                                    Image(systemName: "square.and.arrow.down")
+                                        .font(.system(size: 25))
+                                }
+                            }
+                        }
                     }
                     .padding()
                    
-                    Button(action: {
-                        downloadPDF(url: test.pdfURL)
-                    }) {
-                        Image(systemName: "square.and.arrow.down")
-                            .font(.system(size: 25))
-                    }
-
-
+                  
                     
-                    
-                }.frame(width:360,height: 150)
+                }.frame(width:360,height: 170)
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(10)
                 .padding(.horizontal,20)
@@ -193,8 +201,8 @@ struct ReportsView: View {
 }
 
 
-//#Preview {
-//
-//    ReportsView(, searchText: searcht)
-//
-//}
+#Preview {
+
+    ReportsView(searchText:.constant(""))
+
+}
