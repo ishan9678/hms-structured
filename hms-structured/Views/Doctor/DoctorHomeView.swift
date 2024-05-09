@@ -54,18 +54,22 @@ struct DoctorHomeView: View {
                 VStack{
                     VStack{
                         ZStack(alignment: .leading){
-                            
-                            
+                            Rectangle()
+                                .foregroundStyle(Color("bg-color1"))
+                                .frame(height: 260)
+                                .frame(height: UIScreen.main.bounds.size.height * 0.20)
+                                .padding(.top,-130)
                             HStack{
                                 VStack(alignment: .leading){
-                                    Text("Hello 👋")
+                                    Text("Hello ")
+                                        .foregroundColor(.white)
                                         .font(Font.custom("SF Pro Display", size: 30))
                                         .lineSpacing(22)
                                         .foregroundColor(.black)
                                     Text("\(userName)")
                                         .font(Font.custom("SF Pro Display", size: 30).weight(.semibold))
                                         .lineSpacing(22)
-                                        .foregroundColor(.black)
+                                        .foregroundColor(.white)
                                 }
                                 .padding()
                                 Spacer()
@@ -74,7 +78,7 @@ struct DoctorHomeView: View {
                                     if let imageUrl = URL(string: userProfileURL) {
                                         WebImage(url: imageUrl)
                                             .resizable()
-                                            .frame(width: 60, height: 60)
+                                            .frame(width: 80, height: 80)
                                             .clipShape(RoundedRectangle(cornerRadius: 10))
                                             .padding()
                                     }
@@ -333,7 +337,7 @@ struct AppointmentView: View {
 
                         }
                         
-                    }.background(Color("bg-color1").opacity(1))
+                    }.background(Color.gray.opacity(1))
                             .clipShape(RoundedRectangle(cornerRadius: 20))
                             .padding(.leading,100)
                     },

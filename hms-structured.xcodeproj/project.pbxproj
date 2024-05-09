@@ -87,6 +87,7 @@
 		8EF782E42BE88BCB00B70CE5 /* TestReportsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF782E12BE88BCB00B70CE5 /* TestReportsView.swift */; };
 		8EF783182BE9FD6400B70CE5 /* DProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF783172BE9FD6400B70CE5 /* DProfile.swift */; };
 		8EF7831F2BEC8E4400B70CE5 /* DoctorPatientRecordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF7831E2BEC8E4400B70CE5 /* DoctorPatientRecordsView.swift */; };
+		8EF783232BECCCED00B70CE5 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF783222BECCCED00B70CE5 /* OnboardingView.swift */; };
 		8EFF67802BE3B79A0016A0AA /* PatientContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFF677F2BE3B79A0016A0AA /* PatientContentView.swift */; };
 /* End PBXBuildFile section */
 
@@ -143,6 +144,7 @@
 		8EF782E12BE88BCB00B70CE5 /* TestReportsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestReportsView.swift; sourceTree = "<group>"; };
 		8EF783172BE9FD6400B70CE5 /* DProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DProfile.swift; sourceTree = "<group>"; };
 		8EF7831E2BEC8E4400B70CE5 /* DoctorPatientRecordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorPatientRecordsView.swift; sourceTree = "<group>"; };
+		8EF783222BECCCED00B70CE5 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		8EFF677F2BE3B79A0016A0AA /* PatientContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -235,6 +237,7 @@
 		86B555E02BDA439C0064E9BD /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				8EF783212BECCCA800B70CE5 /* Onboarding */,
 				86ED4D522BDBBD3500282F0D /* Components */,
 				86B555D42BDA43850064E9BD /* ContentView.swift */,
 				8EFF677F2BE3B79A0016A0AA /* PatientContentView.swift */,
@@ -414,6 +417,14 @@
 			path = Profile;
 			sourceTree = "<group>";
 		};
+		8EF783212BECCCA800B70CE5 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				8EF783222BECCCED00B70CE5 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -571,6 +582,7 @@
 				865236412BE9EE9700CA1793 /* AddNurseView.swift in Sources */,
 				86ED4D5A2BDBCE4700282F0D /* Appointments.swift in Sources */,
 				8EF783182BE9FD6400B70CE5 /* DProfile.swift in Sources */,
+				8EF783232BECCCED00B70CE5 /* OnboardingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
