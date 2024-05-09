@@ -55,6 +55,7 @@ struct AdminDashboardView: View {
                                                 .resizable()
                                                 .aspectRatio(contentMode: .fit)
                                                 .frame(width: 24, height: 24)
+                                                .foregroundColor(viewModel.emergencyColor.contrastingColor())
                                         }
                                         .padding()
                 }

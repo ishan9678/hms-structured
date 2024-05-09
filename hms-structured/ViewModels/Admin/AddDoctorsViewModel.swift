@@ -113,5 +113,20 @@ class AddDoctorsViewModel: ObservableObject {
             }
         }
     }
+    
+    func deleteDoctor(doctorId: String) {
+        db.collection("doctors").document(doctorId).delete { error in
+            if let error = error {
+                print("Error removing document: \(error)")
+            } else {
+                print("Document successfully removed!")
+                DispatchQueue.main.async {
+                    self.doctors.removeAll { $0.id == doctorId } // Remove doctor from the local list
+                    print("Doctor with ID \(doctorId) has been successfully deleted from Firestore.")
+                }
+            }
+        }
+    }
+
 
 }
