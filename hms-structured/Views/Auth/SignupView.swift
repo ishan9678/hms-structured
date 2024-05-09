@@ -17,7 +17,8 @@ struct SignupView: View {
     @State private var isNavigateToLogin = false
     
     @State private var loggedIn = false
-
+    @AppStorage("log_status") var logStatus:Bool = false
+    @AppStorage("role") var role:String = ""
     private enum FocusableField: Hashable {
         case name
         case email
@@ -30,10 +31,11 @@ struct SignupView: View {
     
     private func signUpWithEmailPassword() {
         Task {
-            let signUpSuccess = await viewModel.signUpWithEmailPassword()
-            if signUpSuccess {
-               
+            await viewModel.signUpWithEmailPassword()
+            if viewModel.isSignedUp {
+                logStatus = true
                 loggedIn = true
+                role = "patient" 
             }
         }
     }
