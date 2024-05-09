@@ -125,6 +125,7 @@ struct SearchablePrescriptionListView1: View {
                    let doctorSpecialty = data["doctorSpecialty"] as? String ?? ""
                    let symptoms = data["symptoms"] as? String ?? ""
                    let suggestions = data["suggestions"] as? String ?? ""
+                   let diagnosis = data["diagnosis"] as? String ?? ""
                    let medicationData = data["medicines"] as? [[String: Any]] ?? []
                    let medication = medicationData.map { medData -> Medication in
                        let name = medData["name"] as? String ?? ""
@@ -148,7 +149,7 @@ struct SearchablePrescriptionListView1: View {
                    } else {
                        appointmentDate = nil
                    }
-                   let prescription = Prescription(doctorName: doctorName, doctorSpecialty: doctorSpecialty, symptoms: symptoms, medication: medication, tests: tests, suggestions: suggestions, appointmentDate: appointmentDate ?? Date())
+                   let prescription = Prescription(doctorName: doctorName, doctorSpecialty: doctorSpecialty, symptoms: symptoms, diagnosis: diagnosis, medication: medication, tests: tests, suggestions: suggestions, appointmentDate: appointmentDate ?? Date())
                    prescriptions.append(prescription)
                }
 
