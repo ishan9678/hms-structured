@@ -17,6 +17,8 @@ class PatientFrequencyViewModel: ObservableObject {
     @Published var totalPatients: Int = 0
     @Published var totalDoctors: Int = 0
     @Published var totalAppointments: Int = 0
+    @Published var totalMedicalTests: Int = 0
+
 
 
     private var db = Firestore.firestore()
@@ -92,4 +94,22 @@ class PatientFrequencyViewModel: ObservableObject {
                 }
             }
         }
+    
+    func fetchTotalMedicalTests() {
+        db.collection("medical-tests").getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error fetching medical tests: \(error)")
+            } else if let snapshot = querySnapshot {
+                var totalTestsCount = 0
+                for document in snapshot.documents {
+                    let tests  = document.data()
+                    totalTestsCount += tests.count
+                }
+                DispatchQueue.main.async {
+                    self.totalMedicalTests = snapshot.documents.count  // Update total medical tests count
+                }
+            }
+        }
+    }
 }
+

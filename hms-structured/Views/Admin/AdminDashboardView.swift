@@ -7,9 +7,10 @@
 
 import SwiftUI
 import Charts
+import Firebase
+
 
 struct AdminDashboardView: View {
-    let code = "Black"
     
     @State private var selectedChartType = "Bar"
     @ObservedObject var viewModel = PatientFrequencyViewModel()
@@ -21,7 +22,7 @@ struct AdminDashboardView: View {
                 HStack {
                     Text("Hello, Admin")
                         .font(.largeTitle)
-                        .fontWeight(.bold)
+                        .fontWeight(.black)
                         .padding([.top, .bottom], 16)
                         .padding()
                     Spacer()
@@ -34,6 +35,26 @@ struct AdminDashboardView: View {
                             .frame(width: 24, height: 24)
                     }
                     .padding()
+                    
+                    Button(action: {
+                                            do {
+                                                try Auth.auth().signOut()
+                                                UserDefaults.standard.set(false, forKey: "isLoggedIn")
+                                                // Update to switch views properly
+                                                if let window = UIApplication.shared.windows.first {
+                                                    window.rootViewController = UIHostingController(rootView: LoginView())
+                                                    window.makeKeyAndVisible()
+                                                }
+                                            } catch {
+                                                print("Error signing out: \(error.localizedDescription)")
+                                            }
+                                        }) {
+                                            Image(systemName: "arrow.right.square")
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width: 24, height: 24)
+                                        }
+                                        .padding()
                 }
                 .background(Color.bgColor1)  // Set background color to blue
                 .foregroundColor(.white)  // Change text color to white for better contrast
@@ -45,7 +66,7 @@ struct AdminDashboardView: View {
                                                     ("Total Patients", String(viewModel.totalPatients)),
                                                     ("Total Doctors", String(viewModel.totalDoctors)),
                                                     ("Appointments", String(viewModel.totalAppointments)),
-                                                    ("Code", code)
+                                                    ("Total Records", String(viewModel.totalMedicalTests))
                                                 ])
                         
                         Picker("Select Chart Type", selection: $selectedChartType) {
@@ -78,6 +99,7 @@ struct AdminDashboardView: View {
             viewModel.fetchTotalPatients()
             viewModel.fetchTotalDoctors()
             viewModel.fetchTotalAppointments()
+            viewModel.fetchTotalMedicalTests()
         }
     }
 }
@@ -85,7 +107,7 @@ struct StatisticsGridView: View {
     var stats: [(String, String)]
 
     var body: some View {
-        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
+        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
             ForEach(stats, id: \.0) { stat in
                 InfoComponent(title: stat.0, value: stat.1)
             }
@@ -104,9 +126,7 @@ struct BarChartView: View {
                     x: .value("Day", key),
                     y: .value("Patients", data[key]!)
                 )
-                .annotation(position: .top) {
-                    Text("\(data[key]!)")
-                }
+
             }
         }
         .frame(height: 300)
@@ -158,14 +178,14 @@ struct InfoComponent: View {
     var body: some View {
         VStack(alignment: .center) {
             Text(value)
-                .font(.title2)
+                .font(.largeTitle)
                 .fontWeight(.bold)
             Text(title)
-                .font(.caption)
+                .font(.body)
                 .foregroundColor(.gray)
         }
         .padding()
-        .frame(minWidth: 0, maxWidth: .infinity)
+        .frame(minWidth: 110, maxWidth: .infinity)
         .background(Color.gray.opacity(0.1))
         .cornerRadius(10)
     }
@@ -174,3 +194,4 @@ struct InfoComponent: View {
 #Preview {
     AdminDashboardView()
 }
+
