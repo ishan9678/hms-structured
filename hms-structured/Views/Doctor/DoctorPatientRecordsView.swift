@@ -30,24 +30,25 @@ struct RecordsView1: View {
     @State private var searchText = "" // State variable to hold the search text
     
     var body: some View {
-        VStack(alignment: .leading) {
-            Text("\(patientName)'s Records")
-                .font(.title)
-            
-            Picker(selection: $selectedSegmentIndex, label: Text("Select Segment")) {
-                ForEach(0..<segments.count) { index in
-                    Text(self.segments[index]).tag(index)
+        NavigationStack{
+            VStack(alignment: .leading) {
+                Picker(selection: $selectedSegmentIndex, label: Text("Select Segment")) {
+                    ForEach(0..<segments.count) { index in
+                        Text(self.segments[index]).tag(index)
+                    }
+                }
+                .pickerStyle(SegmentedPickerStyle())
+                
+                if selectedSegmentIndex == 0 { // Show the prescription list and search bar
+                    SearchablePrescriptionListView1(patientID: patientID, patientName: patientName, searchText: $searchText)
+                } else if selectedSegmentIndex == 1 { // Show ReportsView
+                    ReportsView( patientID: patientID, searchText: $searchText)
                 }
             }
-            .pickerStyle(SegmentedPickerStyle())
-            
-            if selectedSegmentIndex == 0 { // Show the prescription list and search bar
-                SearchablePrescriptionListView1(patientID: patientID, patientName: patientName, searchText: $searchText)
-            } else if selectedSegmentIndex == 1 { // Show ReportsView
-                ReportsView( searchText: $searchText)
-            }
+            .navigationTitle("\(patientName)'s Records")
+            .padding()
         }
-        .padding()
+        .searchable(text: $searchText)
     }
 }
 
@@ -72,7 +73,7 @@ struct SearchablePrescriptionListView1: View {
                         }
                     }
                 }
-                .searchable(text: $searchText)
+//                .searchable(text: $searchText)
                 .sheet(item: $selectedPrescription) { prescription in
                     PrescriptionView(prescription: prescription)
                 }
@@ -159,36 +160,36 @@ struct SearchablePrescriptionListView1: View {
 
 
 
-struct PrescriptionRow1: View {
-    let prescription: Prescription
-    let onTap: () -> Void // Closure to trigger navigation
-    
-    var body: some View {
-        HStack {
-            // Doctor's image
-            Image(systemName: "person.fill")
-                .resizable()
-                .clipShape(Circle())
-                .frame(width: 50, height: 50)
-            
-            // Doctor's name and specialization
-            VStack(alignment: .leading) {
-                Text(prescription.doctorName)
-                    .font(.headline)
-                Text("Appointment: \(prescription.appointmentDate)")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-            }
-            Spacer()
-            Image(systemName: "chevron.right")
-        }
-        .padding(.vertical, 8)
-        // Trigger the onTap closure when the row is tapped
-        .onTapGesture {
-            onTap()
-        }
-    }
-}
+//struct PrescriptionRow1: View {
+//    let prescription: Prescription
+//    let onTap: () -> Void // Closure to trigger navigation
+//    
+//    var body: some View {
+//        HStack {
+//            // Doctor's image
+//            Image(systemName: "person.fill")
+//                .resizable()
+//                .clipShape(Circle())
+//                .frame(width: 50, height: 50)
+//            
+//            // Doctor's name and specialization
+//            VStack(alignment: .leading) {
+//                Text(prescription.doctorName)
+//                    .font(.headline)
+//                Text("Appointment: \(prescription.appointmentDate)")
+//                    .font(.subheadline)
+//                    .foregroundColor(.gray)
+//            }
+//            Spacer()
+//            Image(systemName: "chevron.right")
+//        }
+//        .padding(.vertical, 8)
+//        // Trigger the onTap closure when the row is tapped
+//        .onTapGesture {
+//            onTap()
+//        }
+//    }
+//}
 
 
 
@@ -199,51 +200,51 @@ struct PrescriptionRow1: View {
 // Medication model
 
 
-struct PrescriptionView1: View {
-    let prescription: Prescription
-
-    var body: some View {
-        List {
-            // Doctor Information
-            Section(header: Text("Doctor Information")) {
-                HStack {
-                    Image(systemName: "person.circle")
-                        .resizable()
-                        .frame(width: 50, height: 50)
-                    VStack(alignment: .leading) {
-                        Text(prescription.doctorName)
-                            .font(.headline)
-                        Text("Specialty: \(prescription.doctorSpecialty)")
-                            .font(.subheadline)
-                    }
-                }
-            }
-
-            // Symptoms
-            Section(header: Text("Symptoms")) {
-                Text(prescription.symptoms)
-            }
-
-            // Medication Details
-            Section(header: Text("Medication Details")) {
-                ForEach(prescription.medication) { medication in
-                    VStack(alignment: .leading) {
-                        Text("Medication: \(medication.name)")
-                        Text("Number of days: \(medication.dosage)")
-                        Text("To be taken: \(medication.toBeTaken)")
-                        Text("Times of Day: \(medication.selectedTimesOfDay.joined(separator: ", "))")
-                    }
-                }
-            }
-
-            // Test Names
-            Section(header: Text("Test Names")) {
-                ForEach(prescription.tests) { test in
-                    Text(test.name)
-                }
-            }
-        }
-        .listStyle(GroupedListStyle())
-        .navigationTitle("Prescription")
-    }
-}
+//struct PrescriptionView1: View {
+//    let prescription: Prescription
+//
+//    var body: some View {
+//        List {
+//            // Doctor Information
+//            Section(header: Text("Doctor Information")) {
+//                HStack {
+//                    Image(systemName: "person.circle")
+//                        .resizable()
+//                        .frame(width: 50, height: 50)
+//                    VStack(alignment: .leading) {
+//                        Text(prescription.doctorName)
+//                            .font(.headline)
+//                        Text("Specialty: \(prescription.doctorSpecialty)")
+//                            .font(.subheadline)
+//                    }
+//                }
+//            }
+//
+//            // Symptoms
+//            Section(header: Text("Symptoms")) {
+//                Text(prescription.symptoms)
+//            }
+//
+//            // Medication Details
+//            Section(header: Text("Medication Details")) {
+//                ForEach(prescription.medication) { medication in
+//                    VStack(alignment: .leading) {
+//                        Text("Medication: \(medication.name)")
+//                        Text("Number of days: \(medication.dosage)")
+//                        Text("To be taken: \(medication.toBeTaken)")
+//                        Text("Times of Day: \(medication.selectedTimesOfDay.joined(separator: ", "))")
+//                    }
+//                }
+//            }
+//
+//            // Test Names
+//            Section(header: Text("Test Names")) {
+//                ForEach(prescription.tests) { test in
+//                    Text(test.name)
+//                }
+//            }
+//        }
+//        .listStyle(GroupedListStyle())
+//        .navigationTitle("Prescription")
+//    }
+//}

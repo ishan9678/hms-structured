@@ -14,7 +14,7 @@ struct RecordsView: View {
     // State variable to hold the selected segment
     @State private var selectedSegmentIndex = 0
     @State private var searchText = "" // State variable to hold the search text
-    
+    @AppStorage("user_UID") var userUID: String = ""
     var body: some View {
         NavigationView{
             VStack(alignment: .leading) {
@@ -28,7 +28,7 @@ struct RecordsView: View {
                 if selectedSegmentIndex == 0 { // Show the prescription list and search bar
                     SearchablePrescriptionListView(searchText: $searchText)
                 } else if selectedSegmentIndex == 1 { // Show ReportsView
-                    ReportsView(searchText: $searchText)
+                    ReportsView(patientID: userUID, searchText: $searchText)
                 }
             }
             .navigationBarTitle("Your Records")
