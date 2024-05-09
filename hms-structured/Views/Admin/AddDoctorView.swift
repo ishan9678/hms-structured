@@ -47,10 +47,10 @@ struct AddDoctorView: View {
 
     let chosenDept = [
         "Emergency Medicine", // Provides immediate care for acute illnesses and injuries.
-        "General Surgery",    // Handles a wide range of common ailments requiring surgical intervention.
+        "General Physician",    // Handles a wide range of common ailments requiring surgical intervention.
         "Cardiology",         // Manages disorders of the heart and blood vessels.
         "Obstetrics & Gynecology", // Cares for reproductive health, childbirth, and females
-        "Pediatrics",         // Focuses on the medical care of infants, children, and adolescents.
+        "Pediatrician",         // Focuses on the medical care of infants, children, and adolescents.
         "Oncology",           // Specializes in the diagnosis and treatment of cancer.
         "Neurology",          // Focuses on diseases of the nervous system.
         "Orthopedics",        // Concerned with conditions involving the musculoskeletal system.

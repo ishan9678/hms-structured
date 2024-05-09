@@ -1,4 +1,3 @@
-
 import SwiftUI
 import FirebaseFirestore
 import FirebaseStorage
@@ -221,6 +220,3 @@ struct SearchBar: View {
     AdminReportsView()
 
 }
-
-
-

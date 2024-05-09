@@ -1,4 +1,3 @@
-
 struct UpdateView_Previews: PreviewProvider {
     static var previews: some View {
         let doctor = Doctor(fullName: "Dr. John Doe", gender: "Male", dateOfBirth: Date(), email: "john.doe@example.com", phone: "1234567890", emergencyContact: "9876543210", profileImageURL: "", employeeID: "EMP001", department: "Cardiology", qualification: "MBBS", position: "Cardiologist", startDate: Date(), licenseNumber: "LIC001", issuingOrganization: "Medical Board", expiryDate: Date(), description: "Lorem ipsum dolor sit amet", yearsOfExperience: "5")
@@ -11,10 +10,12 @@ struct UpdateView_Previews: PreviewProvider {
 
 import SwiftUI
 import Firebase
+import SDWebImageSwiftUI
 
 struct UpdateView: View {
     var doctor: Doctor
     //Personal Details
+    @State var profilImageeUrl: String = " "
     @State var fullName: String = ""
     @State private var gender = 0
     @State private var dateofbirth = Date()
@@ -54,10 +55,10 @@ struct UpdateView: View {
     
     let chosenDept = [
         "Emergency Medicine", // Provides immediate care for acute illnesses and injuries.
-        "General Surgery",    // Handles a wide range of common ailments requiring surgical intervention.
+        "General Physician",    // Handles a wide range of common ailments requiring surgical intervention.
         "Cardiology",         // Manages disorders of the heart and blood vessels.
         "Obstetrics & Gynecology", // Cares for reproductive health, childbirth, and females
-        "Pediatrics",         // Focuses on the medical care of infants, children, and adolescents.
+        "Pediatrician",         // Focuses on the medical care of infants, children, and adolescents.
         "Oncology",           // Specializes in the diagnosis and treatment of cancer.
         "Neurology",          // Focuses on diseases of the nervous system.
         "Orthopedics",        // Concerned with conditions involving the musculoskeletal system.
@@ -75,14 +76,26 @@ struct UpdateView: View {
             Form{
                 
                 HStack {
-                    AsyncImage(url: URL(string: "https://t4.ftcdn.net/jpg/02/60/04/09/360_F_260040900_oO6YW1sHTnKxby4GcjCvtypUCWjnQRg5.jpg")) { image in
-                        image
+//                    AsyncImage(url: URL(string: doctor.profileImageURL)) { image in
+//                        image
+//                            .resizable()
+//                            .frame(width: 130, height: 130)
+//                            .cornerRadius(10)
+//                            .scaledToFit()
+//                    } placeholder: {
+////                        ProgressView()
+//                    }
+                    
+                    if let imageUrl = URL(string: doctor.profileImageURL) {
+                        WebImage(url: imageUrl)
                             .resizable()
-                            .frame(width: 130, height: 130)
-                            .cornerRadius(10)
-                            .scaledToFit()
-                    } placeholder: {
-                        ProgressView()
+                                                        .frame(width: 130, height: 130)
+                                                        .cornerRadius(10)
+                                                        .scaledToFit()
+                    } else {
+                        // Handle invalid URL
+                        Text("Invalid URL")
+                            .foregroundColor(.red)
                     }
                     
                     
@@ -293,7 +306,3 @@ struct UpdateView: View {
     
    
 }
-
-
-
-

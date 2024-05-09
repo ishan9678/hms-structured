@@ -88,6 +88,7 @@
 		8EF783182BE9FD6400B70CE5 /* DProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF783172BE9FD6400B70CE5 /* DProfile.swift */; };
 		8EF7831F2BEC8E4400B70CE5 /* DoctorPatientRecordsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF7831E2BEC8E4400B70CE5 /* DoctorPatientRecordsView.swift */; };
 		8EF783232BECCCED00B70CE5 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF783222BECCCED00B70CE5 /* OnboardingView.swift */; };
+		8EF783252BECEF0200B70CE5 /* PatientFrequencyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EF783242BECEF0200B70CE5 /* PatientFrequencyViewModel.swift */; };
 		8EFF67802BE3B79A0016A0AA /* PatientContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFF677F2BE3B79A0016A0AA /* PatientContentView.swift */; };
 /* End PBXBuildFile section */
 
@@ -145,6 +146,7 @@
 		8EF783172BE9FD6400B70CE5 /* DProfile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DProfile.swift; sourceTree = "<group>"; };
 		8EF7831E2BEC8E4400B70CE5 /* DoctorPatientRecordsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorPatientRecordsView.swift; sourceTree = "<group>"; };
 		8EF783222BECCCED00B70CE5 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		8EF783242BECEF0200B70CE5 /* PatientFrequencyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientFrequencyViewModel.swift; sourceTree = "<group>"; };
 		8EFF677F2BE3B79A0016A0AA /* PatientContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -341,6 +343,7 @@
 				865236492BE9EEB300CA1793 /* AddDoctorsViewModel.swift */,
 				8652364A2BE9EEB300CA1793 /* AddNursesViewModel.swift */,
 				8652364B2BE9EEB300CA1793 /* StaffManagementViewModel.swift */,
+				8EF783242BECEF0200B70CE5 /* PatientFrequencyViewModel.swift */,
 			);
 			path = Admin;
 			sourceTree = "<group>";
@@ -549,6 +552,7 @@
 				86B556312BDA8DDF0064E9BD /* LoginView.swift in Sources */,
 				8EF782E32BE88BCB00B70CE5 /* RecordsView.swift in Sources */,
 				8EF782E42BE88BCB00B70CE5 /* TestReportsView.swift in Sources */,
+				8EF783252BECEF0200B70CE5 /* PatientFrequencyViewModel.swift in Sources */,
 				8E7731E02BE0F00000EE1DA2 /* PrescriptionForm.swift in Sources */,
 				86ED4D512BDB8A2600282F0D /* DoctorDetails.swift in Sources */,
 				8E7731E42BE0F05D00EE1DA2 /* TestList.swift in Sources */,

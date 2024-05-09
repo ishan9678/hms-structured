@@ -1,12 +1,11 @@
-
-
 struct AdminDoctorCardList_Previews: PreviewProvider {
     static var previews: some View {
-        DoctorCardList()
+        AdminDoctorCardList()
     }
 }
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 
 
@@ -29,7 +28,7 @@ struct AdminDoctorCardList: View {
             showAddView = true
         }) {
             HStack {
-                Text("Add")
+                Text("Add").font(.title)
                 Image(systemName: "plus")
             }
             .padding()
@@ -48,7 +47,7 @@ struct AdminDoctorCardList: View {
                    if selectedEntity == "Doctors" {
                        doctorList
                    } else if selectedEntity == "Nurses" {
-                       nurseList
+//                       nurseList
                    }
                }
                .onAppear {
@@ -60,63 +59,7 @@ struct AdminDoctorCardList: View {
     
 
     
-    var nurseList: some View {
-        NavigationView {
-            VStack {
-                
-                
-                List(nurseViewModel.nurses, id: \.id) { nurse in
-                    Button(action: {
-                        self.selectedNurse = nurse
-                        isNurseSelected = true
-                        print("\(selectedNurse.fullName)")
-                    }) {
-                        HStack{
-                                                            Image(systemName: "person.fill")
-                   
-                                                                .resizable()
-                                                                .foregroundColor(.blue)
-                                                                .frame(width: 50, height: 50)
-                                                                .clipShape(Circle())
-                            
-                            VStack(alignment: .leading) {
-                                Text(nurse.fullName)
-                                    .font(.headline)
-                                    .foregroundColor(.blue)
-                                
-                                Text(nurse.department)
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding()
-                            .foregroundColor(.white)
-                            
-                            
-                        }
-                        
-                    }
-                    
-                }
-                    .toolbar {
-                        ToolbarItem(placement: .topBarTrailing) {
-                            addButton
-                        }
-                    }
-                    .sheet(isPresented: $showAddView) {
-                        if selectedEntity == "Doctors" {
-                            AddDoctorView()
-                        } else if selectedEntity == "Nurses" {
-                            AddNurseView()
-                        } else {
-                            Text("Add Patient View goes here") // Placeholder for AddPatientView
-                        }
-                    }
-            }
-            .onAppear {
-                nurseViewModel.fetchNurse()
-            }
-        }
-    }
+  
     
     var doctorList: some View {
         NavigationView {
@@ -135,17 +78,29 @@ struct AdminDoctorCardList: View {
                         print("\(selectedDoc.fullName)")
                     }) {
                         HStack{
-                                                            Image(systemName: "person.fill")
-                   
-                                                                .resizable()
-                                                                .foregroundColor(.blue)
-                                                                .frame(width: 50, height: 50)
-                                                                .clipShape(Circle())
+//                                                            Image(systemName: "person.fill")
+//
+//                                                                .resizable()
+//                                                                .foregroundColor(.blue)
+//                                                                .frame(width: 50, height: 50)
+//                                                                .clipShape(Circle())
+                            
+                            if let imageUrl = URL(string: doctor.profileImageURL) {
+                                WebImage(url: imageUrl)
+                                                                                                .resizable()
+                                                                                                .foregroundColor(.blue)
+                                                                                                .frame(width: 50, height: 50)
+                                                                                                .clipShape(Circle())
+                            } else {
+                                // Handle invalid URL
+                                Text("Invalid URL")
+                                    .foregroundColor(.red)
+                            }
                             
                             VStack(alignment: .leading) {
                                 Text(doctor.fullName)
                                     .font(.headline)
-                                    .foregroundColor(.blue)
+                                    .foregroundColor(.black)
                                 
                                 Text(doctor.department)
                                     .font(.subheadline)
@@ -163,16 +118,14 @@ struct AdminDoctorCardList: View {
                 .navigationTitle("\(selectedEntity)")
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
-                        addButton
-                    }
-                }
-                .sheet(isPresented: $showAddView) {
-                    if selectedEntity == "Doctors" {
-                        AddDoctorView()
-                    } else if selectedEntity == "Nurses" {
-                        AddNurseView()
-                    } else {
-                        Text("Add Patient View goes here") // Placeholder for AddPatientView
+                        NavigationLink(destination: AddDoctorView()) {
+                            HStack {
+                                Text("Add").font(.title)
+                                Image(systemName: "plus")
+                            }
+                            .padding()
+                            .foregroundColor(.blue)
+                        }
                     }
                 }
             }
@@ -187,5 +140,3 @@ struct AdminDoctorCardList: View {
 
         
     }
-    
-
