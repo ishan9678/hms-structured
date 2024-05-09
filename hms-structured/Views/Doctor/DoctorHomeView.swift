@@ -1,4 +1,5 @@
 import SwiftUI
+import SDWebImageSwiftUI
 import Firebase
 
 class Booking: ObservableObject {
@@ -16,6 +17,7 @@ struct DoctorHomeView: View {
     @State private var fetchedAppointments: [Appointments] = []
     @AppStorage("user_name") var userName: String = ""
     @AppStorage("user_UID") var userUID: String = ""
+    @AppStorage("user_profile_url") var userProfileURL: String = ""
     func dateGetter(index: Int) -> Date {
         return Calendar.current.date(byAdding: .day, value: index, to: getFirstDayOfWeek(for: selectedDate))!
     }
@@ -68,12 +70,14 @@ struct DoctorHomeView: View {
                                 .padding()
                                 Spacer()
                                 NavigationLink(destination: DProfile()) {
-                                    Image(systemName: "person.fill")
-                                        .resizable()
-                                        .frame(width: 40, height: 40)
-                                        .padding()
-                                        .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.bgColor1, lineWidth: 3))
-                                        .padding()
+                                        
+                                    if let imageUrl = URL(string: userProfileURL) {
+                                        WebImage(url: imageUrl)
+                                            .resizable()
+                                            .frame(width: 60, height: 60)
+                                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                                            .padding()
+                                    }
                                 }
                                 
                             }

@@ -8,9 +8,24 @@
 import SwiftUI
 
 struct ContentView: View {
+    @AppStorage("log_status") var logStatus:Bool = false
+    @AppStorage("role") var role:String = ""
     var body: some View {
         NavigationView {
-            LoginView()
+            if(logStatus){
+                if(role == "doctor"){
+                    DoctorHomeView()
+                }
+                else if(role == "patient"){
+                    PatientContentView()
+                }
+                else if(role == "admin"){
+                    AdminTabBarView()
+                }
+            }
+            else{
+                LoginView()
+            }
         }
     }
 }
