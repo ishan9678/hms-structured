@@ -2,14 +2,15 @@ import SwiftUI
 import FirebaseFirestore
 import FirebaseStorage
 
-
-
 struct AdminReportsView: View {
+    // State variables
     @State private var fetchedMedicalTests = [MedicalTest]()
     @State private var pdfData: Data?
     @State private var showFilePicker: Bool = false
     @State private var selectedTestID: String = ""
     @State private var searchText: String = ""
+    @State private var patientID: String = ""
+    @State private var showAlert = false // State variable for showing alert
 
     var filteredTests: [MedicalTest] {
         if searchText.isEmpty {
@@ -35,7 +36,7 @@ struct AdminReportsView: View {
                     Text("Time Slot: \(test.timeSlot)")
                     Button(action: {
                         selectedTestID = test.id ?? ""
-                        print(selectedTestID)
+                        patientID = test.patientID
                         showFilePicker.toggle()
                     }) {
                         HStack{
@@ -47,7 +48,7 @@ struct AdminReportsView: View {
                     .fileImporter(isPresented: $showFilePicker, allowedContentTypes: [.pdf]) { result in
                         do {
                             let selectedFile = try result.get()
-                            self.uploadPDF(fileURL: selectedFile)
+                            self.uploadPDF(fileURL: selectedFile, patientID: patientID, selectedTestID: selectedTestID)
                         } catch {
                             print("File selection error: \(error.localizedDescription)")
                         }
@@ -60,11 +61,14 @@ struct AdminReportsView: View {
             .listStyle(PlainListStyle())
         }
         .onAppear {
-            fetchMedicalTest()
+            fetchMedicalTests()
+        }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("Success"), message: Text("PDF uploaded successfully"), dismissButton: .default(Text("OK")))
         }
     }
 
-    private func uploadPDF(fileURL: URL) {
+    private func uploadPDF(fileURL: URL, patientID: String, selectedTestID: String) {
         guard let data = try? Data(contentsOf: fileURL) else { return }
         
         // Upload PDF to Firebase Storage
@@ -80,14 +84,14 @@ struct AdminReportsView: View {
             print("PDF uploaded. Download URL: \(metadata.path ?? "Unknown")")
             
             // Add the PDF download URL to Firestore
-            savePDFDownloadURL(url: metadata.path ?? "")
+            savePDFDownloadURL(url: metadata.path ?? "", patientID: patientID, selectedTestID: selectedTestID)
         }
     }
 
-    private func savePDFDownloadURL(url: String) {
+    private func savePDFDownloadURL(url: String, patientID: String, selectedTestID: String  ) {
         let db = Firestore.firestore()
         let storage = Storage.storage()
-        
+    
         // Get the reference to the uploaded PDF file
         let pdfRef = storage.reference().child(url)
         
@@ -99,7 +103,7 @@ struct AdminReportsView: View {
             }
             
             // Update the medical test entry in Firestore with the download URL
-            db.collection("medical-tests").document("P71IKQYzK4QsPyDnPCWrQsa5ac72")
+            db.collection("medical-tests").document(patientID)
                 .updateData([
                     "\(selectedTestID).pdfURL": downloadURL.absoluteString
                 ]) { error in
@@ -107,6 +111,7 @@ struct AdminReportsView: View {
                         print("Error updating PDF URL: \(error.localizedDescription)")
                     } else {
                         print("PDF URL updated successfully")
+                        showAlert = true // Set showAlert to true to display the alert
                     }
                 }
         }
@@ -118,75 +123,40 @@ struct AdminReportsView: View {
         return dateFormatter.string(from: date)
     }
 
-    private func fetchMedicalTest() {
-
+    func fetchMedicalTests() {
         let db = Firestore.firestore()
-
-        db.collection("medical-tests").document("P71IKQYzK4QsPyDnPCWrQsa5ac72").getDocument { documentSnapshot, error in
-
+        
+        db.collection("medical-tests").getDocuments { querySnapshot, error in
             if let error = error {
-
-                print("Error fetching document: \(error.localizedDescription)")
-
+                print("Error getting appointments: \(error)")
                 return
-
             }
-
-            guard let document = documentSnapshot, document.exists else {
-
-                print("Document does not exist")
-
+            
+            guard let documents = querySnapshot?.documents else {
+                print("No appointments found")
                 return
-
             }
-
-            guard let data = document.data() else {
-
-                print("Document data is empty")
-
-                return
-
-            }
-
-            var medicalTests: [MedicalTest] = []
-
-            for (documentID, map) in data {
-
-                if let mapData = map as? [String: Any],
-
-                   let bookingDateTimestamp = mapData["bookingDate"] as? Timestamp {
-
-                    let bookingDate = bookingDateTimestamp.dateValue()
-
-                    let medicalTest = MedicalTest(
-
-                        id: documentID,
-
-                        bookingDate: bookingDate,
-
-                        category: mapData["category"] as? String ?? "",
-
-                        patientID: mapData["patientID"] as? String ?? "",
-
-                        patientName: mapData["patientName"] as? String ?? "",
-
-                        testName: mapData["testName"] as? String ?? "",
-
-                        timeSlot: mapData["timeSlot"] as? String ?? "",
-
-                        pdfURL: " "
-                    )
-
-                    medicalTests.append(medicalTest)
-
+        
+            fetchedMedicalTests = []
+            for document in documents {
+                let data = document.data()
+                
+                for (documentID, medicalTestData) in data {
+                    print("doc id", documentID)
+    
+                    if let medicalTestData = medicalTestData as? [String: Any] {
+                        if let bookingDateTimestamp = medicalTestData["bookingDate"] as? Timestamp {
+                            let bookingDate = Date(timeIntervalSince1970: TimeInterval(bookingDateTimestamp.seconds))
+                            let medicalTest = MedicalTest(id: documentID, bookingDate: bookingDate, category: medicalTestData["category"] as? String ?? "", patientID: medicalTestData["patientID"] as? String ?? "", patientName: medicalTestData["patientName"] as? String ?? "", testName: medicalTestData["testName"] as? String ?? "", timeSlot: medicalTestData["timeSlot"] as? String ?? "", pdfURL: medicalTestData["pdfURL"] as? String ?? "")
+                            print("pdf exits or not",medicalTestData["pdfURL"])
+                            if(medicalTestData["pdfURL"] == nil){
+                                fetchedMedicalTests.append(medicalTest)
+                            }
+                        }
+                    }
                 }
-
             }
-
-            fetchedMedicalTests = medicalTests
-
         }
-
     }
 }
 
@@ -220,3 +190,4 @@ struct SearchBar: View {
     AdminReportsView()
 
 }
+
