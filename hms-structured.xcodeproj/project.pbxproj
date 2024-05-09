@@ -55,6 +55,7 @@
 		8652364E2BE9EEB300CA1793 /* StaffManagementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652364B2BE9EEB300CA1793 /* StaffManagementViewModel.swift */; };
 		865236502BE9EED400CA1793 /* Doctor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8652364F2BE9EED400CA1793 /* Doctor.swift */; };
 		865236522BE9EEDA00CA1793 /* Nurse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865236512BE9EEDA00CA1793 /* Nurse.swift */; };
+		865908682BEC8A41005EF7BD /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 865908672BEC8A41005EF7BD /* Profile.swift */; };
 		8690D3F52BEB4B6000286184 /* CancelAppointmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8690D3F42BEB4B6000286184 /* CancelAppointmentView.swift */; };
 		86B555D32BDA43850064E9BD /* hms_structuredApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B555D22BDA43850064E9BD /* hms_structuredApp.swift */; };
 		86B555D52BDA43850064E9BD /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B555D42BDA43850064E9BD /* ContentView.swift */; };
@@ -110,6 +111,7 @@
 		8652364B2BE9EEB300CA1793 /* StaffManagementViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaffManagementViewModel.swift; sourceTree = "<group>"; };
 		8652364F2BE9EED400CA1793 /* Doctor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Doctor.swift; sourceTree = "<group>"; };
 		865236512BE9EEDA00CA1793 /* Nurse.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Nurse.swift; sourceTree = "<group>"; };
+		865908672BEC8A41005EF7BD /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		8690D3F42BEB4B6000286184 /* CancelAppointmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelAppointmentView.swift; sourceTree = "<group>"; };
 		86B555CF2BDA43850064E9BD /* hms-structured.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "hms-structured.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		86B555D22BDA43850064E9BD /* hms_structuredApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = hms_structuredApp.swift; sourceTree = "<group>"; };
@@ -406,7 +408,7 @@
 		8EF783192BEA431400B70CE5 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				8EF7831A2BEA432600B70CE5 /* Profile.swift */,
+				865908672BEC8A41005EF7BD /* Profile.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -526,6 +528,7 @@
 				86B556292BDA48BE0064E9BD /* SignupView.swift in Sources */,
 				86B555D52BDA43850064E9BD /* ContentView.swift in Sources */,
 				8652364E2BE9EEB300CA1793 /* StaffManagementViewModel.swift in Sources */,
+				865908682BEC8A41005EF7BD /* Profile.swift in Sources */,
 				86B5563C2BDAD81D0064E9BD /* DoctorListView.swift in Sources */,
 				865236432BE9EE9700CA1793 /* EmergencyView.swift in Sources */,
 				8652364C2BE9EEB300CA1793 /* AddDoctorsViewModel.swift in Sources */,
@@ -730,7 +733,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"hms-structured/Preview Content\"";
-				DEVELOPMENT_TEAM = JS9P3X2U8F;
+				DEVELOPMENT_TEAM = 49B9TR9U74;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "To retrieve vitals";

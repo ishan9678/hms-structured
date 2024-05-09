@@ -30,11 +30,11 @@ struct PatientContentView: View {
                     Image(systemName: "staroflife")
                     Text("Vital")
                 }
-//            Profile()
-//                .tabItem {
-//                    Image(systemName: "person")
-//                    Text("Profile")
-//                }
+            Profile()
+                .tabItem {
+                    Image(systemName: "person")
+                    Text("Profile")
+                }
         }
 
     }
