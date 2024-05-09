@@ -157,7 +157,7 @@ struct DoctorHomeView: View {
                                 
                             }
                             
-                            AppointmentView(temp: hello, appointments: fetchedAppointments,selectedDate: selectedDate, emergencyColor: emergencyColor)
+                            AppointmentView(temp: hello, appointments: fetchedAppointments,selectedDate: selectedDate, emergencyColor: emergencyColor, fetchAppointments: fetchAppointments)
                             Spacer()
                         }
                     }
@@ -221,7 +221,7 @@ struct DoctorHomeView: View {
             for document in documents {
                 let data = document.data()
                 
-                for (_, appointmentData) in data {
+                for (key, appointmentData) in data {
                     if let appointmentData = appointmentData as? [String: Any] {
                         
                         if let doctorID = appointmentData["doctorID"] as? String, doctorID == userId{
@@ -229,7 +229,7 @@ struct DoctorHomeView: View {
                             if let bookingDateTimestamp = appointmentData["bookingDate"] as? Timestamp {
                                 let bookingDate = Date(timeIntervalSince1970: TimeInterval(bookingDateTimestamp.seconds))
                                 // Now you can use the ⁠ bookingDate ⁠ in your ⁠ Appointments ⁠ struct
-                                let appointment = Appointments(bookingDate: bookingDate, timeSlot: appointmentData["timeSlot"] as? String, doctorID: appointmentData["doctorID"] as? String ?? "", doctorName: appointmentData["doctorName"] as? String ?? "", doctorDepartment: appointmentData["doctorDepartment"] as? String ?? "", patientName: appointmentData["patientName"] as? String ?? "", patientID: appointmentData["patientID"] as? String ?? "")
+                                let appointment = Appointments(id:  key, bookingDate: bookingDate, timeSlot: appointmentData["timeSlot"] as? String, doctorID: appointmentData["doctorID"] as? String ?? "", doctorName: appointmentData["doctorName"] as? String ?? "", doctorDepartment: appointmentData["doctorDepartment"] as? String ?? "", patientName: appointmentData["patientName"] as? String ?? "", patientID: appointmentData["patientID"] as? String ?? "")
                                 userName = appointment.doctorName
                                 userUID = appointment.doctorID
                                 fetchedAppointments.append(appointment)
@@ -294,6 +294,7 @@ struct AppointmentView: View {
     var appointments: [Appointments]
     var selectedDate: Date
     var emergencyColor: Color
+    var fetchAppointments:() -> Void
     var body: some View {
         VStack {
             ForEach(0..<4) { i in
@@ -387,7 +388,13 @@ struct AppointmentView: View {
                                     
                                 }
                             })
-
+                            .contextMenu {
+                                Button {
+                                    deleteAppointment(appointment: appointment)
+                                } label: {
+                                    Label("Cancel Appointment", systemImage: "trash")
+                                }
+                            }
                         }
                         
                     }.background(Color.gray.opacity(1))
@@ -455,8 +462,44 @@ struct AppointmentView: View {
         
         return dateFormatter.string(from: date)
     }
+    
+    func deleteAppointment(appointment: Appointments) {
+        let db = Firestore.firestore()
+        let userId = appointment.patientID
 
+        let documentRef = db.collection("appointments").document(userId)
+        
+        print("apt id",appointment)
 
+        documentRef.getDocument { snapshot, error in
+            if let error = error {
+                print("Error fetching document: \(error)")
+                return
+            }
+
+            guard let snapshot = snapshot else {
+                print("Document does not exist")
+                return
+            }
+
+            guard var appointmentsMap = snapshot.data() as? [String: Any] else {
+                print("Document data is empty")
+                return
+            }
+
+            appointmentsMap.removeValue(forKey: appointment.id ?? "")
+
+            documentRef.setData(appointmentsMap) { error in
+                if let error = error {
+                    print("Error updating document: \(error)")
+                } else {
+                    print("Appointment successfully deleted")
+                    fetchAppointments()
+                    
+                }
+            }
+        }
+    }
 }
 
 extension UIColor {
