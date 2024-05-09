@@ -7,9 +7,10 @@
 
 import SwiftUI
 import Charts
+import Firebase
+
 
 struct AdminDashboardView: View {
-    let code = "Black"
     
     @State private var selectedChartType = "Bar"
     @ObservedObject var viewModel = PatientFrequencyViewModel()
@@ -21,9 +22,10 @@ struct AdminDashboardView: View {
                 HStack {
                     Text("Hello, Admin")
                         .font(.largeTitle)
-                        .fontWeight(.bold)
+                        .fontWeight(.black)
                         .padding([.top, .bottom], 16)
                         .padding()
+                        .foregroundColor(viewModel.emergencyColor.contrastingColor())
                     Spacer()
                     Button(action: {
                         print("Notifications tapped")
@@ -34,36 +36,57 @@ struct AdminDashboardView: View {
                             .frame(width: 24, height: 24)
                     }
                     .padding()
+                    .foregroundColor(viewModel.emergencyColor.contrastingColor())
+                    
+                    Button(action: {
+                                            do {
+                                                try Auth.auth().signOut()
+                                                UserDefaults.standard.set(false, forKey: "isLoggedIn")
+                                                // Update to switch views properly
+                                                if let window = UIApplication.shared.windows.first {
+                                                    window.rootViewController = UIHostingController(rootView: LoginView())
+                                                    window.makeKeyAndVisible()
+                                                }
+                                            } catch {
+                                                print("Error signing out: \(error.localizedDescription)")
+                                            }
+                                        }) {
+                                            Image(systemName: "arrow.right.square")
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width: 24, height: 24)
+                                        }
+                                        .padding()
                 }
-                .background(Color.bgColor1)  // Set background color to blue
+                .background(viewModel.emergencyColor)  // Set background color to blue
                 .foregroundColor(.white)  // Change text color to white for better contrast
                 
                 // Information Components
                 ScrollView {
                     VStack(spacing: 20) {
                         StatisticsGridView(stats: [
-                                                    ("Total Patients", String(viewModel.totalPatients)),
-                                                    ("Total Doctors", String(viewModel.totalDoctors)),
-                                                    ("Appointments", String(viewModel.totalAppointments)),
-                                                    ("Code", code)
-                                                ])
+                            ("Total Patients", String(viewModel.totalPatients)),
+                            ("Total Doctors", String(viewModel.totalDoctors)),
+                            ("Appointments", String(viewModel.totalAppointments)),
+                            ("Total Records", String(viewModel.totalMedicalTests))
+                        ], backgroundColor: viewModel.emergencyColor)
                         
                         Picker("Select Chart Type", selection: $selectedChartType) {
                                             Text("Bar").tag("Bar")
                                             Text("Line").tag("Line")
                                             Text("Area").tag("Area")
                                         }
-                                        .pickerStyle(MenuPickerStyle())
+                        .pickerStyle(.segmented)
                                         .padding()
                         
                         VStack(spacing: 20) {
                                                 switch selectedChartType {
                                                 case "Line":
-                                                    LineChartView(data: viewModel.patientFrequency)
+                                                    LineChartView(data: viewModel.patientFrequency, color: viewModel.emergencyColor)
                                                 case "Area":
-                                                    AreaChartView(data: viewModel.patientFrequency)
+                                                    AreaChartView(data: viewModel.patientFrequency, color: viewModel.emergencyColor)
                                                 default:
-                                                    BarChartView(data: viewModel.patientFrequency)
+                                                    BarChartView(data: viewModel.patientFrequency, color: viewModel.emergencyColor)
                                                 }
                                             }
                     }
@@ -78,16 +101,19 @@ struct AdminDashboardView: View {
             viewModel.fetchTotalPatients()
             viewModel.fetchTotalDoctors()
             viewModel.fetchTotalAppointments()
+            viewModel.fetchTotalMedicalTests()
+            viewModel.fetchEmergencyColor()
         }
     }
 }
 struct StatisticsGridView: View {
     var stats: [(String, String)]
+    var backgroundColor: Color  // Add this to receive color
 
     var body: some View {
-        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
+        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
             ForEach(stats, id: \.0) { stat in
-                InfoComponent(title: stat.0, value: stat.1)
+                InfoComponent(title: stat.0, value: stat.1, backgroundColor: backgroundColor)
             }
         }
         .padding(.horizontal)
@@ -96,6 +122,7 @@ struct StatisticsGridView: View {
 
 struct BarChartView: View {
     var data: [String: Int]
+    var color: Color
 
     var body: some View {
         Chart {
@@ -104,19 +131,17 @@ struct BarChartView: View {
                     x: .value("Day", key),
                     y: .value("Patients", data[key]!)
                 )
-                .annotation(position: .top) {
-                    Text("\(data[key]!)")
-                }
+                .foregroundStyle(color)
             }
         }
         .frame(height: 300)
         .padding(.horizontal)
-        
     }
 }
 
 struct LineChartView: View {
     var data: [String: Int]
+    var color: Color
 
     var body: some View {
         Chart {
@@ -126,7 +151,7 @@ struct LineChartView: View {
                     y: .value("Patients", data[key]!)
                 )
                 .symbol(Circle())
-                .foregroundStyle(Color.bgColor1)
+                .foregroundStyle(color)
             }
         }
         .frame(height: 300)
@@ -136,7 +161,8 @@ struct LineChartView: View {
 
 struct AreaChartView: View {
     var data: [String: Int]
-
+    var color: Color
+    
     var body: some View {
         Chart {
             ForEach(data.keys.sorted(), id: \.self) { key in
@@ -144,6 +170,7 @@ struct AreaChartView: View {
                     x: .value("Day", key),
                     y: .value("Patients", data[key]!)
                 )
+                .foregroundStyle(color)
             }
         }
         .frame(height: 300)
@@ -154,23 +181,37 @@ struct AreaChartView: View {
 struct InfoComponent: View {
     var title: String
     var value: String
+    var backgroundColor: Color
 
     var body: some View {
         VStack(alignment: .center) {
             Text(value)
-                .font(.title2)
+                .font(.largeTitle)
                 .fontWeight(.bold)
+                .foregroundColor(backgroundColor.contrastingColor())
             Text(title)
-                .font(.caption)
-                .foregroundColor(.gray)
+                .font(.body)
+                .foregroundColor(backgroundColor.contrastingColor())
         }
         .padding()
-        .frame(minWidth: 0, maxWidth: .infinity)
-        .background(Color.gray.opacity(0.1))
+        .frame(minWidth: 110, maxWidth: .infinity)
+        .background(backgroundColor)
         .cornerRadius(10)
+    }
+}
+
+extension Color {
+    func contrastingColor() -> Color {
+        var r: CGFloat = 0
+        var g: CGFloat = 0
+        var b: CGFloat = 0
+        let c = UIColor(self)
+        c.getRed(&r, green: &g, blue: &b, alpha: nil)
+        return (r * 0.299 + g * 0.587 + b * 0.114) > 0.5 ? .black : .white
     }
 }
 
 #Preview {
     AdminDashboardView()
 }
+

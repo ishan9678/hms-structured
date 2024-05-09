@@ -182,9 +182,9 @@ struct PrescriptionView: View {
             // Doctor Information
             Section(header: Text("Doctor Information")) {
                 HStack {
-                    Image(systemName: "person.circle")
-                        .resizable()
-                        .frame(width: 50, height: 50)
+//                    Image(systemName: "person.circle")
+//                        .resizable()
+//                        .frame(width: 50, height: 50)
                     VStack(alignment: .leading) {
                         Text(prescription.doctorName)
                             .font(.headline)
@@ -206,11 +206,48 @@ struct PrescriptionView: View {
             Section(header: Text("Medication Details")) {
                 ForEach(prescription.medication) { medication in
                     VStack(alignment: .leading) {
-                        Text("Medication: \(medication.name)")
-                        Text("Number of days: \(medication.dosage)")
-                        Text("To be taken: \(medication.toBeTaken)")
-                        Text("Times of Day: \(medication.selectedTimesOfDay.joined(separator: ", "))")
-                    }
+                                            HStack(spacing:10){
+                                                Text("Medication:")
+                                                    .fontWeight(.bold)
+                                                Text("\(medication.name)")
+                                            }
+                                            HStack{
+                                                Text("Number of days:")
+                                                    .fontWeight(.bold)
+                                                Text(" \(medication.dosage)")
+                                            }
+                                            HStack{
+                                                Text("To be taken:")
+                                                    .fontWeight(.bold)
+                                                Text(" \(medication.toBeTaken)")
+                                            }
+                                            
+                                            HStack(alignment:.center,
+                                                   spacing:80) {
+                                                Text("Times of Day:")
+                                                    .padding(.top, 4)
+                                                    .fontWeight(.bold)
+                                                HStack{
+                                                    ForEach(["Morning", "Afternoon", "Night"], id: \.self) { timeOfDay in
+                                                        VStack {
+                                                            Image(systemName: timeOfDay.lowercased() == "morning" ? "sunrise.fill" : (timeOfDay.lowercased() == "afternoon" ? "sun.max.fill" : "moon.fill"))
+                                                                .foregroundColor(timeOfDay.lowercased() == "morning" ? .yellow : (timeOfDay.lowercased() == "afternoon" ? .orange : .blue))
+                                                            Text(timeOfDay.prefix(1).capitalized)
+                                                            
+                                                            // Check if the time of day is present in selectedTimesOfDay
+                                                            let isPresent = medication.selectedTimesOfDay.contains(timeOfDay)
+                                                            
+                                                            // Display indicator (1 if present, 0 if not)
+                                                            Text(isPresent ? "1" : "0")
+                                                            
+                                                            // Display whether it's taken before or after
+                                                        }
+                                                        .padding(.trailing, 20)
+                                                        // Add spacing between each time of day
+                                                    }
+                                                }
+                                            }
+                                        }
                 }
             }
 
