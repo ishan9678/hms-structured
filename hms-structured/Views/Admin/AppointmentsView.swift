@@ -542,86 +542,87 @@ struct AppointmentAdminView: View {
     }
     
     var body: some View {
-        VStack {
-            SearchBar(text: $searchText)
-            
-            ForEach(filteredAppointments.indices, id: \.self) { index in
-                let appointment = filteredAppointments[index]
-                DisclosureGroup(
-                    content: {
-                        HStack {
-                            VStack(alignment: .leading) {
-                                if index == 0 { // Only show the day box for the first appointment
-                                    Text("Patients for the Doctor")
-                                        .font(.subheadline)
-                                        .fontWeight(.bold)
-                                        .padding(.bottom, 5)
-                                    
-                                    Text(appointment.patientName)
-                                        .font(.custom("SF Pro Display", size: 16).weight(.semibold))
-                                        .tracking(0.16)
-                                        .lineSpacing(21.60)
-                                        .foregroundColor(.black)
-                                } else {
-                                    // No day box for subsequent appointments
-                                    Text(appointment.patientName)
-                                        .font(.custom("SF Pro Display", size: 16).weight(.semibold))
-                                        .tracking(0.16)
-                                        .lineSpacing(21.60)
-                                        .foregroundColor(.black)
-                                        .padding(.leading, 60) // Adjust padding for alignment
-                                }
-                            }
-                            
-                            Spacer()
-                            
-                            Image(systemName: "arrow.forward")
-                        }
-                        .frame(width: 218, height: 84)
-                        .background(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                        .padding([.horizontal, .vertical], 5)
-                        .padding(.leading, index == 0 ? 60 : 0) // Adjust leading padding for the first appointment
-                    },
-                    label: {
-                        HStack {
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 20)
-                                    .foregroundColor(Color("bg-color1"))
-                                    .frame(width: 86.78, height: 96)
-                                
-                                Text("\(temp)")
-                                    .font(.custom("SF Pro Display", size: 18).weight(.medium))
-                                    .foregroundColor(.white)
-                            }
-                            .frame(width: 86.78, height: 96)
-                            
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 20)
-                                    .foregroundColor(Color("bg-color1"))
-                                    .frame(width: 249.62, height: 96)
-                                
+        ScrollView{
+            VStack {
+                SearchBar(text: $searchText)
+                
+                ForEach(filteredAppointments.indices, id: \.self) { index in
+                    let appointment = filteredAppointments[index]
+                    DisclosureGroup(
+                        content: {
+                            HStack {
                                 VStack(alignment: .leading) {
-                                    Text("\(appointment.timeSlot!)")
-                                        .font(.custom("SF Pro Display", size: 16).weight(.semibold))
-                                        .foregroundColor(.white)
-                                        .padding(.bottom)
-                                    
-                                    Text("Doctor Name: \(appointment.doctorName)")
-                                        .font(.custom("SF Pro Display", size: 14))
-                                        .foregroundColor(.white)
+                                    if index == 0 { // Only show the day box for the first appointment
+                                        
+                                        Text(appointment.patientName)
+                                            .font(.custom("SF Pro Display", size: 16).weight(.semibold))
+                                            .tracking(0.16)
+                                            .lineSpacing(21.60)
+                                            .foregroundColor(.black)
+                                    } else {
+                                        // No day box for subsequent appointments
+                                        Text(appointment.patientName)
+                                            .font(.custom("SF Pro Display", size: 16).weight(.semibold))
+                                            .tracking(0.16)
+                                            .lineSpacing(21.60)
+                                            .foregroundColor(.black)
+                                            .padding(.leading, 60) // Adjust padding for alignment
+                                    }
                                 }
-                                .offset(x: -30)
+                                
+                                Spacer()
                             }
-                            .frame(width: 249.62, height: 96)
+                            .frame(width: 218, height: 84)
+                            .background(.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 20))
+                            .padding([.horizontal, .vertical], 5)
+                            .padding(.leading, index == 0 ? 60 : 0) // Adjust leading padding for the first appointment
+                        },
+                        label: {
+                            HStack {
+                                if(index == 0){
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .foregroundColor(Color("bg-color1"))
+                                            .frame(width: 86.78, height: 96)
+                                        
+                                        Text("\(temp)")
+                                            .font(.custom("SF Pro Display", size: 18).weight(.medium))
+                                            .foregroundColor(.white)
+                                    }
+                                    .frame(width: 86.78, height: 96)
+                                }
+                                else{
+                                    Spacer()
+                                }
+                                
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .foregroundColor(Color("bg-color1"))
+                                        .frame(width: 249.62, height: 96)
+                                    
+                                    VStack(alignment: .leading) {
+                                        Text("\(appointment.timeSlot!)")
+                                            .font(.custom("SF Pro Display", size: 16).weight(.semibold))
+                                            .foregroundColor(.white)
+                                            .padding(.bottom)
+                                        
+                                        Text("Doctor Name: \(appointment.doctorName)")
+                                            .font(.custom("SF Pro Display", size: 14))
+                                            .foregroundColor(.white)
+                                    }
+                                    .padding()
+                                }
+                                .frame(width: 249.62, height: 96)
+                            }
                         }
-                    }
-                )
-                .padding(.horizontal)
+                    )
+                    .padding(.horizontal)
+                }
             }
-        }
-        .onAppear {
-            print("appointments", appointments)
+            .onAppear {
+                print("appointments", appointments)
+            }
         }
     }
     
