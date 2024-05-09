@@ -13,7 +13,8 @@ struct DProfile: View {
     @State private var confirmPassword: String = ""
     @State private var isChangingPassword: Bool = false
     @State private var passwordChangeError: String?
-    
+    @AppStorage("log_status") var logStatus:Bool = false
+    @AppStorage("role") var role:String = ""
     var body: some View {
 
 //        VStack {
@@ -131,6 +132,8 @@ struct DProfile: View {
                                 Divider()
                                 Button(action: {
                                     do {
+                                        logStatus = false
+                                        role = ""
                                         try Auth.auth().signOut()
                                         UserDefaults.standard.set(false, forKey: "isLoggedIn")
                                         UIApplication.shared.windows.first?.rootViewController = UIHostingController(rootView: LoginView())

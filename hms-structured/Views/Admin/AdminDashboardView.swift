@@ -14,7 +14,8 @@ struct AdminDashboardView: View {
     
     @State private var selectedChartType = "Bar"
     @ObservedObject var viewModel = PatientFrequencyViewModel()
-    
+    @AppStorage("log_status") var logStatus:Bool = false
+    @AppStorage("role") var role:String = ""
     var body: some View {
         NavigationView {
             VStack {
@@ -40,6 +41,8 @@ struct AdminDashboardView: View {
                     
                     Button(action: {
                                             do {
+                                                logStatus = false
+                                                role = ""
                                                 try Auth.auth().signOut()
                                                 UserDefaults.standard.set(false, forKey: "isLoggedIn")
                                                 // Update to switch views properly

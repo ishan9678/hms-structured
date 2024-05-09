@@ -97,7 +97,7 @@ import SwiftUI
    
 
     var isValid: Bool {
-        return !email.isEmpty && !password.isEmpty && !confirmPassword.isEmpty && age > 0 && !bloodGroup.isEmpty && !gender.isEmpty
+        return !email.isEmpty && !password.isEmpty && !confirmPassword.isEmpty
     }
     
     var isValidLogin: Bool {

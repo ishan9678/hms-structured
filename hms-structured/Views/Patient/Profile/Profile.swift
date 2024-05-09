@@ -14,6 +14,8 @@ struct Profile: View {
     @State private var passwordChangeError: String?
     @State private var newPassword: String = ""
     @State private var isRecordsViewActive = false
+    @AppStorage("log_status") var logStatus:Bool = false
+    @AppStorage("role") var role:String = ""
 
     var body: some View {
         ScrollView {
@@ -121,6 +123,8 @@ struct Profile: View {
                             
                             Button(action: {
                                 do {
+                                    logStatus = false
+                                    role = ""
                                     try Auth.auth().signOut()
                                     UserDefaults.standard.set(false, forKey: "isLoggedIn")
                                     UIApplication.shared.windows.first?.rootViewController = UIHostingController(rootView: LoginView())
