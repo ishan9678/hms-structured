@@ -18,9 +18,13 @@ struct DoctorHomeView: View {
     @AppStorage("user_name") var userName: String = ""
     @AppStorage("user_UID") var userUID: String = ""
     @AppStorage("user_profile_url") var userProfileURL: String = ""
+    @State var emergencyColor: Color = Color("bg-color1")
     func dateGetter(index: Int) -> Date {
         return Calendar.current.date(byAdding: .day, value: index, to: getFirstDayOfWeek(for: selectedDate))!
     }
+    @State private var isBlinking: Bool = true
+    @State var emergencyTitle: String = ""
+
     
     func getFirstDayOfWeek(for date: Date) -> Date {
         let calendar = Calendar.current
@@ -55,7 +59,7 @@ struct DoctorHomeView: View {
                     VStack{
                         ZStack(alignment: .leading){
                             Rectangle()
-                                .foregroundStyle(Color("bg-color1"))
+                                .foregroundStyle(emergencyColor)
                                 .frame(height: 260)
                                 .frame(height: UIScreen.main.bounds.size.height * 0.20)
                                 .padding(.top,-130)
@@ -70,6 +74,8 @@ struct DoctorHomeView: View {
                                         .font(Font.custom("SF Pro Display", size: 30).weight(.semibold))
                                         .lineSpacing(22)
                                         .foregroundColor(.white)
+                                        .scaleEffect(isBlinking ? 2.0 : 1.0)
+                                        .animation(Animation.easeInOut(duration: 0.5).reverse(on: $isBlinking, delay:0.5))
                                 }
                                 .padding()
                                 Spacer()
@@ -102,9 +108,12 @@ struct DoctorHomeView: View {
                                         .foregroundColor(.black)
                                 }
                                 Spacer()
+                                Text(emergencyTitle)
+                                    .foregroundStyle(Color.red)
                             }
                             .padding([.horizontal, .top])
                             .cornerRadius(10)
+                            
                             
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack {
@@ -134,24 +143,28 @@ struct DoctorHomeView: View {
                                             .background(
                                                 RoundedRectangle(cornerRadius: 15)
                                                     .frame(width: 64, height: 80)
-                                                    .foregroundColor(isSelected ? Color("bg-color1").opacity(01) : .white)
+                                                    .foregroundColor(isSelected ? emergencyColor.opacity(01) : .white)
                                                     .padding(.leading)
                                             )
                                             .padding()
                                         }
                                     }
+                                    
                                 }
                                 .frame(height: 85)
                                 .padding(.bottom)
                                 .padding(.trailing, 16)
+                                
                             }
                             
-                            AppointmentView(temp: hello, appointments: fetchedAppointments,selectedDate: selectedDate)
+                            AppointmentView(temp: hello, appointments: fetchedAppointments,selectedDate: selectedDate, emergencyColor: emergencyColor)
                             Spacer()
                         }
                     }
                 }.padding(.top,50)
             }
+            
+            
             
             if isDropdownExpanded {
                 Color.black.opacity(0.5)
@@ -178,7 +191,7 @@ struct DoctorHomeView: View {
         .onAppear {
             self.hello = getDay(date: Date())
             fetchAppointments()
-            
+            fetchEmergencyColor()
         }
     }
     
@@ -220,7 +233,7 @@ struct DoctorHomeView: View {
                                 userName = appointment.doctorName
                                 userUID = appointment.doctorID
                                 fetchedAppointments.append(appointment)
-                                print(fetchedAppointments)
+//                                print(fetchedAppointments)
                             }
                         }
                     }
@@ -229,6 +242,45 @@ struct DoctorHomeView: View {
             }
         }
     }
+    
+    func fetchEmergencyColor() {
+        let db = Firestore.firestore()
+        
+        db.collection("emergency_notifications").document("emergencyNotification").getDocument { document, error in
+            if let error = error {
+                print("Error getting emergency notification: \(error)")
+                return
+            }
+            
+            guard let document = document else {
+                print("No emergency notification document found")
+                return
+            }
+            
+            if let hexCode = document["hexCode"] as? String {
+                DispatchQueue.main.async {
+                    self.emergencyColor = getColorForEmergencyNotification(hexCode: hexCode)
+                }
+            }
+            
+            if let emergencyTitle = document["body"] as? String {
+                DispatchQueue.main.async {
+                    self.emergencyTitle = emergencyTitle
+                }
+
+            }
+        }
+    }
+
+    func getColorForEmergencyNotification(hexCode: String) -> Color {
+        // Convert hex string to Color
+        if let uiColor = UIColor(hexString: hexCode) {
+            return Color(uiColor)
+        } else {
+            return Color("bg-color1") // Default color if conversion fails
+        }
+    }
+
 }
 
 struct DoctorHomeView_Previews: PreviewProvider {
@@ -241,6 +293,7 @@ struct AppointmentView: View {
     var temp: String
     var appointments: [Appointments]
     var selectedDate: Date
+    var emergencyColor: Color
     var body: some View {
         VStack {
             ForEach(0..<4) { i in
@@ -348,7 +401,7 @@ struct AppointmentView: View {
                                 Rectangle()
                                   .foregroundColor(.clear)
                                   .frame(width: 86.78, height: 96)
-                                  .background(Color("bg-color1"))
+                                  .background(emergencyColor)
                                   .cornerRadius(20)
                                 Text("\(temp)")
                                   .font(Font.custom("SF Pro Display", size: 20).weight(.medium))
@@ -363,7 +416,7 @@ struct AppointmentView: View {
                           Rectangle()
                             .foregroundColor(.clear)
                             .frame(width: 249.62, height: 96)
-                            .background(Color("bg-color1"))
+                            .background(emergencyColor)
                             .cornerRadius(20)
                             VStack(alignment: .leading){
                                 if(i == 0 || i == 1){
@@ -392,7 +445,7 @@ struct AppointmentView: View {
                 
             }
         }.onAppear(){
-            print("appointments",appointments)
+//            print("appointments",appointments)
         }
         
     }
@@ -404,4 +457,32 @@ struct AppointmentView: View {
     }
 
 
+}
+
+extension UIColor {
+    convenience init?(hexString: String) {
+        var hexSanitized = hexString.trimmingCharacters(in: .whitespacesAndNewlines)
+        hexSanitized = hexSanitized.replacingOccurrences(of: "#", with: "")
+        
+        var rgb: UInt64 = 0
+        
+        guard Scanner(string: hexSanitized).scanHexInt64(&rgb) else {
+            return nil
+        }
+        
+        let red = CGFloat((rgb & 0xFF0000) >> 16) / 255.0
+        let green = CGFloat((rgb & 0x00FF00) >> 8) / 255.0
+        let blue = CGFloat(rgb & 0x0000FF) / 255.0
+        
+        self.init(red: red, green: green, blue: blue, alpha: 1.0)
+    }
+}
+
+extension Animation {
+    func reverse(on: Binding<Bool>, delay: Double) -> Self {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            on.wrappedValue = false /// Switch off after `delay` time
+        }
+        return self
+    }
 }

@@ -7,18 +7,21 @@ struct EmergencyCode {
     let code: String
     let description: String
     let color: Color
+    let hexCode: String
 }
 
 struct EmergencyView: View {
-    let emergencyCodes = [ EmergencyCode(code: "Blue", description: "Medical Emergency", color: .blue),
-                           EmergencyCode(code: "Red", description: "Fire", color: .red),
-                           EmergencyCode(code: "Black", description: "Bomb Threat", color: .black),
-                           EmergencyCode(code: "Gray", description: "Security Alert", color: .gray),
-                           EmergencyCode(code: "Brown", description: "External Disaster", color: .brown),
-                           EmergencyCode(code: "Yellow", description: "Missing Person", color: .yellow),
-                           EmergencyCode(code: "Pink", description: "Infant Abduction", color: .pink),
-                           EmergencyCode(code: "Orange", description: "Hazardous Material Spill", color: .orange),
-                           EmergencyCode(code: "Green", description: "Mass Casualty Incident", color: .green)
+    let staticDocumentID = "emergencyNotification"
+    
+    let emergencyCodes = [  EmergencyCode(code: "Blue", description: "Medical Emergency", color: .blue, hexCode: "#0000FF"),
+                            EmergencyCode(code: "Red", description: "Fire", color: .red, hexCode: "#FF0000"),
+                            EmergencyCode(code: "Black", description: "Bomb Threat", color: .black, hexCode: "#000000"),
+                            EmergencyCode(code: "Gray", description: "Security Alert", color: .gray, hexCode: "#808080"),
+                            EmergencyCode(code: "Brown", description: "External Disaster", color: .brown, hexCode: "#A52A2A"),
+                            EmergencyCode(code: "Yellow", description: "Missing Person", color: .yellow, hexCode: "#FFFF00"),
+                            EmergencyCode(code: "Pink", description: "Infant Abduction", color: .pink, hexCode: "#FFC0CB"),
+                            EmergencyCode(code: "Orange", description: "Hazardous Material Spill", color: .orange, hexCode: "#FFA500"),
+                            EmergencyCode(code: "Green", description: "Mass Casualty Incident", color: .green, hexCode: "#008000")
 
         // ... other emergency codes
     ]
@@ -66,19 +69,19 @@ struct EmergencyView: View {
             }
         }
         .onAppear {
-            // Listen for changes in the emergency_notifications collection
-            db.collection("emergency_notifications").addSnapshotListener { querySnapshot, error in
-                guard let documents = querySnapshot?.documents else {
-                    print("Error fetching documents: \(error?.localizedDescription ?? "Unknown error")")
+            let docRef = db.collection("emergency_notifications").document(staticDocumentID)
+            docRef.addSnapshotListener { documentSnapshot, error in
+                guard let document = documentSnapshot else {
+                    print("Error fetching document: \(error?.localizedDescription ?? "Unknown error")")
                     return
                 }
                 
-                // Check if there are any documents in the collection
-                self.emergencyDocExists = !documents.isEmpty
-                
-                // Update selectedDocumentId if document exists
-                if let doc = documents.first {
-                    self.selectedDocumentId = doc.documentID
+                if let data = document.data(), data["isActive"] as? Bool == true {
+                    self.emergencyDocExists = true
+                    self.selectedDocumentId = staticDocumentID
+                } else {
+                    self.emergencyDocExists = false
+                    self.selectedDocumentId = nil
                 }
             }
         }
@@ -108,44 +111,43 @@ struct EmergencyView: View {
     }
     
     private func sendEmergencyNotification(code: EmergencyCode) {
-        // Prepare notification payload (same as before)
         let notificationPayload = [
             "title": "Emergency Alert",
-            "body": "\(code.description) has been declared.",
-            "code": code.code
-        ]
+            "body": "\(code.description)",
+            "code": code.code,
+            "hexCode": code.hexCode,
+            "isActive": true  // Flag to indicate an active emergency
+        ] as [String : Any]
         
-        // Access the "emergency_notifications" collection in Firestore
-        let docRef = db.collection("emergency_notifications").document()
+        // Access the specific emergency_notifications document using the static ID
+        let docRef = db.collection("emergency_notifications").document(staticDocumentID)
         
-        // Add notification data to the collection and store the document ID
+        // Set or update notification data in the specific document
         docRef.setData(notificationPayload) { error in
             if let error = error {
-                print("Error adding notification data: \(error.localizedDescription)")
+                print("Error updating notification data: \(error.localizedDescription)")
                 return
             }
             
-            print("Notification data saved successfully!")
-            self.selectedDocumentId = docRef.documentID // Store the document ID
-            
-            // Send notification to doctors using FCM (same as before)
-            self.sendNotificationToDoctors(payload: notificationPayload)
+            print("Notification data updated successfully!")
+            self.selectedDocumentId = staticDocumentID // Use the static document ID
         }
     }
+
     
     private func endEmergency(documentId: String) {
-        // Access the document using the stored ID
         let docRef = db.collection("emergency_notifications").document(documentId)
         
-        // Delete the document
-        docRef.delete() { error in
+        // Update the document to indicate there is no active emergency
+        docRef.updateData([
+            "isActive": false  // Set isActive to false to indicate no active emergency
+        ]) { error in
             if let error = error {
-                print("Error deleting emergency notification: \(error.localizedDescription)")
+                print("Error clearing emergency notification: \(error.localizedDescription)")
                 return
             }
             
-            print("Emergency notification ended successfully!")
-            self.selectedDocumentId = nil // Clear the document ID
+            print("Emergency notification cleared successfully!")
         }
     }
     

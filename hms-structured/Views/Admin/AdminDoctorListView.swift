@@ -71,50 +71,37 @@ struct AdminDoctorCardList: View {
                     EmptyView()
                 }
                 
-                List(doctorsViewModel.doctors, id: \.id) { doctor in
-                    Button(action: {
-                        self.selectedDoc = doctor
-                        isDoctorSelected = true
-                        print("\(selectedDoc.fullName)")
-                    }) {
-                        HStack{
-//                                                            Image(systemName: "person.fill")
-//
-//                                                                .resizable()
-//                                                                .foregroundColor(.blue)
-//                                                                .frame(width: 50, height: 50)
-//                                                                .clipShape(Circle())
-                            
-                            if let imageUrl = URL(string: doctor.profileImageURL) {
-                                WebImage(url: imageUrl)
-                                                                                                .resizable()
-                                                                                                .foregroundColor(.blue)
-                                                                                                .frame(width: 50, height: 50)
-                                                                                                .clipShape(Circle())
-                            } else {
-                                // Handle invalid URL
-                                Text("Invalid URL")
-                                    .foregroundColor(.red)
+                List {
+                            ForEach(doctorsViewModel.doctors, id: \.id) { doctor in
+                                Button(action: {
+                                    self.selectedDoc = doctor
+                                    isDoctorSelected = true
+                                }) {
+                                    HStack {
+                                        if let imageUrl = URL(string: doctor.profileImageURL) {
+                                            WebImage(url: imageUrl)
+                                                .resizable()
+                                                .foregroundColor(.blue)
+                                                .frame(width: 50, height: 50)
+                                                .clipShape(Circle())
+                                        } else {
+                                            Text("Invalid URL")
+                                                .foregroundColor(.red)
+                                        }
+                                        VStack(alignment: .leading) {
+                                            Text(doctor.fullName)
+                                                .font(.headline)
+                                                .foregroundColor(.black)
+                                            Text(doctor.department)
+                                                .font(.subheadline)
+                                                .foregroundColor(.secondary)
+                                        }
+                                        .padding()
+                                    }
+                                }
                             }
-                            
-                            VStack(alignment: .leading) {
-                                Text(doctor.fullName)
-                                    .font(.headline)
-                                    .foregroundColor(.black)
-                                
-                                Text(doctor.department)
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                            }
-                            .padding()
-                            .foregroundColor(.white)
-                            
-                            
+                            .onDelete(perform: delete)
                         }
-                        
-                    }
-                    
-                }
                 .navigationTitle("\(selectedEntity)")
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
@@ -128,6 +115,7 @@ struct AdminDoctorCardList: View {
                         }
                     }
                 }
+                
             }
             .onAppear {
                 doctorsViewModel.fetchDoctors()
@@ -136,7 +124,18 @@ struct AdminDoctorCardList: View {
     }
     
     
+    private func delete(at offsets: IndexSet) {
+        offsets.forEach { index in
+            if let doctorId = doctorsViewModel.doctors[index].id {
+                doctorsViewModel.deleteDoctor(doctorId: doctorId)
+            } else {
+                print("Failed to retrieve doctorId for deletion")
+            }
+        }
+    }
     
 
         
     }
+
+
