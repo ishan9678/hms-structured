@@ -18,7 +18,7 @@ struct OnBoardingScreen: View {
                     Button(action: {
                         // Action to perform when the button is tapped
                     }) {
-                        NavigationLink(destination: SignupView()) {
+                        NavigationLink(destination: LoginView()) {
                             Text("Skip")
                                 .foregroundColor(.black)
                                 .frame(maxWidth: .infinity, alignment: .trailing)
@@ -72,7 +72,7 @@ struct OnboardingStepView: View {
             
             if isLastScreen {
                             // Get Started button
-                            NavigationLink(destination: SignupView()) {
+                            NavigationLink(destination: LoginView()) {
                                 Text("   ")
                                 Spacer()
                                 Text("Get Started")

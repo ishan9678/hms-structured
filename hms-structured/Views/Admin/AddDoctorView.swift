@@ -50,7 +50,7 @@ struct AddDoctorView: View {
         "General Physician",
         "Cardiology",
         "Obstetrics & Gynecology",
-        "Pediatrician",
+        "Pediatrics",
         "Oncology",
         "Neurology",
         "Orthopedics",

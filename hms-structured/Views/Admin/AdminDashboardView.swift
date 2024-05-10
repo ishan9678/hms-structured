@@ -95,6 +95,14 @@ struct AdminDashboardView: View {
                                             }
                     }
                 }
+                .refreshable {
+                    viewModel.fetchBookings()
+                    viewModel.fetchTotalPatients()
+                    viewModel.fetchTotalDoctors()
+                    viewModel.fetchTotalAppointments()
+                    viewModel.fetchTotalMedicalTests()
+                    viewModel.fetchEmergencyColor()
+                }
                 Spacer()
             }
             .navigationTitle("Dashboard")

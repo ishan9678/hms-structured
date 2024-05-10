@@ -15,7 +15,7 @@ struct PatientHomeView: View {
                         
                         
                         VStack {
-                            Text("Good Morning, \(userName)")
+                            Text("Good Afternoon, \(userName)")
                                 .foregroundStyle(Color.white)
                                 .font(.system(size: 20))
                                 .opacity(0.8)

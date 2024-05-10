@@ -82,7 +82,7 @@ struct SearchablePrescriptionListView1: View {
             
             // Add an overlay button to pop up a sheet for adding a prescription
             NavigationLink(
-                destination: PrescriptionForm(patientID: patientID,patientName: patientName),
+                destination: PrescriptionForm(patientID: patientID,patientName: patientName).navigationBarBackButtonHidden(),
                 isActive: $isAddPrescriptionSheetPresented,
                 label: {
                     EmptyView()

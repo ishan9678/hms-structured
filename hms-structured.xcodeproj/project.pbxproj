@@ -752,7 +752,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"hms-structured/Preview Content\"";
-				DEVELOPMENT_TEAM = 49B9TR9U74;
+				DEVELOPMENT_TEAM = JS9P3X2U8F;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "To retrieve vitals";

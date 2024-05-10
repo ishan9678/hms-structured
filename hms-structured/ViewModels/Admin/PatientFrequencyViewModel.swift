@@ -17,7 +17,7 @@ class PatientFrequencyViewModel: ObservableObject {
     @Published var totalDoctors: Int = 0
     @Published var totalAppointments: Int = 0
     @Published var totalMedicalTests: Int = 0
-    @Published var emergencyColor: Color = .blue
+    @Published var emergencyColor: Color = .bgColor1
 
 
 
@@ -143,6 +143,7 @@ class PatientFrequencyViewModel: ObservableObject {
                     }
                     
                 } else {
+                    self.emergencyColor = .bgColor1
                     print("falseee")
                     return
                 }
