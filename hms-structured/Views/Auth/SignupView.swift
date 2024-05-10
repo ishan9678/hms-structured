@@ -17,7 +17,8 @@ struct SignupView: View {
     @State private var isNavigateToLogin = false
     
     @State private var loggedIn = false
-
+    @AppStorage("log_status") var logStatus:Bool = false
+    @AppStorage("role") var role:String = ""
     private enum FocusableField: Hashable {
         case name
         case email
@@ -30,10 +31,11 @@ struct SignupView: View {
     
     private func signUpWithEmailPassword() {
         Task {
-            let signUpSuccess = await viewModel.signUpWithEmailPassword()
-            if signUpSuccess {
-               
+            await viewModel.signUpWithEmailPassword()
+            if viewModel.isSignedUp {
+                logStatus = true
                 loggedIn = true
+                role = "patient" 
             }
         }
     }
@@ -42,25 +44,15 @@ struct SignupView: View {
         NavigationStack{
             
             VStack {
-                Image("SignUp")
+                Image("healix")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(minHeight: 300, maxHeight: 400)
+                    .frame(minHeight: 200, maxHeight: 200)
                 Text("Sign up")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                HStack {
-                    Text("Already have an account?")
-                    Button(action: {
-                        isNavigateToLogin = true
-                    }) {
-                        Text("Log in")
-                            .fontWeight(.semibold)
-                            .foregroundColor(.blue)
-                    }
-                }
-                .padding([.top, .bottom], 50)
+               
                 TextField("Name", text: $viewModel.name)
                     .disableAutocorrection(true)
                     .focused($focus, equals: .name)
@@ -71,6 +63,7 @@ struct SignupView: View {
                     .padding(.vertical, 6)
                     .background(Divider(), alignment: .bottom)
                     .padding(.bottom, 4)
+                    .padding(.top,10)
                 
                 TextField("Email", text: $viewModel.email)
                     .textInputAutocapitalization(.never)
@@ -104,21 +97,7 @@ struct SignupView: View {
                     .background(Divider(), alignment: .bottom)
                     .padding(.bottom, 8)
                 
-                TextField("Age", value: $viewModel.age, formatter: NumberFormatter())
-                    .keyboardType(.numberPad)
-                    .padding(.vertical, 6)
-                    .background(Divider(), alignment: .bottom)
-                    .padding(.bottom, 8)
                 
-                TextField("Blood Group", text: $viewModel.bloodGroup)
-                    .padding(.vertical, 6)
-                    .background(Divider(), alignment: .bottom)
-                    .padding(.bottom, 8)
-                
-                TextField("Gender", text: $viewModel.gender)
-                    .padding(.vertical, 6)
-                    .background(Divider(), alignment: .bottom)
-                    .padding(.bottom, 8)
                 
                 if !viewModel.errorMessage.isEmpty {
                     VStack {
@@ -142,18 +121,40 @@ struct SignupView: View {
                 .disabled(!viewModel.isValid)
                 .frame(maxWidth: .infinity)
                 .buttonStyle(.borderedProminent)
+                .padding(.top,20)
+
                 
+                HStack {
+                    Text("Already have an account?")
+                    Button(action: {
+                        isNavigateToLogin.toggle()
+                    }) {
+                        NavigationLink(destination: LoginView()){
+                            Text("Log in")
+                                .fontWeight(.semibold)
+                                .foregroundColor(.blue)
+                        }
+                        
+                    }
+                }
+                .padding()
+                .padding(.top,20)
                
                 
                 //navigation
                 
-                NavigationLink(
-                    destination: LoginView(),
-                    isActive: $isNavigateToLogin,
-                    label: {
-                        EmptyView()
-                    })
-                    .hidden()
+//                NavigationLink(
+//                    destination: LoginView(),
+//                    isActive: $isNavigateToLogin,
+//                    label: {
+//                        EmptyView()
+//                    })
+//                    .hidden()
+                
+                NavigationLink(destination: LoginView(), isActive: $isNavigateToLogin) {
+                    EmptyView()
+                }
+                .hidden()
                 
                 NavigationLink(
                     destination: PatientHomeView(),
@@ -167,7 +168,7 @@ struct SignupView: View {
             .listStyle(.plain)
             .padding()
         }
-        .navigationBarBackButtonHidden()
+        .navigationBarBackButtonHidden(true)
         
     }
         
@@ -182,4 +183,3 @@ struct SignupView_Previews: PreviewProvider {
         }
     }
 }
-

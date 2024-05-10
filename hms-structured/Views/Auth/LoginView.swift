@@ -17,6 +17,9 @@ private enum FocusableField: Hashable {
 struct LoginView: View {
     @AppStorage("user_name") var userName: String = ""
     @AppStorage("user_UID") var userUID: String = ""
+    @AppStorage("user_profile_url") var userProfileURL: String = ""
+    @AppStorage("log_status") var logStatus:Bool = false
+    @AppStorage("role") var role:String = ""
     @ObservedObject var viewModel =  AuthenticationViewModel()
     @Environment(\.dismiss) var dismiss
     
@@ -31,19 +34,25 @@ struct LoginView: View {
             if await viewModel.signInWithEmailPassword() == true {
                 dismiss()
                 isLoggedIn = true
-//                if viewModel.role == .doctor{
-//                    userName = viewModel.doctor.fullName
-//                    if let userid = viewModel.doctor.id{
-//                        userUID = userid
-//                    }
-//                }
-                if viewModel.role == .patient{
+                if viewModel.role == .doctor{
+                    userProfileURL = viewModel.doctor.profileImageURL
+                    userName = viewModel.doctor.fullName
+                    role = "doctor"
+                    if let userid = viewModel.doctor.id{
+                        userUID = userid
+                    }
+                }
+                else if viewModel.role == .patient{
                     userName = viewModel.patient.name
                     if let userid = viewModel.patient.id{
                         userUID = userid
                     }
+                    role = "patient"
                 }
-                
+                else{
+                    role = "admin"
+                }
+                logStatus = true
             }
         }
     }
@@ -51,10 +60,16 @@ struct LoginView: View {
     var body: some View {
         NavigationStack{
             VStack {
-                Image("Login")
+                Spacer()
+                
+                Image("healix")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(minHeight: 300, maxHeight: 400)
+                    .frame(width: 200, height: 200)
+                    
+                
+                Spacer()
+                
                 Text("Login")
                     .font(.largeTitle)
                     .fontWeight(.bold)
@@ -118,24 +133,39 @@ struct LoginView: View {
                     Button(action: {
                         isNavigateToSignUp = true
                     }) {
-                        Text("Sign up")
-                            .fontWeight(.semibold)
-                            .foregroundColor(.blue)
+                        Button(action: {
+                            isNavigateToSignUp.toggle()
+                        }) {
+                            NavigationLink(destination: SignupView()){
+                                Text("Sign up")
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.blue)
+                                
+                            }
+                            
+                        }
+                        
                     }
                 }
                 .padding([.top, .bottom], 50)
                 
                 // to navigate
-                NavigationLink(
-                    destination: SignupView(),
-                    isActive: $isNavigateToSignUp,
-                    label: {
-                        EmptyView()
-                    })
-                    .hidden()
+//                NavigationLink(
+//                    destination: SignupView().navigationBarBackButtonHidden(),
+//                    isActive: $isNavigateToSignUp,
+//                    label: {
+//                        EmptyView()
+//                    })
+//                    .hidden()
+                
+                NavigationLink(destination: SignupView(), isActive: $isNavigateToSignUp) {
+                    EmptyView()
+                }
+                .hidden()
+                
                 
                 NavigationLink(
-                    destination: viewModel.role == .patient ? AnyView(PatientContentView().navigationBarBackButtonHidden()) : viewModel.role == .doctor ? AnyView(DoctorHomeView().navigationBarBackButtonHidden()) : AnyView(SignupView()),
+                    destination: viewModel.role == .patient ? AnyView(PatientContentView().navigationBarBackButtonHidden()) : viewModel.role == .doctor ? AnyView(DoctorHomeView().navigationBarBackButtonHidden()) : viewModel.role == .admin ? AnyView(AdminTabBarView().navigationBarBackButtonHidden()) : AnyView(SignupView()),
                     isActive: $isLoggedIn,
                     label: {
                         EmptyView()
@@ -145,6 +175,7 @@ struct LoginView: View {
             }
             .listStyle(.plain)
             .padding()
+            .navigationBarBackButtonHidden(true)
             .analyticsScreen(name: "\(Self.self)")
         }
     }

@@ -13,6 +13,7 @@ struct BookAppointmentView_Previews: PreviewProvider {
 
 import SwiftUI
 import Firebase
+import FirebaseFirestore
 import GoogleGenerativeAI
 import SDWebImageSwiftUI
 
@@ -185,7 +186,7 @@ struct BookAppointmentView: View {
         
         Task {
             do {
-                let prompt = "Given the departments of the hospital which are Cardiology, Emergency Medicine, General Surgery, Neurology, Obstetrics & Gynaecology, Oncology, Orthopaedics, Paediatrics, Radiology. The given input would be symptoms or diseases and you need to respond with the department name that would be responsible. Here is the input: "
+                let prompt = "Given the departments of the hospital which are Emergency Medicine, General Physician, Cardiology, Obstetrics & Gynecology, Pediatrics, Oncology, Neurology, Orthopedics, Radiology. The given input would be symptoms or diseases and you need to respond with the department name that would be responsible, if its something minor return with General Physician. Here is the input: "
                 let response = try await model.generateContent(prompt + query)
                 print(response)
                 let departmentName = response.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
@@ -297,7 +298,7 @@ struct MedicineTestListView: View {
                 }
                 .background(
                     NavigationLink(
-                        destination: Text("Details or booking view for \(selectedTest ?? "")"),
+                        destination: MedicalTestDetailsView(testName : selectedTest ?? "", category: category),
                         isActive: $isDetailViewActive,
                         label: { EmptyView() }
                     )
