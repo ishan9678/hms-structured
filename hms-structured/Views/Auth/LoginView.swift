@@ -60,10 +60,16 @@ struct LoginView: View {
     var body: some View {
         NavigationStack{
             VStack {
-                Image("SignUp")
+                Spacer()
+                
+                Image("healix")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(minHeight: 300, maxHeight: 400)
+                    .frame(width: 200, height: 200)
+                    
+                
+                Spacer()
+                
                 Text("Login")
                     .font(.largeTitle)
                     .fontWeight(.bold)

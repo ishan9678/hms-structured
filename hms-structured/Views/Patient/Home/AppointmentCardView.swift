@@ -63,7 +63,7 @@ struct PatientAppointmentsView: View {
                     .padding(.leading, 25)
                     .font(.headline)
                 Spacer()
-                Button("See all") {}
+                Button("May 2024") {}
                     .padding(.trailing, 25)
                     .font(.headline)
             }

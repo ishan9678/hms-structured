@@ -46,16 +46,16 @@ struct AddDoctorView: View {
     let chosenGender = ["Female","Male","Prefer not to disclose"]
 
     let chosenDept = [
-        "Emergency Medicine", // Provides immediate care for acute illnesses and injuries.
-        "General Physician",    // Handles a wide range of common ailments requiring surgical intervention.
-        "Cardiology",         // Manages disorders of the heart and blood vessels.
-        "Obstetrics & Gynecology", // Cares for reproductive health, childbirth, and females
-        "Pediatrician",         // Focuses on the medical care of infants, children, and adolescents.
-        "Oncology",           // Specializes in the diagnosis and treatment of cancer.
-        "Neurology",          // Focuses on diseases of the nervous system.
-        "Orthopedics",        // Concerned with conditions involving the musculoskeletal system.
-        "Radiology",          // Essential for diagnostics using imaging technologies.
-        "Internal Medicine"   // Deals with the prevention, diagnosis, and treatment of adult diseases.
+        "Emergency Medicine",
+        "General Physician",
+        "Cardiology",
+        "Obstetrics & Gynecology",
+        "Pediatrician",
+        "Oncology",
+        "Neurology",
+        "Orthopedics",
+        "Radiology",
+        "Internal Medicine"
     ]
     
     @State private var isEmailValidFlag = true

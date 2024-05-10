@@ -257,18 +257,25 @@ struct DoctorHomeView: View {
                 return
             }
             
-            if let hexCode = document["hexCode"] as? String {
-                DispatchQueue.main.async {
-                    self.emergencyColor = getColorForEmergencyNotification(hexCode: hexCode)
-                }
-            }
-            
-            if let emergencyTitle = document["body"] as? String {
-                DispatchQueue.main.async {
-                    self.emergencyTitle = emergencyTitle
+            if let isActive = document["isActive"] as? Int, isActive != 0 {
+                print("efekfefepije", document["isActive"])
+
+                if let hexCode = document["hexCode"] as? String {
+                    DispatchQueue.main.async {
+                        self.emergencyColor = getColorForEmergencyNotification(hexCode: hexCode)
+                    }
                 }
 
+                if let emergencyTitle = document["body"] as? String {
+                    DispatchQueue.main.async {
+                        self.emergencyTitle = emergencyTitle
+                    }
+                }
+            } else {
+                print("falseee")
+                return
             }
+
         }
     }
 

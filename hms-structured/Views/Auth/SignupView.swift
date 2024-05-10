@@ -44,7 +44,7 @@ struct SignupView: View {
         NavigationStack{
             
             VStack {
-                Image("SignUp")
+                Image("healix")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(minHeight: 200, maxHeight: 200)

@@ -125,19 +125,29 @@ class PatientFrequencyViewModel: ObservableObject {
                     return
                 }
                 
-                guard let hexCode = document.get("hexCode") as? String else {
-                    print("Hex code not found or is not a string.")
+                if let isActive = document["isActive"] as? Int, isActive != 0 {
+                    print("efekfefepije", document["isActive"])
+                    
+                    guard let hexCode = document.get("hexCode") as? String else {
+                        print("Hex code not found or is not a string.")
+                        return
+                    }
+
+                    print("Fetched Hex Code: \(hexCode)")  // Debug output
+                    if self.isValidHexCode(hexCode) {
+                        DispatchQueue.main.async {
+                            self.emergencyColor = Color(hex: hexCode)
+                        }
+                    } else {
+                        print("Invalid hex code format.")
+                    }
+                    
+                } else {
+                    print("falseee")
                     return
                 }
-
-                print("Fetched Hex Code: \(hexCode)")  // Debug output
-                if self.isValidHexCode(hexCode) {
-                    DispatchQueue.main.async {
-                        self.emergencyColor = Color(hex: hexCode)
-                    }
-                } else {
-                    print("Invalid hex code format.")
-                }
+                
+                
             }
         }
 

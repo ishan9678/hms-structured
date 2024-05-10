@@ -36,13 +36,7 @@ struct Profile: View {
                                 .foregroundColor(.white)
                                 .font(.system(size: 30))
                                 .fontWeight(.bold)
-                                .padding(.top, 30)
-                            Text("\(patient.gender)")
-                                .foregroundColor(.white)
-                                .font(.system(size: 20))
-                            Text("\(patient.bloodGroup)")
-                                .foregroundColor(.white)
-                                .font(.system(size: 20))
+                        
                         }
                     }
                 }

@@ -28,6 +28,7 @@ struct RecordsView1: View {
     // State variable to hold the selected segment
     @State private var selectedSegmentIndex = 0
     @State private var searchText = "" // State variable to hold the search text
+//    @State var appoinmentID: String
     
     var body: some View {
         NavigationStack{
